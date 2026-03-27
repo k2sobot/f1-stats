@@ -1,0 +1,447 @@
+/* F1 Stats - Dark/Light Theme Styles */
+
+:root {
+    /* Light theme (default) */
+    --bg-primary: #f5f5f5;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --text-muted: #999999;
+    --border-color: #e0e0e0;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
+    
+    /* F1 Team Colors */
+    --mercedes: #00d2be;
+    --ferrari: #dc0000;
+    --redbull: #0600ef;
+    --mclaren: #ff8700;
+    --alpine: #0090ff;
+    --astonmartin: #006f62;
+    --haas: #ffffff;
+    --alphatauri: #2b4562;
+    --williams: #005aff;
+    --alfaromeo: #900000;
+    --audi: #c0c0c0;
+    --cadillac: #c0c0c0;
+    
+    /* Position colors */
+    --pos-gold: #ffd700;
+    --pos-silver: #c0c0c0;
+    --pos-bronze: #cd7f32;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #141414;
+    --bg-card: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-muted: #707070;
+    --border-color: #2a2a2a;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+/* Header */
+.header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    font-size: 1.5rem;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--mercedes), var(--ferrari));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.season-badge {
+    background: var(--ferrari);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.header-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.theme-toggle, .refresh-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.theme-toggle:hover, .refresh-btn:hover {
+    background: var(--border-color);
+    transform: translateY(-1px);
+}
+
+.refresh-btn.loading .refresh-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Main */
+.main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Cards */
+.card {
+    background: var(--bg-card);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.card h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card h2 .icon {
+    font-size: 1.25rem;
+}
+
+/* Race Card */
+.race-card {
+    grid-column: span 2;
+}
+
+@media (max-width: 900px) {
+    .race-card {
+        grid-column: span 1;
+    }
+}
+
+.race-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+}
+
+.race-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.race-date {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.race-circuit {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.session-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.session-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.session-name {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.session-time {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Standings */
+.standings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.driver-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: background 0.2s ease;
+}
+
+.driver-row:hover {
+    background: var(--bg-secondary);
+}
+
+.position {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.position.p1 {
+    background: var(--pos-gold);
+    color: #000;
+    border: none;
+}
+
+.position.p2 {
+    background: var(--pos-silver);
+    color: #000;
+    border: none;
+}
+
+.position.p3 {
+    background: var(--pos-bronze);
+    color: #fff;
+    border: none;
+}
+
+.driver-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.driver-name {
+    font-weight: 500;
+}
+
+.team-tag {
+    font-size: 0.625rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.team-tag.team-mercedes { background: var(--mercedes); color: #000; }
+.team-tag.team-ferrari { background: var(--ferrari); color: #fff; }
+.team-tag.team-redbull { background: var(--redbull); color: #fff; }
+.team-tag.team-mclaren { background: var(--mclaren); color: #000; }
+.team-tag.team-alpine { background: var(--alpine); color: #fff; }
+.team-tag.team-astonmartin { background: var(--astonmartin); color: #fff; }
+.team-tag.team-haas { background: #e0e0e0; color: #000; }
+.team-tag.team-williams { background: var(--williams); color: #fff; }
+.team-tag.team-audi { background: var(--audi); color: #000; }
+.team-tag.team-cadillac { background: #e0e0e0; color: #000; }
+.team-tag.team-racingbulls { background: #666; color: #fff; }
+
+.driver-points {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* Results Table */
+.results-header {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.results-table th,
+.results-table td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.results-table th {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.results-table td {
+    font-size: 0.875rem;
+}
+
+.results-table tr:last-child td {
+    border-bottom: none;
+}
+
+.results-table .position {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.75rem;
+}
+
+/* Loading States */
+.loading-skeleton {
+    height: 2.5rem;
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 0.5rem;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.loading-cell {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.footer a {
+    color: var(--mercedes);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.cache-status {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+}
+
+/* Error State */
+.error-message {
+    color: var(--ferrari);
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .main {
+        padding: 1rem;
+    }
+    
+    .card {
+        padding: 1rem;
+    }
+    
+    .race-name {
+        font-size: 1.25rem;
+    }
+    
+    .session-list {
+        flex-direction: column;
+    }
+}
