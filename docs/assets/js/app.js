@@ -1,6 +1,5 @@
 /**
- * F1 Stats - Static data with GitHub Actions auto-update
- * Data is fetched from Jolpica API and committed to repo
+ * F1 Stats - Static data with auto-update
  */
 
 // Team color mapping
@@ -29,7 +28,8 @@ let dataCache = {
     drivers: null,
     constructors: null,
     schedule: null,
-    lastUpdate: null
+    qualifying: null,
+    results: null
 };
 
 /**
@@ -37,7 +37,7 @@ let dataCache = {
  */
 async function loadLocalData(file) {
     const resp = await fetch(`data/${file}.json`);
-    if (!resp.ok) throw new Error(`Failed to load ${file}`);
+    if (!resp.ok) return null;
     return resp.json();
 }
 
@@ -46,9 +46,9 @@ async function loadLocalData(file) {
  */
 async function getDriverStandings() {
     if (!dataCache.drivers) {
-        const data = await loadLocalData('drivers');
-        dataCache.drivers = data;
+        dataCache.drivers = await loadLocalData('drivers');
     }
+    if (!dataCache.drivers) return { standings: [], round: 0 };
     
     const standingsTable = dataCache.drivers.MRData?.StandingsTable?.StandingsLists?.[0];
     if (!standingsTable) return { standings: [], round: 0 };
@@ -69,9 +69,9 @@ async function getDriverStandings() {
  */
 async function getConstructorStandings() {
     if (!dataCache.constructors) {
-        const data = await loadLocalData('constructors');
-        dataCache.constructors = data;
+        dataCache.constructors = await loadLocalData('constructors');
     }
+    if (!dataCache.constructors) return [];
     
     const standingsTable = dataCache.constructors.MRData?.StandingsTable?.StandingsLists?.[0];
     if (!standingsTable) return [];
@@ -89,9 +89,9 @@ async function getConstructorStandings() {
  */
 async function getNextRace() {
     if (!dataCache.schedule) {
-        const data = await loadLocalData('schedule');
-        dataCache.schedule = data;
+        dataCache.schedule = await loadLocalData('schedule');
     }
+    if (!dataCache.schedule) return null;
     
     const races = dataCache.schedule.MRData?.RaceTable?.Races || [];
     const now = new Date();
@@ -104,14 +104,18 @@ async function getNextRace() {
     
     if (!nextRace) return null;
     
-    const raceDate = new Date(`${nextRace.date}T${nextRace.time || '00:00:00Z'}`);
+    const raceDate = new Date(`${nextRace.date}T${r.time || '00:00:00Z'}`);
     
-    // Build session times (approximate based on typical schedule)
+    // Build session times with dates
+    // Typical F1 weekend: Friday (FP1, FP2), Saturday (FP3, Quali), Sunday (Race)
+    const friday = addDays(raceDate, -2);
+    const saturday = addDays(raceDate, -1);
+    
     const sessions = [
-        { name: 'FP1', date: addDays(raceDate, -2) },
-        { name: 'FP2', date: addDays(raceDate, -2) },
-        { name: 'FP3', date: addDays(raceDate, -1) },
-        { name: 'Qualifying', date: addDays(raceDate, -1) },
+        { name: 'FP1', date: setDateTime(friday, '01:30:00Z') },
+        { name: 'FP2', date: setDateTime(friday, '05:00:00Z') },
+        { name: 'FP3', date: setDateTime(saturday, '04:30:00Z') },
+        { name: 'Qualifying', date: setDateTime(saturday, '08:00:00Z') },
         { name: 'Race', date: raceDate }
     ];
     
@@ -120,10 +124,7 @@ async function getNextRace() {
         date: raceDate,
         circuit: nextRace.Circuit?.circuitName || '',
         country: nextRace.Circuit?.Location?.country || '',
-        sessions: sessions.map(s => ({
-            name: s.name,
-            time: s.date
-        }))
+        sessions: sessions
     };
 }
 
@@ -137,6 +138,61 @@ function addDays(date, days) {
 }
 
 /**
+ * Set time on a date
+ */
+function setDateTime(date, timeStr) {
+    const d = new Date(date);
+    const [hours, mins] = timeStr.split(':');
+    d.setUTCHours(parseInt(hours), parseInt(mins), 0, 0);
+    return d;
+}
+
+/**
+ * Get latest session results
+ */
+async function getLatestSession() {
+    // Try to load qualifying and race results
+    if (!dataCache.qualifying) {
+        dataCache.qualifying = await loadLocalData('qualifying');
+    }
+    if (!dataCache.results) {
+        dataCache.results = await loadLocalData('results');
+    }
+    
+    // Prefer race results if available
+    if (dataCache.results?.MRData?.RaceTable?.Races?.[0]?.Results) {
+        const race = dataCache.results.MRData.RaceTable.Races[0];
+        return {
+            sessionName: 'Race',
+            raceName: race.raceName,
+            results: race.Results.slice(0, 10).map(r => ({
+                position: parseInt(r.position),
+                driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
+                team: r.Constructor.name,
+                time: r.Time?.time || r.status
+            }))
+        };
+    }
+    
+    // Fall back to qualifying
+    if (dataCache.qualifying?.MRData?.RaceTable?.Races?.[0]?.QualifyingResults) {
+        const race = dataCache.qualifying.MRData.RaceTable.Races[0];
+        return {
+            sessionName: 'Qualifying',
+            raceName: race.raceName,
+            results: race.QualifyingResults.slice(0, 10).map((r, i) => ({
+                position: i + 1,
+                driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
+                team: r.Constructor.name,
+                time: r.Q3 || r.Q2 || r.Q1 || '-'
+            }))
+        };
+    }
+    
+    return null;
+}
+
+/**
  * Format date for display
  */
 function formatDate(date) {
@@ -144,14 +200,16 @@ function formatDate(date) {
 }
 
 /**
- * Format time for display (SAST = UTC+2)
+ * Format date and time for display (SAST = UTC+2)
  */
-function formatTime(date) {
-    return date.toLocaleTimeString('en-US', { 
+function formatDateTime(date) {
+    const day = date.toLocaleDateString('en-US', { weekday: 'short' });
+    const time = date.toLocaleTimeString('en-US', { 
         hour: '2-digit', 
         minute: '2-digit',
         timeZone: 'Africa/Johannesburg'
-    }) + ' SAST';
+    });
+    return `${day} ${time} SAST`;
 }
 
 /**
@@ -214,17 +272,33 @@ function renderNextRace(race) {
     sessionsContainer.innerHTML = race.sessions.map(s => `
         <div class="session-item">
             <span class="session-name">${s.name}</span>
-            <span class="session-time">${formatTime(s.time)}</span>
+            <span class="session-time">${formatDateTime(s.date)}</span>
         </div>
     `).join('');
 }
 
 /**
- * Render latest results (placeholder - would need results data)
+ * Render latest session results
  */
-function renderLatestResults() {
-    document.getElementById('results-header').textContent = 'Race Results';
-    document.getElementById('latest-results').innerHTML = '<tr><td colspan="3" class="loading-cell">Data updates after each race</td></tr>';
+function renderLatestResults(data) {
+    const header = document.getElementById('results-header');
+    const tbody = document.getElementById('latest-results');
+    
+    if (!data) {
+        header.textContent = 'No session results available';
+        tbody.innerHTML = '<tr><td colspan="3" class="loading-cell">Check back after a session</td></tr>';
+        return;
+    }
+    
+    header.textContent = `${data.sessionName} - ${data.raceName}`;
+    
+    tbody.innerHTML = data.results.map(r => `
+        <tr>
+            <td><div class="position ${r.position <= 3 ? 'p' + r.position : ''}">${r.position}</div></td>
+            <td>${r.driver} <span class="team-tag team-${TEAM_COLORS[r.team] || 'default'}">${r.team.substring(0, 3).toUpperCase()}</span></td>
+            <td>${r.time}</td>
+        </tr>
+    `).join('');
 }
 
 /**
@@ -242,16 +316,17 @@ async function loadAll() {
     refreshBtn.classList.add('loading');
     
     try {
-        const [driverStandings, constructorStandings, nextRace] = await Promise.all([
+        const [driverStandings, constructorStandings, nextRace, latestSession] = await Promise.all([
             getDriverStandings().catch(e => ({ standings: [], error: e.message })),
             getConstructorStandings().catch(e => []),
-            getNextRace().catch(e => null)
+            getNextRace().catch(e => null),
+            getLatestSession().catch(e => null)
         ]);
         
         renderDriverStandings(driverStandings);
         renderConstructorStandings(constructorStandings);
         renderNextRace(nextRace);
-        renderLatestResults();
+        renderLatestResults(latestSession);
         
         // Update cache status
         const status = document.getElementById('cache-status');
