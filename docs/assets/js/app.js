@@ -156,10 +156,188 @@ function setDateTime(date, timeStr) {
 }
 
 /**
- * Get latest session results
+ * Check if we're in a race weekend and get weekend state
+ */
+async function getWeekendState() {
+    const now = new Date();
+    const year = now.getFullYear();
+    
+    try {
+        const resp = await fetch(`https://api.openf1.org/v1/sessions?year=${year}`);
+        const sessions = await resp.json();
+        
+        // Group sessions by meeting
+        const meetings = {};
+        for (const s of sessions) {
+            const meetingKey = s.meeting_key;
+            if (!meetings[meetingKey]) {
+                meetings[meetingKey] = {
+                    country: s.country_name,
+                    circuit: s.circuit_short_name,
+                    sessions: []
+                };
+            }
+            meetings[meetingKey].sessions.push(s);
+        }
+        
+        // Check each meeting
+        for (const [meetingKey, meeting] of Object.entries(meetings)) {
+            const sessionTimes = [];
+            for (const s of meeting.sessions) {
+                if (s.date_start) {
+                    try { sessionTimes.push(new Date(s.date_start)); } catch {}
+                }
+                if (s.date_end) {
+                    try { sessionTimes.push(new Date(s.date_end)); } catch {}
+                }
+            }
+            
+            if (sessionTimes.length === 0) continue;
+            
+            const weekendStart = new Date(Math.min(...sessionTimes));
+            weekendStart.setHours(weekendStart.getHours() - 12); // Start 12hrs before first session
+            const weekendEnd = new Date(Math.max(...sessionTimes));
+            weekendEnd.setHours(weekendEnd.getHours() + 6); // End 6hrs after last session
+            
+            if (now >= weekendStart && now <= weekendEnd) {
+                // We're in this weekend! Find session states
+                let currentSession = null;
+                let lastCompleted = null;
+                let nextSession = null;
+                
+                // Sort sessions by start time
+                const sortedSessions = meeting.sessions.sort((a, b) => 
+                    new Date(a.date_start) - new Date(b.date_start)
+                );
+                
+                for (const s of sortedSessions) {
+                    if (!s.date_start || !s.date_end) continue;
+                    
+                    try {
+                        const start = new Date(s.date_start);
+                        const end = new Date(s.date_end);
+                        
+                        if (start <= now && now <= end) {
+                            currentSession = s;
+                        } else if (end < now) {
+                            lastCompleted = s;
+                        } else if (start > now && !nextSession) {
+                            nextSession = s;
+                        }
+                    } catch {}
+                }
+                
+                return {
+                    inWeekend: true,
+                    country: meeting.country,
+                    circuit: meeting.circuit,
+                    meetingKey: meetingKey,
+                    currentSession: currentSession,
+                    lastCompleted: lastCompleted,
+                    nextSession: nextSession
+                };
+            }
+        }
+        
+        return { inWeekend: false };
+    } catch (e) {
+        console.error('Failed to get weekend state:', e);
+        return { inWeekend: false };
+    }
+}
+
+/**
+ * Fetch live session results from OpenF1
+ */
+async function fetchLiveSessionResults(sessionKey) {
+    try {
+        const [driversResp, lapsResp] = await Promise.all([
+            fetch(`https://api.openf1.org/v1/drivers?session_key=${sessionKey}`),
+            fetch(`https://api.openf1.org/v1/laps?session_key=${sessionKey}`)
+        ]);
+        
+        const drivers = await driversResp.json();
+        const laps = await lapsResp.json();
+        
+        // Build driver lookup
+        const driverMap = {};
+        for (const d of drivers) {
+            driverMap[d.driver_number] = {
+                name: d.name_acronym || `D${d.driver_number}`,
+                team: d.team_name || 'Unknown'
+            };
+        }
+        
+        // Find best lap per driver
+        const bestLaps = {};
+        for (const lap of laps) {
+            const driverNum = lap.driver_number;
+            const duration = lap.lap_duration;
+            if (duration && (!bestLaps[driverNum] || duration < bestLaps[driverNum].duration)) {
+                bestLaps[driverNum] = { duration };
+            }
+        }
+        
+        // Sort by lap time
+        const results = Object.entries(bestLaps)
+            .sort((a, b) => a[1].duration - b[1].duration)
+            .slice(0, 10)
+            .map(([driverNum, data], i) => ({
+                position: i + 1,
+                driver: driverMap[driverNum]?.name || `D${driverNum}`,
+                team: driverMap[driverNum]?.team || 'Unknown',
+                time: formatLapTime(data.duration),
+                fastestLap: false
+            }));
+        
+        return results;
+    } catch (e) {
+        console.error('Failed to fetch live session:', e);
+        return null;
+    }
+}
+
+/**
+ * Format lap time from seconds
+ */
+function formatLapTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toFixed(3).padStart(6, '0')}`;
+}
+
+/**
+ * Get latest session results - now with weekend context
  */
 async function getLatestSession() {
-    // Try to load qualifying and race results
+    // First check if we're in a race weekend
+    const weekendState = await getWeekendState();
+    
+    if (weekendState.inWeekend && weekendState.lastCompleted) {
+        // During a race weekend - fetch live data for last completed session
+        const sessionKey = weekendState.lastCompleted.session_key;
+        const sessionName = weekendState.lastCompleted.session_name || 'Session';
+        const results = await fetchLiveSessionResults(sessionKey);
+        
+        if (results && results.length > 0) {
+            return {
+                sessionName: sessionName,
+                raceName: `${weekendState.country}GP`,
+                results: results,
+                fastestLap: null,
+                weekendContext: {
+                    inWeekend: true,
+                    country: weekendState.country,
+                    circuit: weekendState.circuit,
+                    lastCompleted: weekendState.lastCompleted.session_name,
+                    currentSession: weekendState.currentSession?.session_name || null,
+                    nextSession: weekendState.nextSession?.session_name || null
+                }
+            };
+        }
+    }
+    
+    // Outside race weekend or live data failed - use static data
     if (!dataCache.qualifying) {
         dataCache.qualifying = await loadLocalData('qualifying');
     }
@@ -167,19 +345,15 @@ async function getLatestSession() {
         dataCache.results = await loadLocalData('results');
     }
     
-    // Get current round from standings
     const standingsData = dataCache.drivers || await loadLocalData('drivers');
     const currentRound = standingsData?.MRData?.StandingsTable?.StandingsLists?.[0]?.round || 1;
     
-    // Check if qualifying is from current round and has results
     const qualiRace = dataCache.qualifying?.MRData?.RaceTable?.Races?.[0];
     const qualiRound = dataCache.qualifying?.MRData?.RaceTable?.round;
     
-    // Check if race results are from current or previous round
     const raceData = dataCache.results?.MRData?.RaceTable?.Races?.[0];
     const raceRound = dataCache.results?.MRData?.RaceTable?.round;
     
-    // Prefer race results if available and from current/past round
     if (raceData?.Results && raceRound <= currentRound) {
         const fastestLapDriver = raceData.Results.find(r => r.FastestLap?.rank === '1');
         
@@ -196,11 +370,11 @@ async function getLatestSession() {
             fastestLap: fastestLapDriver ? {
                 driver: fastestLapDriver.Driver.code,
                 time: fastestLapDriver.FastestLap?.Time?.time
-            } : null
+            } : null,
+            weekendContext: { inWeekend: false }
         };
     }
     
-    // Fall back to qualifying
     if (qualiRace?.QualifyingResults) {
         return {
             sessionName: 'Qualifying',
@@ -212,7 +386,8 @@ async function getLatestSession() {
                 time: r.Q3 || r.Q2 || r.Q1 || '-',
                 fastestLap: false
             })),
-            fastestLap: null
+            fastestLap: null,
+            weekendContext: { inWeekend: false }
         };
     }
     
@@ -342,6 +517,8 @@ function renderNextRace(race) {
 function renderLatestResults(data) {
     const header = document.getElementById('results-header');
     const tbody = document.getElementById('latest-results');
+    const liveBanner = document.getElementById('live-banner');
+    const liveText = document.getElementById('live-text');
     
     if (!data) {
         header.textContent = 'No session results available';
@@ -349,7 +526,28 @@ function renderLatestResults(data) {
         return;
     }
     
-    header.textContent = `${data.sessionName} - ${data.raceName}`;
+    // Handle weekend context
+    if (data.weekendContext?.inWeekend) {
+        const ctx = data.weekendContext;
+        
+        // Show live banner with context
+        if (ctx.currentSession) {
+            liveBanner.style.display = 'flex';
+            liveText.textContent = `${ctx.currentSession} LIVE - ${ctx.country}GP`;
+        } else if (ctx.nextSession) {
+            liveBanner.style.display = 'flex';
+            liveBanner.classList.add('upcoming');
+            liveText.textContent = `Next: ${ctx.nextSession} - ${ctx.country}GP`;
+        } else {
+            liveBanner.style.display = 'none';
+        }
+        
+        // Show session context in results header
+        header.innerHTML = `<span class="session-label">${data.sessionName}</span> Results <span class="race-location">${ctx.country}GP</span>`;
+    } else {
+        liveBanner.style.display = 'none';
+        header.textContent = `${data.sessionName} - ${data.raceName}`;
+    }
     
     // Add fastest lap info if available
     if (data.fastestLap) {

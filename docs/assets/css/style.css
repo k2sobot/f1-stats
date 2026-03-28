@@ -81,6 +81,10 @@ body {
     gap: 0.75rem;
 }
 
+.live-banner.upcoming {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+}
+
 .live-dot {
     width: 10px;
     height: 10px;
@@ -433,6 +437,19 @@ body {
     font-size: 0.875rem;
     color: var(--text-muted);
     margin-bottom: 0.75rem;
+}
+
+.results-header .session-label {
+    background: linear-gradient(90deg, #e10600, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+}
+
+.results-header .race-location {
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
 .results-table {
