@@ -369,13 +369,13 @@ function renderLatestResults(data) {
     
     // Add fastest lap info if available
     if (data.fastestLap) {
-        header.innerHTML = `${data.sessionName} - ${data.raceName} <span class="fastest-lap-header"><span class="purple-clock">⏱️</span> ${data.fastestLap.driver} (${data.fastestLap.time})</span>`;
+        header.innerHTML = `${data.sessionName} - ${data.raceName} <span class="fastest-lap-header"><span class="fl-badge">FL</span> ${data.fastestLap.driver} (${data.fastestLap.time})</span>`;
     }
     
     tbody.innerHTML = data.results.map(r => `
         <tr>
             <td><div class="position ${r.position <= 3 ? 'p' + r.position : ''}">${r.position}</div></td>
-            <td>${r.driver} ${r.fastestLap ? '<span class="purple-clock" title="Fastest Lap">⏱️</span>' : ''} <span class="team-tag team-${TEAM_COLORS[r.team] || 'default'}">${r.team.substring(0, 3).toUpperCase()}</span></td>
+            <td>${r.driver} ${r.fastestLap ? '<span class="fl-badge" title="Fastest Lap">FL</span>' : ''} <span class="team-tag team-${TEAM_COLORS[r.team] || 'default'}">${r.team.substring(0, 3).toUpperCase()}</span></td>
             <td>${r.time}</td>
         </tr>
     `).join('');
