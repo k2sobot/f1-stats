@@ -7,47 +7,144 @@
 const POLL_STORAGE_KEY = 'f1-votes';
 
 /**
- * Check if we're currently in a race weekend
+ * Get current race info from schedule
+ * Returns { raceName, raceKey, isRaceWeekend } or null if not in a race weekend
  */
-function isRaceWeekend() {
-    const now = new Date();
-    const year = now.getFullYear();
-    
-    // Get schedule from cache or return conservative estimate
-    // Race weekends are typically Fri-Sun
-    const day = now.getDay(); // 0=Sun, 5=Fri, 6=Sat
-    
-    // Simple heuristic: show poll on Fri/Sat/Sun
-    // More accurate: check against actual schedule
-    return day === 0 || day === 5 || day === 6;
-}
-
-/**
- * Get current race name from schedule
- */
-async function getCurrentRaceName() {
+async function getCurrentRaceInfo() {
+    // Ensure schedule is loaded
     if (!dataCache.schedule) {
         dataCache.schedule = await loadLocalData('schedule');
     }
-    if (!dataCache.schedule) return 'this race';
+    if (!dataCache.schedule) return null;
     
     const races = dataCache.schedule.MRData?.RaceTable?.Races || [];
     const now = new Date();
+    const year = now.getFullYear();
     
-    // Find current/upcoming race
     for (const race of races) {
         const raceDate = new Date(`${race.date}T${race.time || '00:00:00Z'}`);
+        
+        // Race weekend: Friday (2 days before) to Monday after
         const friday = new Date(raceDate);
         friday.setDate(friday.getDate() - 2);
+        friday.setHours(0, 0, 0, 0);
+        
         const mondayAfter = new Date(raceDate);
         mondayAfter.setDate(mondayAfter.getDate() + 1);
+        mondayAfter.setHours(23, 59, 59, 999);
         
         if (now >= friday && now <= mondayAfter) {
-            return race.raceName;
+            const raceName = race.raceName;
+            const raceKey = `${year}-${raceName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+            const round = parseInt(race.round || '0');
+            
+            return {
+                raceName,
+                raceKey,
+                round,
+                raceDate,
+                isRaceWeekend: true
+            };
         }
     }
     
-    return 'this race';
+    return null;
+}
+
+/**
+ * Clean up old poll data from localStorage
+ * Keeps only current and future races, removes past races
+ */
+function cleanupOldPollData() {
+    try {
+        const stored = localStorage.getItem(POLL_STORAGE_KEY);
+        if (!stored) return;
+        
+        const votes = JSON.parse(stored);
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        
+        // Keep track of valid keys
+        const validKeys = new Set();
+        
+        // Get valid race keys from schedule if available
+        // We'll also keep any key that starts with current or future years
+        for (const key of Object.keys(votes)) {
+            // Extract year from key (format: YYYY-race-name)
+            const match = key.match(/^(\d{4})-/);
+            if (match) {
+                const keyYear = parseInt(match[1]);
+                // Keep current year and future years
+                if (keyYear >= currentYear) {
+                    validKeys.add(key);
+                }
+            }
+        }
+        
+        // Remove entries for past races
+        const cleaned = {};
+        for (const [key, value] of Object.entries(votes)) {
+            if (validKeys.has(key)) {
+                cleaned[key] = value;
+            }
+        }
+        
+        // Only update if something changed
+        if (Object.keys(cleaned).length !== Object.keys(votes).length) {
+            localStorage.setItem(POLL_STORAGE_KEY, JSON.stringify(cleaned));
+            console.log('Cleaned up old poll data');
+        }
+    } catch (e) {
+        console.error('Error cleaning up poll data:', e);
+    }
+}
+
+/**
+ * Get all race keys from schedule for cleanup
+ */
+async function getValidRaceKeys() {
+    if (!dataCache.schedule) {
+        dataCache.schedule = await loadLocalData('schedule');
+    }
+    if (!dataCache.schedule) return [];
+    
+    const races = dataCache.schedule.MRData?.RaceTable?.Races || [];
+    const year = new Date().getFullYear();
+    
+    return races.map(race => {
+        const raceName = race.raceName;
+        return `${year}-${raceName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+    });
+}
+
+/**
+ * Clean up old polls based on actual schedule
+ */
+async function cleanupPollsBySchedule() {
+    try {
+        const validKeys = await getValidRaceKeys();
+        const stored = localStorage.getItem(POLL_STORAGE_KEY);
+        if (!stored) return;
+        
+        const votes = JSON.parse(stored);
+        const cleaned = {};
+        
+        for (const [key, value] of Object.entries(votes)) {
+            // Keep keys that are in the schedule or start with current/future year
+            const yearMatch = key.match(/^(\d{4})-/);
+            const currentYear = new Date().getFullYear();
+            
+            if (validKeys.includes(key) || (yearMatch && parseInt(yearMatch[1]) >= currentYear)) {
+                cleaned[key] = value;
+            }
+        }
+        
+        if (Object.keys(cleaned).length !== Object.keys(votes).length) {
+            localStorage.setItem(POLL_STORAGE_KEY, JSON.stringify(cleaned));
+        }
+    } catch (e) {
+        console.error('Error in schedule-based cleanup:', e);
+    }
 }
 
 /**
@@ -63,24 +160,6 @@ function getStoredVotes() {
         console.error('Error reading poll data:', e);
     }
     return {};
-}
-
-/**
- * Save vote
- */
-function saveVote(driverId, raceKey) {
-    const votes = getStoredVotes();
-    
-    if (!votes[raceKey]) {
-        votes[raceKey] = {};
-    }
-    
-    votes[raceKey][driverId] = (votes[raceKey][driverId] || 0) + 1;
-    votes[raceKey]._lastVote = new Date().toISOString();
-    
-    localStorage.setItem(POLL_STORAGE_KEY, JSON.stringify(votes));
-    
-    return votes[raceKey];
 }
 
 /**
@@ -123,8 +202,7 @@ function calculatePercentages(votes, drivers) {
     const total = drivers.reduce((sum, d) => sum + (votes[d.driver] || 0), 0);
     
     if (total === 0) {
-        // Seed with initial votes for visualization
-        return drivers.map((d, i) => ({
+        return drivers.map((d) => ({
             ...d,
             votes: 0,
             percentage: 0
@@ -139,27 +217,20 @@ function calculatePercentages(votes, drivers) {
 }
 
 /**
- * Get race key for current weekend
- */
-async function getRaceKey() {
-    const raceName = await getCurrentRaceName();
-    const year = new Date().getFullYear();
-    // Normalize race name for key
-    return `${year}-${raceName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
-}
-
-/**
  * Render poll UI
  */
 async function renderPoll() {
     const pollContainer = document.getElementById('poll-container');
     if (!pollContainer) return;
     
-    // Check if race weekend
-    const isWeekend = isRaceWeekend();
+    // Clean up old poll data first
+    await cleanupPollsBySchedule();
     
-    // Show poll during race weekends (or override for demo)
-    const showPoll = isWeekend || localStorage.getItem('f1-poll-debug') === 'true';
+    // Check if we're in an actual race weekend
+    const raceInfo = await getCurrentRaceInfo();
+    
+    // Show poll during actual race weekends (or override for demo)
+    const showPoll = raceInfo?.isRaceWeekend || localStorage.getItem('f1-poll-debug') === 'true';
     
     if (!showPoll) {
         pollContainer.style.display = 'none';
@@ -175,8 +246,8 @@ async function renderPoll() {
         return;
     }
     
-    const raceKey = await getRaceKey();
-    const raceName = await getCurrentRaceName();
+    const raceKey = raceInfo?.raceKey || 'unknown-race';
+    const raceName = raceInfo?.raceName || 'this race';
     const userVote = getUserVote(raceKey);
     const storedVotes = getStoredVotes();
     const raceVotes = storedVotes[raceKey] || {};
@@ -191,7 +262,7 @@ async function renderPoll() {
     const pollVote = document.getElementById('poll-vote');
     
     if (pollTitle) pollTitle.textContent = '🏎️ Race Winner Poll';
-    if (pollSubtitle) pollSubtitle.textContent = `Who will win ${raceName}?`;
+    if (pollSubtitle) pollSubtitle.textContent = `Who will win the ${raceName}?`;
     
     if (userVote) {
         // Show results
@@ -238,7 +309,6 @@ async function renderPoll() {
             pollVote.querySelectorAll('.poll-option').forEach(btn => {
                 btn.addEventListener('click', async () => {
                     const driver = btn.dataset.driver;
-                    const raceKey = await getRaceKey();
                     recordUserVote(driver, raceKey);
                     renderPoll(); // Re-render to show results
                 });
