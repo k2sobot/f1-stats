@@ -104,7 +104,7 @@ async function getNextRace() {
     
     if (!nextRace) return null;
     
-    const raceDate = new Date(`${nextRace.date}T${r.time || '00:00:00Z'}`);
+    const raceDate = new Date(`${nextRace.date}T${nextRace.time || '00:00:00Z'}`);
     
     // Build session times with dates
     // Typical F1 weekend: Friday (FP1, FP2), Saturday (FP3, Quali), Sunday (Race)
