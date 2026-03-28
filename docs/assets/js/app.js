@@ -1,9 +1,19 @@
 /**
  * F1 Stats - Client-side API handling with caching
- * Uses Jolpica API (Ergast successor) for reliability
+ * Uses Jolpica API via CORS proxy for browser compatibility
  */
 
+// CORS proxy for browser requests
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 const JOLPICA_BASE = 'https://api.jolpi.ca/ergast/f1';
+
+// Helper to fetch with CORS proxy
+async function fetchAPI(url) {
+    const proxyUrl = `${CORS_PROXY}${encodeURIComponent(url)}`;
+    const resp = await fetch(proxyUrl);
+    if (!resp.ok) throw new Error(`API error: ${resp.status}`);
+    return resp.json();
+}
 
 // Cache configuration
 const cache = {
@@ -64,9 +74,7 @@ function updateCacheStatus(key, timestamp) {
 async function getDriverStandings() {
     return fetchWithCache('standings', async () => {
         const year = new Date().getFullYear();
-        const resp = await fetch(`${JOLPICA_BASE}/${year}/driverStandings.json`);
-        if (!resp.ok) throw new Error(`API error: ${resp.status}`);
-        const data = await resp.json();
+        const data = await fetchAPI(`${JOLPICA_BASE}/${year}/driverStandings.json`);
         
         const standingsTable = data.MRData?.StandingsTable?.StandingsLists?.[0];
         if (!standingsTable) return { standings: [], round: 0 };
@@ -89,9 +97,7 @@ async function getDriverStandings() {
 async function getConstructorStandings() {
     return fetchWithCache('standings', async () => {
         const year = new Date().getFullYear();
-        const resp = await fetch(`${JOLPICA_BASE}/${year}/constructorStandings.json`);
-        if (!resp.ok) throw new Error(`API error: ${resp.status}`);
-        const data = await resp.json();
+        const data = await fetchAPI(`${JOLPICA_BASE}/${year}/constructorStandings.json`);
         
         const standingsTable = data.MRData?.StandingsTable?.StandingsLists?.[0];
         if (!standingsTable) return [];
@@ -111,9 +117,7 @@ async function getConstructorStandings() {
 async function getNextRace() {
     return fetchWithCache('schedule', async () => {
         const year = new Date().getFullYear();
-        const resp = await fetch(`${JOLPICA_BASE}/${year}.json`);
-        if (!resp.ok) throw new Error(`API error: ${resp.status}`);
-        const data = await resp.json();
+        const data = await fetchAPI(`${JOLPICA_BASE}/${year}.json`);
         
         const races = data.MRData?.RaceTable?.Races || [];
         const now = new Date();
@@ -167,14 +171,12 @@ async function getLatestResults() {
         const year = new Date().getFullYear();
         
         // Get current round from standings
-        const standingsResp = await fetch(`${JOLPICA_BASE}/${year}/driverStandings.json`);
-        const standingsData = await standingsResp.json();
+        const standingsData = await fetchAPI(`${JOLPICA_BASE}/${year}/driverStandings.json`);
         const round = standingsData.MRData?.StandingsTable?.StandingsLists?.[0]?.round || 1;
         
         if (round <= 1) {
             // Try to get qualifying results for first race
-            const qualiResp = await fetch(`${JOLPICA_BASE}/${year}/1/qualifying.json`);
-            const qualiData = await qualiResp.json();
+            const qualiData = await fetchAPI(`${JOLPICA_BASE}/${year}/1/qualifying.json`);
             const race = qualiData.MRData?.RaceTable?.Races?.[0];
             
             if (race?.QualifyingResults) {
@@ -193,8 +195,7 @@ async function getLatestResults() {
         }
         
         // Get last race results
-        const resp = await fetch(`${JOLPICA_BASE}/${year}/${round}/results.json`);
-        const data = await resp.json();
+        const data = await fetchAPI(`${JOLPICA_BASE}/${year}/${round}/results.json`);
         const race = data.MRData?.RaceTable?.Races?.[0];
         
         if (!race?.Results) return null;
