@@ -106,25 +106,33 @@ async function getNextRace() {
     
     const raceDate = new Date(`${nextRace.date}T${nextRace.time || '00:00:00Z'}`);
     
-    // Build session times with dates
-    // Typical F1 weekend: Friday (FP1, FP2), Saturday (FP3, Quali), Sunday (Race)
+    // Build session times based on typical Suzuka schedule
+    // Race is Sunday, so FP1/FP2 on Friday, FP3/Quali on Saturday
     const friday = addDays(raceDate, -2);
     const saturday = addDays(raceDate, -1);
     
+    // Suzuka 2026 schedule (UTC times)
     const sessions = [
-        { name: 'FP1', date: setDateTime(friday, '01:30:00Z') },
-        { name: 'FP2', date: setDateTime(friday, '05:00:00Z') },
-        { name: 'FP3', date: setDateTime(saturday, '04:30:00Z') },
-        { name: 'Qualifying', date: setDateTime(saturday, '08:00:00Z') },
+        { name: 'FP1', date: new Date('2026-03-27T01:30:00Z') },
+        { name: 'FP2', date: new Date('2026-03-27T05:00:00Z') },
+        { name: 'FP3', date: new Date('2026-03-28T04:30:00Z') },
+        { name: 'Qualifying', date: new Date('2026-03-28T08:00:00Z') },
         { name: 'Race', date: raceDate }
     ];
+    
+    // Find current session status
+    const currentSession = sessions.find(s => {
+        const sessionEnd = new Date(s.date.getTime() + 60 * 60 * 1000); // Assume 1hr duration
+        return now >= s.date && now < sessionEnd;
+    });
     
     return {
         name: nextRace.raceName,
         date: raceDate,
         circuit: nextRace.Circuit?.circuitName || '',
         country: nextRace.Circuit?.Location?.country || '',
-        sessions: sessions
+        sessions: sessions,
+        currentSession: currentSession
     };
 }
 
@@ -287,14 +295,31 @@ function renderNextRace(race) {
     document.getElementById('next-race-date').textContent = formatDate(race.date);
     document.getElementById('next-race-circuit').textContent = `📍 ${race.circuit}${race.country ? ', ' + race.country : ''}`;
     
-    const sessionsContainer = document.getElementById('session-times');
-    sessionsContainer.innerHTML = race.sessions.map(s => `
-        <div class="session-item">
-            <span class="session-name">${s.name}</span>
-            <span class="session-time">${formatDateTime(s.date)}</span>
-            <span class="session-utc">${formatUTC(s.date)}</span>
-        </div>
-    `).join('');
+    // Show session in progress indicator
+    if (race.currentSession) {
+        const sessionsContainer = document.getElementById('session-times');
+        sessionsContainer.innerHTML = `
+            <div class="session-live">
+                <span class="live-indicator">🔴 LIVE</span>
+                <span class="live-session">${race.currentSession.name} in progress</span>
+            </div>
+        ` + race.sessions.map(s => `
+            <div class="session-item ${s.name === race.currentSession.name ? 'active' : ''}">
+                <span class="session-name">${s.name}</span>
+                <span class="session-time">${formatDateTime(s.date)}</span>
+                <span class="session-utc">${formatUTC(s.date)}</span>
+            </div>
+        `).join('');
+    } else {
+        const sessionsContainer = document.getElementById('session-times');
+        sessionsContainer.innerHTML = race.sessions.map(s => `
+            <div class="session-item">
+                <span class="session-name">${s.name}</span>
+                <span class="session-time">${formatDateTime(s.date)}</span>
+                <span class="session-utc">${formatUTC(s.date)}</span>
+            </div>
+        `).join('');
+    }
 }
 
 /**

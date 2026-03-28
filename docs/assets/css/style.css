@@ -233,6 +233,11 @@ body {
     gap: 0.125rem;
 }
 
+.session-item.active {
+    border-color: var(--ferrari);
+    background: rgba(220, 0, 0, 0.1);
+}
+
 .session-name {
     font-size: 0.75rem;
     color: var(--text-muted);
@@ -248,6 +253,34 @@ body {
 .session-utc {
     font-size: 0.625rem;
     color: var(--text-muted);
+}
+
+.session-live {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, rgba(220, 0, 0, 0.2), rgba(220, 0, 0, 0.1));
+    border: 1px solid var(--ferrari);
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.live-indicator {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--ferrari);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.live-session {
+    font-size: 0.875rem;
+    font-weight: 600;
 }
 
 /* Standings */
