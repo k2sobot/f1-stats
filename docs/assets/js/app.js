@@ -295,7 +295,18 @@ function renderNextRace(race) {
     document.getElementById('next-race-date').textContent = formatDate(race.date);
     document.getElementById('next-race-circuit').textContent = `📍 ${race.circuit}${race.country ? ', ' + race.country : ''}`;
     
-    // Show session in progress indicator
+    // Show/hide live banner at top
+    const liveBanner = document.getElementById('live-banner');
+    const liveText = document.getElementById('live-text');
+    
+    if (race.currentSession) {
+        liveBanner.style.display = 'flex';
+        liveText.textContent = `${race.currentSession.name} in progress - ${race.name}`;
+    } else {
+        liveBanner.style.display = 'none';
+    }
+    
+    // Show session in progress indicator in card
     if (race.currentSession) {
         const sessionsContainer = document.getElementById('session-times');
         sessionsContainer.innerHTML = `
