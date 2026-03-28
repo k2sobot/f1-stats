@@ -230,7 +230,7 @@ body {
     padding: 0.5rem 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.125rem;
 }
 
 .session-name {
@@ -243,6 +243,11 @@ body {
 .session-time {
     font-size: 0.875rem;
     font-weight: 600;
+}
+
+.session-utc {
+    font-size: 0.625rem;
+    color: var(--text-muted);
 }
 
 /* Standings */

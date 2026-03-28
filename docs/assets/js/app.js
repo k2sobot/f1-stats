@@ -200,16 +200,35 @@ function formatDate(date) {
 }
 
 /**
- * Format date and time for display (SAST = UTC+2)
+ * Format date and time for display in user's local timezone
  */
 function formatDateTime(date) {
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const userOffset = -new Date().getTimezoneOffset() / 60;
+    const offsetStr = userOffset >= 0 ? `UTC+${userOffset}` : `UTC${userOffset}`;
+    
     const day = date.toLocaleDateString('en-US', { weekday: 'short' });
     const time = date.toLocaleTimeString('en-US', { 
         hour: '2-digit', 
         minute: '2-digit',
-        timeZone: 'Africa/Johannesburg'
+        hour12: false
     });
-    return `${day} ${time} SAST`;
+    
+    return `${day} ${time} (${offsetStr})`;
+}
+
+/**
+ * Format UTC time for display
+ */
+function formatUTC(date) {
+    const day = date.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' });
+    const time = date.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'UTC'
+    });
+    return `${day} ${time} UTC`;
 }
 
 /**
@@ -273,6 +292,7 @@ function renderNextRace(race) {
         <div class="session-item">
             <span class="session-name">${s.name}</span>
             <span class="session-time">${formatDateTime(s.date)}</span>
+            <span class="session-utc">${formatUTC(s.date)}</span>
         </div>
     `).join('');
 }
