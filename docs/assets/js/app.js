@@ -325,31 +325,15 @@ function renderNextRace(race) {
         liveBanner.style.display = 'none';
     }
     
-    // Show session in progress indicator in card
-    if (race.currentSession) {
-        const sessionsContainer = document.getElementById('session-times');
-        sessionsContainer.innerHTML = `
-            <div class="session-live">
-                <span class="live-indicator">🔴 LIVE</span>
-                <span class="live-session">${race.currentSession.name} in progress</span>
-            </div>
-        ` + race.sessions.map(s => `
-            <div class="session-item ${s.name === race.currentSession.name ? 'active' : ''}">
-                <span class="session-name">${s.name}</span>
-                <span class="session-time">${formatDateTime(s.date)}</span>
-                <span class="session-utc">${formatUTC(s.date)}</span>
-            </div>
-        `).join('');
-    } else {
-        const sessionsContainer = document.getElementById('session-times');
-        sessionsContainer.innerHTML = race.sessions.map(s => `
-            <div class="session-item">
-                <span class="session-name">${s.name}</span>
-                <span class="session-time">${formatDateTime(s.date)}</span>
-                <span class="session-utc">${formatUTC(s.date)}</span>
-            </div>
-        `).join('');
-    }
+    // Just show session times (no redundant live indicator)
+    const sessionsContainer = document.getElementById('session-times');
+    sessionsContainer.innerHTML = race.sessions.map(s => `
+        <div class="session-item ${s.name === race.currentSession?.name ? 'active' : ''}">
+            <span class="session-name">${s.name}</span>
+            <span class="session-time">${formatDateTime(s.date)}</span>
+            <span class="session-utc">${formatUTC(s.date)}</span>
+        </div>
+    `).join('');
 }
 
 /**
