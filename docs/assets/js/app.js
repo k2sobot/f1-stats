@@ -1,33 +1,36 @@
 /**
  * F1 Stats - Client-side API handling with caching
+ * Uses Jolpica API (Ergast successor) for reliability
  */
 
-const OPENF1_BASE = 'https://api.openf1.org/v1';
+const JOLPICA_BASE = 'https://api.jolpi.ca/ergast/f1';
 
 // Cache configuration
 const cache = {
-    standings: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },      // 5 min
-    schedule: { data: null, timestamp: 0, ttl: 60 * 60 * 1000 },      // 1 hour
-    latestSession: { data: null, timestamp: 0, ttl: 2 * 60 * 1000 },  // 2 min
+    standings: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
+    schedule: { data: null, timestamp: 0, ttl: 60 * 60 * 1000 },
+    results: { data: null, timestamp: 0, ttl: 2 * 60 * 1000 },
 };
-
-// F1 points system
-const POINTS = { 1: 25, 2: 18, 3: 15, 4: 12, 5: 10, 6: 8, 7: 6, 8: 4, 9: 2, 10: 1 };
 
 // Team color mapping
 const TEAM_COLORS = {
     'Mercedes': 'mercedes',
     'Ferrari': 'ferrari',
     'Red Bull Racing': 'redbull',
+    'Red Bull': 'redbull',
     'McLaren': 'mclaren',
+    'Alpine F1 Team': 'alpine',
     'Alpine': 'alpine',
+    'Aston Martin F1 Team': 'astonmartin',
     'Aston Martin': 'astonmartin',
     'Haas F1 Team': 'haas',
+    'Haas': 'haas',
     'Williams': 'williams',
     'Audi': 'audi',
     'Cadillac': 'cadillac',
     'Racing Bulls': 'racingbulls',
     'RB': 'racingbulls',
+    'Visa RB': 'racingbulls',
 };
 
 /**
@@ -56,227 +59,157 @@ function updateCacheStatus(key, timestamp) {
 }
 
 /**
- * Fetch all sessions for the year
- */
-async function fetchSessions() {
-    const year = new Date().getFullYear();
-    const resp = await fetch(`${OPENF1_BASE}/sessions?year=${year}`);
-    if (!resp.ok) throw new Error(`API error: ${resp.status}`);
-    return resp.json();
-}
-
-/**
- * Get driver standings
+ * Get driver standings from Jolpica/Ergast
  */
 async function getDriverStandings() {
     return fetchWithCache('standings', async () => {
-        const sessions = await fetchSessions();
-        const now = new Date();
+        const year = new Date().getFullYear();
+        const resp = await fetch(`${JOLPICA_BASE}/${year}/driverStandings.json`);
+        if (!resp.ok) throw new Error(`API error: ${resp.status}`);
+        const data = await resp.json();
         
-        // Find completed races
-        const raceSessions = sessions
-            .filter(s => s.session_type === 'Race' && !s.session_name?.includes('Sprint'))
-            .filter(s => s.date_end && new Date(s.date_end) < now)
-            .map(s => s.session_key);
+        const standingsTable = data.MRData?.StandingsTable?.StandingsLists?.[0];
+        if (!standingsTable) return { standings: [], round: 0 };
         
-        const standings = {};
-        const allDrivers = {};
+        const standings = standingsTable.DriverStandings.map(s => ({
+            position: parseInt(s.position),
+            driver: s.Driver.code || `${s.Driver.givenName[0]}. ${s.Driver.familyName}`,
+            team: s.Constructors[0]?.name || 'Unknown',
+            points: parseInt(s.points),
+            wins: parseInt(s.wins)
+        }));
         
-        for (const sessionKey of raceSessions) {
-            // Get driver info
-            const driversResp = await fetch(`${OPENF1_BASE}/drivers?session_key=${sessionKey}`);
-            const drivers = await driversResp.json();
-            
-            for (const d of drivers) {
-                const num = d.driver_number;
-                if (num && !allDrivers[num]) {
-                    allDrivers[num] = {
-                        name: d.name_acronym || `Driver ${num}`,
-                        team: d.team_name || 'Unknown'
-                    };
-                }
-            }
-            
-            // Get final positions
-            const posResp = await fetch(`${OPENF1_BASE}/position?session_key=${sessionKey}`);
-            const positions = await posResp.json();
-            
-            const final = {};
-            for (const p of positions) {
-                const driver = p.driver_number;
-                const pos = p.position;
-                const date = p.date;
-                if (driver && pos) {
-                    if (!final[driver] || date > final[driver].date) {
-                        final[driver] = { pos, date };
-                    }
-                }
-            }
-            
-            // Add points
-            for (const [driver, { pos }] of Object.entries(final)) {
-                const points = POINTS[pos] || 0;
-                if (!standings[driver]) {
-                    const driverData = allDrivers[driver] || { name: `Driver ${driver}`, team: 'Unknown' };
-                    standings[driver] = { points: 0, name: driverData.name, team: driverData.team };
-                }
-                standings[driver].points += points;
-            }
-        }
-        
-        // Sort by points
-        const sorted = Object.entries(standings)
-            .sort((a, b) => b[1].points - a[1].points)
-            .map(([driver, data], i) => ({
-                position: i + 1,
-                driver: data.name,
-                team: data.team,
-                points: data.points
-            }));
-        
-        return { standings: sorted, round: raceSessions.length };
+        return { standings, round: parseInt(standingsTable.round) };
     });
 }
 
 /**
- * Get constructor standings from driver standings
+ * Get constructor standings from Jolpica/Ergast
  */
 async function getConstructorStandings() {
-    const { standings } = await getDriverStandings();
-    
-    const constructorPoints = {};
-    for (const s of standings) {
-        const team = s.team;
-        if (!constructorPoints[team]) constructorPoints[team] = 0;
-        constructorPoints[team] += s.points;
-    }
-    
-    return Object.entries(constructorPoints)
-        .sort((a, b) => b[1] - a[1])
-        .map(([constructor, points], i) => ({
-            position: i + 1,
-            constructor,
-            points
+    return fetchWithCache('standings', async () => {
+        const year = new Date().getFullYear();
+        const resp = await fetch(`${JOLPICA_BASE}/${year}/constructorStandings.json`);
+        if (!resp.ok) throw new Error(`API error: ${resp.status}`);
+        const data = await resp.json();
+        
+        const standingsTable = data.MRData?.StandingsTable?.StandingsLists?.[0];
+        if (!standingsTable) return [];
+        
+        return standingsTable.ConstructorStandings.map(s => ({
+            position: parseInt(s.position),
+            constructor: s.Constructor.name,
+            points: parseInt(s.points),
+            wins: parseInt(s.wins)
         }));
+    });
 }
 
 /**
- * Get next race
+ * Get next race from Jolpica/Ergast
  */
 async function getNextRace() {
     return fetchWithCache('schedule', async () => {
-        const sessions = await fetchSessions();
+        const year = new Date().getFullYear();
+        const resp = await fetch(`${JOLPICA_BASE}/${year}.json`);
+        if (!resp.ok) throw new Error(`API error: ${resp.status}`);
+        const data = await resp.json();
+        
+        const races = data.MRData?.RaceTable?.Races || [];
         const now = new Date();
         
-        // Find next race session
-        const futureRaces = sessions
-            .filter(s => s.session_type === 'Race' && !s.session_name?.includes('Sprint'))
-            .filter(s => s.date_start && new Date(s.date_start) > now)
-            .sort((a, b) => new Date(a.date_start) - new Date(b.date_start));
+        // Find next race
+        const nextRace = races.find(r => {
+            const raceDate = new Date(`${r.date}T${r.time || '00:00:00Z'}`);
+            return raceDate > now;
+        });
         
-        if (futureRaces.length === 0) return null;
+        if (!nextRace) return null;
         
-        const race = futureRaces[0];
-        const raceDate = new Date(race.date_start);
+        const raceDate = new Date(`${nextRace.date}T${nextRace.time || '00:00:00Z'}`);
         
-        // Get all sessions for this race weekend
-        const raceSessions = sessions
-            .filter(s => s.meeting_key === race.meeting_key)
-            .sort((a, b) => new Date(a.date_start) - new Date(b.date_start));
+        // Build session times (approximate based on typical schedule)
+        const sessions = [
+            { name: 'FP1', date: addDays(raceDate, -2) },
+            { name: 'FP2', date: addDays(raceDate, -2) },
+            { name: 'FP3', date: addDays(raceDate, -1) },
+            { name: 'Qualifying', date: addDays(raceDate, -1) },
+            { name: 'Race', date: raceDate }
+        ];
         
         return {
-            name: race.meeting_name || 'Grand Prix',
+            name: nextRace.raceName,
             date: raceDate,
-            circuit: race.location || '',
-            sessions: raceSessions.map(s => ({
-                name: formatSessionName(s.session_name || s.session_type),
-                time: new Date(s.date_start)
+            circuit: nextRace.Circuit?.circuitName || '',
+            country: nextRace.Circuit?.Location?.country || '',
+            sessions: sessions.map(s => ({
+                name: s.name,
+                time: s.date
             }))
         };
     });
 }
 
 /**
- * Get latest session results
+ * Add days to a date
  */
-async function getLatestSession() {
-    return fetchWithCache('latestSession', async () => {
-        const sessions = await fetchSessions();
-        const now = new Date();
+function addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+
+/**
+ * Get latest race results
+ */
+async function getLatestResults() {
+    return fetchWithCache('results', async () => {
+        const year = new Date().getFullYear();
         
-        // Find most recent completed session
-        const completedSessions = sessions
-            .filter(s => s.date_end && new Date(s.date_end) < now)
-            .sort((a, b) => new Date(b.date_end) - new Date(a.date_end));
+        // Get current round from standings
+        const standingsResp = await fetch(`${JOLPICA_BASE}/${year}/driverStandings.json`);
+        const standingsData = await standingsResp.json();
+        const round = standingsData.MRData?.StandingsTable?.StandingsLists?.[0]?.round || 1;
         
-        if (completedSessions.length === 0) return null;
-        
-        const latest = completedSessions[0];
-        const sessionKey = latest.session_key;
-        
-        // Get drivers
-        const driversResp = await fetch(`${OPENF1_BASE}/drivers?session_key=${sessionKey}`);
-        const drivers = await driversResp.json();
-        const driverMap = Object.fromEntries(drivers.map(d => [d.driver_number, d]));
-        
-        // Get laps
-        const lapsResp = await fetch(`${OPENF1_BASE}/laps?session_key=${sessionKey}`);
-        const laps = await lapsResp.json();
-        
-        // Find best lap per driver
-        const bestLaps = {};
-        for (const lap of laps) {
-            const driver = lap.driver_number;
-            const duration = lap.lap_duration;
-            if (duration && (!bestLaps[driver] || duration < bestLaps[driver])) {
-                bestLaps[driver] = duration;
+        if (round <= 1) {
+            // Try to get qualifying results for first race
+            const qualiResp = await fetch(`${JOLPICA_BASE}/${year}/1/qualifying.json`);
+            const qualiData = await qualiResp.json();
+            const race = qualiData.MRData?.RaceTable?.Races?.[0];
+            
+            if (race?.QualifyingResults) {
+                return {
+                    sessionName: 'Qualifying',
+                    raceName: race.raceName,
+                    results: race.QualifyingResults.slice(0, 10).map((r, i) => ({
+                        position: i + 1,
+                        driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
+                        team: r.Constructor.name,
+                        time: r.Q3 || r.Q2 || r.Q1 || '-'
+                    }))
+                };
             }
+            return null;
         }
         
-        // Sort by lap time
-        const results = Object.entries(bestLaps)
-            .sort((a, b) => a[1] - b[1])
-            .slice(0, 10)
-            .map(([driver, duration], i) => {
-                const driverInfo = driverMap[driver] || {};
-                return {
-                    position: i + 1,
-                    driver: driverInfo.name_acronym || `Driver ${driver}`,
-                    team: driverInfo.team_name || 'Unknown',
-                    time: formatLapTime(duration)
-                };
-            });
+        // Get last race results
+        const resp = await fetch(`${JOLPICA_BASE}/${year}/${round}/results.json`);
+        const data = await resp.json();
+        const race = data.MRData?.RaceTable?.Races?.[0];
+        
+        if (!race?.Results) return null;
         
         return {
-            session: latest,
-            results
+            sessionName: 'Race',
+            raceName: race.raceName,
+            results: race.Results.slice(0, 10).map(r => ({
+                position: parseInt(r.position),
+                driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
+                team: r.Constructor.name,
+                time: r.Time?.time || r.status
+            }))
         };
     });
-}
-
-/**
- * Format session name
- */
-function formatSessionName(name) {
-    const names = {
-        'Practice 1': 'FP1',
-        'Practice 2': 'FP2',
-        'Practice 3': 'FP3',
-        'Qualifying': 'Qualifying',
-        'Sprint Qualifying': 'Sprint Quali',
-        'Sprint': 'Sprint',
-        'Race': 'Race'
-    };
-    return names[name] || name;
-}
-
-/**
- * Format lap time (seconds to M:SS.mmm)
- */
-function formatLapTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toFixed(3).padStart(6, '0')}`;
 }
 
 /**
@@ -300,9 +233,14 @@ function formatTime(date) {
 /**
  * Render driver standings
  */
-function renderDriverStandings(standings) {
+function renderDriverStandings(data) {
     const container = document.getElementById('driver-standings');
-    container.innerHTML = standings.slice(0, 10).map(s => `
+    if (!data?.standings?.length) {
+        container.innerHTML = '<div class="error-message">No standings available</div>';
+        return;
+    }
+    
+    container.innerHTML = data.standings.slice(0, 10).map(s => `
         <div class="driver-row">
             <div class="position ${s.position <= 3 ? 'p' + s.position : ''}">${s.position}</div>
             <div class="driver-info">
@@ -319,6 +257,11 @@ function renderDriverStandings(standings) {
  */
 function renderConstructorStandings(standings) {
     const container = document.getElementById('constructor-standings');
+    if (!standings?.length) {
+        container.innerHTML = '<div class="error-message">No standings available</div>';
+        return;
+    }
+    
     container.innerHTML = standings.slice(0, 10).map(s => `
         <div class="driver-row">
             <div class="position ${s.position <= 3 ? 'p' + s.position : ''}">${s.position}</div>
@@ -341,7 +284,7 @@ function renderNextRace(race) {
     
     document.getElementById('next-race-name').textContent = race.name;
     document.getElementById('next-race-date').textContent = formatDate(race.date);
-    document.getElementById('next-race-circuit').textContent = `📍 ${race.circuit}`;
+    document.getElementById('next-race-circuit').textContent = `📍 ${race.circuit}${race.country ? ', ' + race.country : ''}`;
     
     const sessionsContainer = document.getElementById('session-times');
     sessionsContainer.innerHTML = race.sessions.map(s => `
@@ -353,16 +296,16 @@ function renderNextRace(race) {
 }
 
 /**
- * Render latest session results
+ * Render latest results
  */
 function renderLatestResults(data) {
     if (!data) {
         document.getElementById('results-header').textContent = 'No completed sessions';
+        document.getElementById('latest-results').innerHTML = '<tr><td colspan="3" class="loading-cell">No results yet</td></tr>';
         return;
     }
     
-    const sessionName = data.session.meeting_name || data.session.session_name || 'Session';
-    document.getElementById('results-header').textContent = `${data.session.session_name || 'Session'} - ${sessionName}`;
+    document.getElementById('results-header').textContent = `${data.sessionName} - ${data.raceName}`;
     
     const tbody = document.getElementById('latest-results');
     tbody.innerHTML = data.results.map(r => `
@@ -389,23 +332,22 @@ async function loadAll() {
     refreshBtn.classList.add('loading');
     
     try {
-        // Load in parallel
-        const [driverStandings, constructorStandings, nextRace, latestSession] = await Promise.all([
+        const [driverStandings, constructorStandings, nextRace, latestResults] = await Promise.all([
             getDriverStandings().catch(e => ({ standings: [], error: e.message })),
-            getConstructorStandings().catch(e => ({ standings: [], error: e.message })),
+            getConstructorStandings().catch(e => []),
             getNextRace().catch(e => null),
-            getLatestSession().catch(e => null)
+            getLatestResults().catch(e => null)
         ]);
         
-        renderDriverStandings(driverStandings.standings);
+        renderDriverStandings(driverStandings);
         renderConstructorStandings(constructorStandings);
         renderNextRace(nextRace);
-        renderLatestSession(latestSession);
+        renderLatestResults(latestResults);
         
     } catch (error) {
         console.error('Failed to load data:', error);
-        showError(document.getElementById('driver-standings'), 'Failed to load standings');
-        showError(document.getElementById('constructor-standings'), 'Failed to load standings');
+        showError(document.getElementById('driver-standings'), 'Failed to load');
+        showError(document.getElementById('constructor-standings'), 'Failed to load');
     } finally {
         refreshBtn.classList.remove('loading');
     }
@@ -417,7 +359,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Refresh button
     document.getElementById('refresh-btn').addEventListener('click', () => {
-        // Clear cache
         Object.keys(cache).forEach(key => {
             cache[key].data = null;
             cache[key].timestamp = 0;
