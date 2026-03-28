@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="assets/css/style.css?t=202603280812">
     <link rel="preconnect" href="https://api.openf1.org">
     <script src="assets/js/app.js?t=202603280812" defer></script>
+    <script src="assets/js/poll.js?t=202603280812" defer></script>
 </head>
 <body>
     <header class="header">
@@ -64,6 +65,18 @@
                 <h2 id="constructor-standings-title"><span class="icon">🏭</span> Constructor Standings</h2>
                 <div id="constructor-standings" class="standings-list">
                     <div class="loading-skeleton"></div>
+                </div>
+            </section>
+
+            <!-- Race Winner Poll -->
+            <section class="card poll-card" id="poll-container" aria-labelledby="poll-title" style="display: none;">
+                <h2 id="poll-title">🏎️ Race Winner Poll</h2>
+                <p class="poll-subtitle" id="poll-subtitle">Who will win?</p>
+                <div id="poll-vote" class="poll-vote-area">
+                    <!-- Voting options rendered here -->
+                </div>
+                <div id="poll-results" class="poll-results-area" style="display: none;">
+                    <!-- Results rendered here -->
                 </div>
             </section>
 

@@ -594,6 +594,11 @@ async function loadAll() {
         const status = document.getElementById('cache-status');
         status.textContent = 'Data updated via GitHub Actions';
         
+        // Refresh poll if available
+        if (typeof window.refreshPoll === 'function') {
+            window.refreshPoll();
+        }
+        
     } catch (error) {
         console.error('Failed to load data:', error);
         showError(document.getElementById('driver-standings'), 'Failed to load');

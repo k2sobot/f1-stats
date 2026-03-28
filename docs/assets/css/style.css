@@ -528,6 +528,132 @@ body {
     font-size: 0.75rem;
 }
 
+/* Poll Card */
+.poll-card {
+    grid-column: span 2;
+}
+
+@media (max-width: 900px) {
+    .poll-card {
+        grid-column: span 1;
+    }
+}
+
+.poll-card h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.poll-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.poll-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+@media (max-width: 600px) {
+    .poll-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+.poll-option {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    text-align: left;
+    color: var(--text-primary);
+}
+
+.poll-option:hover {
+    border-color: var(--mclaren);
+    background: rgba(255, 135, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.poll-option:active {
+    transform: translateY(0);
+}
+
+/* Results View */
+.poll-voted {
+    background: linear-gradient(135deg, var(--mclaren), #ffaa00);
+    color: #000;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.poll-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.poll-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: background 0.2s ease;
+}
+
+.poll-row.voted {
+    background: rgba(255, 135, 0, 0.15);
+    border-radius: 0.5rem;
+}
+
+.poll-driver {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 140px;
+}
+
+.poll-bar-container {
+    flex: 1;
+    height: 8px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.poll-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--mclaren), #ffaa00);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.poll-pct {
+    min-width: 40px;
+    text-align: right;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.poll-total {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-top: 1rem;
+}
+
 /* Error State */
 .error-message {
     color: var(--ferrari);
