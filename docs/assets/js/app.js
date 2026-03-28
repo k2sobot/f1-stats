@@ -111,12 +111,12 @@ async function getNextRace() {
     const friday = addDays(raceDate, -2);
     const saturday = addDays(raceDate, -1);
     
-    // Suzuka 2026 schedule (UTC times)
+    // Suzuka 2026 schedule (UTC times) - based on actual F1 schedule
     const sessions = [
         { name: 'FP1', date: new Date('2026-03-27T01:30:00Z') },
         { name: 'FP2', date: new Date('2026-03-27T05:00:00Z') },
         { name: 'FP3', date: new Date('2026-03-28T04:30:00Z') },
-        { name: 'Qualifying', date: new Date('2026-03-28T08:00:00Z') },
+        { name: 'Qualifying', date: new Date('2026-03-28T06:00:00Z') },  // 08:00 SAST
         { name: 'Race', date: raceDate }
     ];
     
