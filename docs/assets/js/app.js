@@ -167,33 +167,52 @@ async function getLatestSession() {
         dataCache.results = await loadLocalData('results');
     }
     
-    // Prefer race results if available
-    if (dataCache.results?.MRData?.RaceTable?.Races?.[0]?.Results) {
-        const race = dataCache.results.MRData.RaceTable.Races[0];
+    // Get current round from standings
+    const standingsData = dataCache.drivers || await loadLocalData('drivers');
+    const currentRound = standingsData?.MRData?.StandingsTable?.StandingsLists?.[0]?.round || 1;
+    
+    // Check if qualifying is from current round and has results
+    const qualiRace = dataCache.qualifying?.MRData?.RaceTable?.Races?.[0];
+    const qualiRound = dataCache.qualifying?.MRData?.RaceTable?.round;
+    
+    // Check if race results are from current or previous round
+    const raceData = dataCache.results?.MRData?.RaceTable?.Races?.[0];
+    const raceRound = dataCache.results?.MRData?.RaceTable?.round;
+    
+    // Prefer race results if available and from current/past round
+    if (raceData?.Results && raceRound <= currentRound) {
+        const fastestLapDriver = raceData.Results.find(r => r.FastestLap?.rank === '1');
+        
         return {
             sessionName: 'Race',
-            raceName: race.raceName,
-            results: race.Results.slice(0, 10).map(r => ({
+            raceName: raceData.raceName,
+            results: raceData.Results.slice(0, 10).map(r => ({
                 position: parseInt(r.position),
                 driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
                 team: r.Constructor.name,
-                time: r.Time?.time || r.status
-            }))
+                time: r.Time?.time || r.status,
+                fastestLap: r.FastestLap?.rank === '1'
+            })),
+            fastestLap: fastestLapDriver ? {
+                driver: fastestLapDriver.Driver.code,
+                time: fastestLapDriver.FastestLap?.Time?.time
+            } : null
         };
     }
     
     // Fall back to qualifying
-    if (dataCache.qualifying?.MRData?.RaceTable?.Races?.[0]?.QualifyingResults) {
-        const race = dataCache.qualifying.MRData.RaceTable.Races[0];
+    if (qualiRace?.QualifyingResults) {
         return {
             sessionName: 'Qualifying',
-            raceName: race.raceName,
-            results: race.QualifyingResults.slice(0, 10).map((r, i) => ({
+            raceName: qualiRace.raceName,
+            results: qualiRace.QualifyingResults.slice(0, 10).map((r, i) => ({
                 position: i + 1,
                 driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
                 team: r.Constructor.name,
-                time: r.Q3 || r.Q2 || r.Q1 || '-'
-            }))
+                time: r.Q3 || r.Q2 || r.Q1 || '-',
+                fastestLap: false
+            })),
+            fastestLap: null
         };
     }
     
@@ -348,10 +367,15 @@ function renderLatestResults(data) {
     
     header.textContent = `${data.sessionName} - ${data.raceName}`;
     
+    // Add fastest lap info if available
+    if (data.fastestLap) {
+        header.innerHTML = `${data.sessionName} - ${data.raceName} <span class="fastest-lap-header"><span class="purple-clock">⏱️</span> ${data.fastestLap.driver} (${data.fastestLap.time})</span>`;
+    }
+    
     tbody.innerHTML = data.results.map(r => `
         <tr>
             <td><div class="position ${r.position <= 3 ? 'p' + r.position : ''}">${r.position}</div></td>
-            <td>${r.driver} <span class="team-tag team-${TEAM_COLORS[r.team] || 'default'}">${r.team.substring(0, 3).toUpperCase()}</span></td>
+            <td>${r.driver} ${r.fastestLap ? '<span class="purple-clock" title="Fastest Lap">⏱️</span>' : ''} <span class="team-tag team-${TEAM_COLORS[r.team] || 'default'}">${r.team.substring(0, 3).toUpperCase()}</span></td>
             <td>${r.time}</td>
         </tr>
     `).join('');

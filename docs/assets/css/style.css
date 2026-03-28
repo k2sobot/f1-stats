@@ -401,6 +401,23 @@ body {
     color: var(--text-secondary);
 }
 
+/* Fastest Lap - Purple Clock */
+.purple-clock {
+    color: #a855f7;
+    font-size: 0.875rem;
+    margin-left: 0.25rem;
+}
+
+.fastest-lap-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: 0.75rem;
+    color: #a855f7;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
 /* Results Table */
 .results-header {
     font-size: 0.875rem;
