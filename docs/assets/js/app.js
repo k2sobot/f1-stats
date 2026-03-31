@@ -23,7 +23,7 @@ const TEAM_COLORS = {
     'Visa RB': 'racingbulls',
 };
 
-// Cache for loaded data
+// Cache for loaded data (in-memory)
 let dataCache = {
     drivers: null,
     constructors: null,
@@ -32,10 +32,65 @@ let dataCache = {
     results: null
 };
 
+// LocalStorage cache key and expiry
+const CACHE_KEY = 'f1-data-cache';
+const CACHE_EXPIRY_HOURS = 6; // Cache for 6 hours, or until next race session
+
 /**
- * Load local JSON data
+ * Get cached data from localStorage
+ */
+function getCachedData() {
+    try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (!cached) return null;
+        
+        const data = JSON.parse(cached);
+        const now = new Date();
+        const cachedAt = new Date(data.timestamp);
+        
+        // Check if cache is expired
+        const hoursSinceCache = (now - cachedAt) / (1000 * 60 * 60);
+        if (hoursSinceCache > CACHE_EXPIRY_HOURS) {
+            localStorage.removeItem(CACHE_KEY);
+            return null;
+        }
+        
+        return data;
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Save data to localStorage cache
+ */
+function setCachedData(data) {
+    try {
+        const cacheData = {
+            timestamp: new Date().toISOString(),
+            drivers: data.drivers,
+            constructors: data.constructors,
+            schedule: data.schedule,
+            qualifying: data.qualifying,
+            results: data.results
+        };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+    } catch (e) {
+        // localStorage might be full or disabled
+    }
+}
+
+/**
+ * Load local JSON data with caching
  */
 async function loadLocalData(file) {
+    // Check localStorage cache first
+    const cached = getCachedData();
+    if (cached && cached[file]) {
+        return cached[file];
+    }
+    
+    // Fetch from server
     const resp = await fetch(`data/${file}.json`);
     if (!resp.ok) return null;
     return resp.json();
@@ -591,12 +646,29 @@ function showError(container, message) {
  */
 async function loadAll() {
     try {
+        // Check localStorage cache first
+        const cached = getCachedData();
+        
+        if (cached) {
+            // Use cached data
+            dataCache = {
+                drivers: cached.drivers,
+                constructors: cached.constructors,
+                schedule: cached.schedule,
+                qualifying: cached.qualifying,
+                results: cached.results
+            };
+        }
+        
         const [driverStandings, constructorStandings, nextRace, latestSession] = await Promise.all([
             getDriverStandings().catch(e => ({ standings: [], error: e.message })),
             getConstructorStandings().catch(e => []),
             getNextRace().catch(e => null),
             getLatestSession().catch(e => null)
         ]);
+        
+        // Save to localStorage cache
+        setCachedData(dataCache);
         
         renderDriverStandings(driverStandings);
         renderConstructorStandings(constructorStandings);
