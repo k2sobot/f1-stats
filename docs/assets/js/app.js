@@ -34,7 +34,7 @@ let dataCache = {
 
 // LocalStorage cache key and expiry
 const CACHE_KEY = 'f1-data-cache';
-const CACHE_EXPIRY_HOURS = 6; // Cache for 6 hours, or until next race session
+const CACHE_EXPIRY_DAYS = 7; // Cache for 7 days - fresh enough between race weekends
 
 /**
  * Get cached data from localStorage
@@ -49,8 +49,8 @@ function getCachedData() {
         const cachedAt = new Date(data.timestamp);
         
         // Check if cache is expired
-        const hoursSinceCache = (now - cachedAt) / (1000 * 60 * 60);
-        if (hoursSinceCache > CACHE_EXPIRY_HOURS) {
+        const daysSinceCache = (now - cachedAt) / (1000 * 60 * 60 * 24);
+        if (daysSinceCache > CACHE_EXPIRY_DAYS) {
             localStorage.removeItem(CACHE_KEY);
             return null;
         }
