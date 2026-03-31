@@ -1,0 +1,51 @@
+name: Update F1 Data
+
+on:
+  # Run after typical race end times (races usually end ~2-3 hours after start)
+  # Most races start around 14:00-15:00 local time, so we check at 17:00 and 20:00 UTC on Sundays
+  schedule:
+    # After most European races (ends ~16:00 local = 14:00-15:00 UTC)
+    - cron: '0 17 * * SUN'
+    # After most Asian races (later start times)
+    - cron: '0 20 * * SUN'
+    # Monday morning backup (SAST morning)
+    - cron: '0 5 * * MON'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Fetch and update F1 data
+        run: |
+          node scripts/update-f1-data.js
+      
+      - name: Check for changes
+        id: check-changes
+        run: |
+          git diff --exit-code docs/data/ || echo "has_changes=true" >> $GITHUB_OUTPUT
+      
+      - name: Commit and push if changed
+        if: steps.check-changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/
+          git commit -m "Update F1 data - $(date +'%Y-%m-%d %H:%M UTC')"
+          git push
