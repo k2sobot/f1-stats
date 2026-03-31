@@ -93,6 +93,31 @@
                     </tbody>
                 </table>
             </section>
+
+            <!-- Weather (Live during sessions) -->
+            <section class="card weather-card" id="weather-card" aria-labelledby="weather-title" style="display: none;">
+                <h2 id="weather-title"><span class="icon">🌦️</span> Track Weather</h2>
+                <div id="weather-content" class="weather-grid">
+                    <div class="loading-skeleton"></div>
+                </div>
+            </section>
+
+            <!-- Pit Stops (Live during race) -->
+            <section class="card pitstops-card" id="pitstops-card" aria-labelledby="pitstops-title" style="display: none;">
+                <h2 id="pitstops-title"><span class="icon">🛞</span> Pit Stops</h2>
+                <table class="results-table" aria-label="Pit stop times">
+                    <thead>
+                        <tr>
+                            <th>Lap</th>
+                            <th>Driver</th>
+                            <th>Time</th>
+                            <th>Tire</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pitstops-results">
+                    </tbody>
+                </table>
+            </section>
         </div>
     </main>
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test</title>
+</head>
+<body>
+  <h1>Driver Standings Test</h1>
+  <pre id="output">Loading...</pre>
+  <script>
+    async function test() {
+      const out = document.getElementById('output');
+      try {
+        const resp = await fetch('data/drivers.json');
+        out.textContent = 'Fetch status: ' + resp.status + ' ' + resp.statusText + '\n';
+        const data = await resp.json();
+        const standings = data.MRData.StandingsTable.StandingsLists[0].DriverStandings.slice(0, 5);
+        out.textContent += 'Top 5 drivers:\n';
+        for (const s of standings) {
+          out.textContent += s.position + '. ' + s.Driver.code + ' - ' + s.points + ' pts\n';
+        }
+      } catch (e) {
+        out.textContent = 'Error: ' + e.message + '\n' + e.stack;
+      }
+    }
+    test();
+  </script>
+</body>
+</html>

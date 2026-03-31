@@ -36,6 +36,10 @@ let dataCache = {
 const CACHE_KEY = 'f1-data-cache';
 const CACHE_EXPIRY_DAYS = 7; // Cache for 7 days - fresh enough between race weekends
 
+// Short-term cache for live data (weather, pitstops)
+const LIVE_CACHE_KEY = 'f1-live-cache';
+const LIVE_CACHE_MINUTES = 5; // 5-minute cache for live data
+
 /**
  * Get cached data from localStorage
  */
@@ -94,6 +98,145 @@ async function loadLocalData(file) {
     const resp = await fetch(`data/${file}.json`);
     if (!resp.ok) return null;
     return resp.json();
+}
+
+/**
+ * Get live data cache (5-minute expiry)
+ */
+function getLiveCache(type) {
+    try {
+        const cached = localStorage.getItem(LIVE_CACHE_KEY);
+        if (!cached) return null;
+        
+        const data = JSON.parse(cached);
+        if (!data[type]) return null;
+        
+        const now = new Date();
+        const cachedAt = new Date(data[type].timestamp);
+        const minutesSinceCache = (now - cachedAt) / (1000 * 60);
+        
+        if (minutesSinceCache > LIVE_CACHE_MINUTES) {
+            delete data[type];
+            localStorage.setItem(LIVE_CACHE_KEY, JSON.stringify(data));
+            return null;
+        }
+        
+        return data[type].data;
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Set live data cache
+ */
+function setLiveCache(type, data) {
+    try {
+        let cache = {};
+        const existing = localStorage.getItem(LIVE_CACHE_KEY);
+        if (existing) cache = JSON.parse(existing);
+        
+        cache[type] = {
+            timestamp: new Date().toISOString(),
+            data: data
+        };
+        
+        localStorage.setItem(LIVE_CACHE_KEY, JSON.stringify(cache));
+    } catch (e) {
+        // localStorage might be full
+    }
+}
+
+/**
+ * Fetch weather data from OpenF1 (live during sessions)
+ */
+async function getWeather(sessionKey) {
+    // Check cache first
+    const cached = getLiveCache('weather');
+    if (cached) return cached;
+    
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const resp = await fetch(`https://api.openf1.org/v1/weather?session_key=${sessionKey}`, {
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        
+        if (!resp.ok) return null;
+        
+        const data = await resp.json();
+        if (data && data.length > 0) {
+            // Get latest weather reading
+            const latest = data[data.length - 1];
+            const weather = {
+                airTemp: latest.air_temperature,
+                trackTemp: latest.track_temperature,
+                humidity: latest.humidity,
+                windSpeed: latest.wind_speed,
+                rainfall: latest.rainfall || 0
+            };
+            
+            setLiveCache('weather', weather);
+            return weather;
+        }
+    } catch (e) {
+        console.log('Weather fetch failed:', e.message);
+    }
+    
+    return null;
+}
+
+/**
+ * Fetch pit stop data from OpenF1 (live during race)
+ */
+async function getPitStops(sessionKey) {
+    // Check cache first
+    const cached = getLiveCache('pitstops');
+    if (cached) return cached;
+    
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        
+        const [stopsResp, driversResp] = await Promise.all([
+            fetch(`https://api.openf1.org/v1/pit?session_key=${sessionKey}`, {
+                signal: controller.signal
+            }),
+            fetch(`https://api.openf1.org/v1/drivers?session_key=${sessionKey}`, {
+                signal: controller.signal
+            })
+        ]);
+        clearTimeout(timeoutId);
+        
+        if (!stopsResp.ok || !driversResp.ok) return null;
+        
+        const stops = await stopsResp.json();
+        const drivers = await driversResp.json();
+        
+        // Build driver lookup
+        const driverMap = {};
+        for (const d of drivers) {
+            driverMap[d.driver_number] = d.name_acronym || d.first_name?.substring(0, 3).toUpperCase() || `D${d.driver_number}`;
+        }
+        
+        // Sort by lap number, get latest stops
+        const sorted = stops.sort((a, b) => b.lap_number - a.lap_number);
+        const pitstops = sorted.slice(0, 15).map(s => ({
+            lap: s.lap_number,
+            driver: driverMap[s.driver_number] || `D${s.driver_number}`,
+            duration: s.pit_duration ? `${s.pit_duration.toFixed(2)}s` : '-',
+            tire: s.tyre_compound || '-'
+        }));
+        
+        setLiveCache('pitstops', pitstops);
+        return pitstops;
+    } catch (e) {
+        console.log('Pit stops fetch failed:', e.message);
+    }
+    
+    return null;
 }
 
 /**
@@ -635,6 +778,75 @@ function renderLatestResults(data) {
 }
 
 /**
+ * Render weather data
+ */
+function renderWeather(weather) {
+    const container = document.getElementById('weather-card');
+    const content = document.getElementById('weather-content');
+    
+    if (!weather) {
+        container.style.display = 'none';
+        return;
+    }
+    
+    container.style.display = 'block';
+    
+    const rainIcon = weather.rainfall > 0 ? '🌧️' : (weather.humidity > 70 ? '⛅' : '☀️');
+    
+    content.innerHTML = `
+        <div class="weather-item">
+            <span class="weather-icon">${rainIcon}</span>
+            <span class="weather-label">Conditions</span>
+            <span class="weather-value">${weather.rainfall > 0 ? 'Rain' : (weather.humidity > 70 ? 'Overcast' : 'Clear')}</span>
+        </div>
+        <div class="weather-item">
+            <span class="weather-icon">🌡️</span>
+            <span class="weather-label">Air Temp</span>
+            <span class="weather-value">${weather.airTemp}°C</span>
+        </div>
+        <div class="weather-item">
+            <span class="weather-icon">🏁</span>
+            <span class="weather-label">Track Temp</span>
+            <span class="weather-value">${weather.trackTemp}°C</span>
+        </div>
+        <div class="weather-item">
+            <span class="weather-icon">💧</span>
+            <span class="weather-label">Humidity</span>
+            <span class="weather-value">${weather.humidity}%</span>
+        </div>
+        <div class="weather-item">
+            <span class="weather-icon">💨</span>
+            <span class="weather-label">Wind</span>
+            <span class="weather-value">${weather.windSpeed} km/h</span>
+        </div>
+    `;
+}
+
+/**
+ * Render pit stops data
+ */
+function renderPitStops(pitstops) {
+    const container = document.getElementById('pitstops-card');
+    const tbody = document.getElementById('pitstops-results');
+    
+    if (!pitstops || pitstops.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
+    
+    container.style.display = 'block';
+    
+    tbody.innerHTML = pitstops.map(s => `
+        <tr>
+            <td>${s.lap}</td>
+            <td>${s.driver}</td>
+            <td>${s.duration}</td>
+            <td><span class="tire-${s.tire?.toLowerCase()}">${s.tire}</span></td>
+        </tr>
+    `).join('');
+}
+
+/**
  * Show error state
  */
 function showError(container, message) {
@@ -674,6 +886,25 @@ async function loadAll() {
         renderConstructorStandings(constructorStandings);
         renderNextRace(nextRace);
         renderLatestResults(latestSession);
+        
+        // Fetch live data if in a race weekend
+        const weekendState = await getWeekendState();
+        if (weekendState.inWeekend && weekendState.lastCompleted) {
+            const sessionKey = weekendState.lastCompleted.session_key;
+            
+            // Fetch weather and pitstops in parallel (non-blocking)
+            const [weather, pitstops] = await Promise.all([
+                getWeather(sessionKey).catch(() => null),
+                getPitStops(sessionKey).catch(() => null)
+            ]);
+            
+            renderWeather(weather);
+            renderPitStops(pitstops);
+        } else {
+            // Hide live data cards outside race weekends
+            document.getElementById('weather-card').style.display = 'none';
+            document.getElementById('pitstops-card').style.display = 'none';
+        }
         
         // Refresh poll if available
         if (typeof window.refreshPoll === 'function') {

@@ -673,6 +673,56 @@ body {
     padding: 1rem;
 }
 
+/* Weather Card */
+.weather-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+}
+
+.weather-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.weather-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.weather-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.weather-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 0.25rem;
+}
+
+/* Pit Stops */
+.tire-soft, .tire-medium, .tire-hard, .tire-intermediate, .tire-wet {
+    font-weight: 600;
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+}
+
+.tire-soft { color: #e10600; }
+.tire-medium { color: #ffd12e; }
+.tire-hard { color: #3695c7; }
+.tire-intermediate { color: #78c457; }
+.tire-wet { color: #4296d9; }
+
 /* Responsive */
 @media (max-width: 600px) {
     .header-content {
@@ -694,5 +744,9 @@ body {
     
     .session-list {
         flex-direction: column;
+    }
+    
+    .weather-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
