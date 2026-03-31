@@ -574,9 +574,6 @@ function showError(container, message) {
  * Load all data
  */
 async function loadAll() {
-    const refreshBtn = document.getElementById('refresh-btn');
-    refreshBtn.classList.add('loading');
-    
     try {
         const [driverStandings, constructorStandings, nextRace, latestSession] = await Promise.all([
             getDriverStandings().catch(e => ({ standings: [], error: e.message })),
@@ -590,10 +587,6 @@ async function loadAll() {
         renderNextRace(nextRace);
         renderLatestResults(latestSession);
         
-        // Update cache status
-        const status = document.getElementById('cache-status');
-        status.textContent = 'Data updated via GitHub Actions';
-        
         // Refresh poll if available
         if (typeof window.refreshPoll === 'function') {
             window.refreshPoll();
@@ -603,8 +596,6 @@ async function loadAll() {
         console.error('Failed to load data:', error);
         showError(document.getElementById('driver-standings'), 'Failed to load');
         showError(document.getElementById('constructor-standings'), 'Failed to load');
-    } finally {
-        refreshBtn.classList.remove('loading');
     }
 }
 
