@@ -140,14 +140,13 @@ body {
 }
 
 .beta-badge {
-    font-size: 0.6rem;
-    font-weight: 600;
     background: linear-gradient(135deg, #ff6b6b, #ee5a24);
     color: white;
-    padding: 0.1rem 0.35rem;
-    border-radius: 0.2rem;
-    margin-left: 0.4rem;
-    vertical-align: super;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
