@@ -163,7 +163,18 @@ async function getWeekendState() {
     const year = now.getFullYear();
     
     try {
-        const resp = await fetch(`https://api.openf1.org/v1/sessions?year=${year}`);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const resp = await fetch(`https://api.openf1.org/v1/sessions?year=${year}`, {
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        
+        if (!resp.ok) {
+            return { inWeekend: false };
+        }
+        
         const sessions = await resp.json();
         
         // Group sessions by meeting
@@ -251,10 +262,15 @@ async function getWeekendState() {
  */
 async function fetchLiveSessionResults(sessionKey) {
     try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        
         const [driversResp, lapsResp] = await Promise.all([
-            fetch(`https://api.openf1.org/v1/drivers?session_key=${sessionKey}`),
-            fetch(`https://api.openf1.org/v1/laps?session_key=${sessionKey}`)
+            fetch(`https://api.openf1.org/v1/drivers?session_key=${sessionKey}`, { signal: controller.signal }),
+            fetch(`https://api.openf1.org/v1/laps?session_key=${sessionKey}`, { signal: controller.signal })
         ]);
+        
+        clearTimeout(timeoutId);
         
         const drivers = await driversResp.json();
         const laps = await lapsResp.json();
@@ -601,8 +617,7 @@ async function loadAll() {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    // Update season year
+    document.getElementById('season-year').textContent = `${new Date().getFullYear()} Season`;
     loadAll();
 });
-
-// Update season year
-document.getElementById('season-year').textContent = `${new Date().getFullYear()} Season`;
