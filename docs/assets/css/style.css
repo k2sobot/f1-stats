@@ -58,6 +58,136 @@ body {
     line-height: 1.5;
 }
 
+/* Countdown Banner */
+.countdown-banner {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.countdown-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    animation: shimmer-bg 3s infinite;
+}
+
+@keyframes shimmer-bg {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
+}
+
+.countdown-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+.countdown-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+}
+
+.countdown-race {
+    font-size: 1.125rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--ferrari), var(--mclaren));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.countdown-timer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+}
+
+.countdown-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(180deg, #ffffff 0%, #b0b0b0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+}
+
+.countdown-label-small {
+    font-size: 0.625rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    margin-top: 0.25rem;
+}
+
+.countdown-separator {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    line-height: 1;
+}
+
+/* Countdown complete state */
+.countdown-banner.race-time {
+    background: linear-gradient(135deg, var(--ferrari), #ff3333);
+    animation: pulse-bg 2s infinite;
+}
+
+@keyframes pulse-bg {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+}
+
+.countdown-banner.race-time .countdown-value {
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: white;
+}
+
+@media (max-width: 600px) {
+    .countdown-content {
+        gap: 0.75rem;
+    }
+    
+    .countdown-unit {
+        min-width: 48px;
+    }
+    
+    .countdown-value {
+        font-size: 1.25rem;
+    }
+    
+    .countdown-separator {
+        font-size: 1rem;
+    }
+    
+    .countdown-race {
+        font-size: 0.9rem;
+    }
+}
+
 /* Header */
 .header {
     background: var(--bg-secondary);

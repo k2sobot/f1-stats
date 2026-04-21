@@ -32,6 +32,10 @@ let dataCache = {
     results: null
 };
 
+// Countdown state
+let countdownInterval = null;
+let nextRaceDate = null;
+
 // LocalStorage cache key and expiry
 const CACHE_KEY = 'f1-data-cache';
 const CACHE_EXPIRY_DAYS = 7; // Cache for 7 days - fresh enough between race weekends
@@ -691,17 +695,80 @@ function renderConstructorStandings(standings) {
 }
 
 /**
+ * Update countdown timer display
+ */
+function updateCountdown() {
+    if (!nextRaceDate) return;
+    
+    const now = new Date();
+    const diff = nextRaceDate - now;
+    
+    if (diff <= 0) {
+        // Race time!
+        document.getElementById('countdown-days').textContent = '00';
+        document.getElementById('countdown-hours').textContent = '00';
+        document.getElementById('countdown-minutes').textContent = '00';
+        document.getElementById('countdown-seconds').textContent = '00';
+        document.getElementById('countdown-banner').classList.add('race-time');
+        
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
+        return;
+    }
+    
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    document.getElementById('countdown-days').textContent = String(days).padStart(2, '0');
+    document.getElementById('countdown-hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('countdown-minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('countdown-seconds').textContent = String(seconds).padStart(2, '0');
+}
+
+/**
+ * Start countdown timer
+ */
+function startCountdown(raceDate, raceName) {
+    // Clear existing interval if any
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+    }
+    
+    nextRaceDate = raceDate;
+    
+    // Update race name
+    document.getElementById('countdown-race').textContent = raceName;
+    
+    // Remove race-time class if present
+    document.getElementById('countdown-banner').classList.remove('race-time');
+    
+    // Initial update
+    updateCountdown();
+    
+    // Update every second
+    countdownInterval = setInterval(updateCountdown, 1000);
+}
+
+/**
  * Render next race
  */
 function renderNextRace(race) {
     if (!race) {
         document.getElementById('next-race-name').textContent = 'No upcoming races';
+        document.getElementById('countdown-race').textContent = 'Season Complete';
         return;
     }
     
     document.getElementById('next-race-name').textContent = race.name;
     document.getElementById('next-race-date').textContent = formatDate(race.date);
     document.getElementById('next-race-circuit').textContent = `📍 ${race.circuit}${race.country ? ', ' + race.country : ''}`;
+    
+    // Start countdown timer
+    startCountdown(race.date, race.name);
     
     // Show/hide live banner at top
     const liveBanner = document.getElementById('live-banner');
