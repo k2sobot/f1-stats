@@ -1,32 +1,28 @@
 /**
- * F1 Stats - Static data with live weekend sessions
+ * F1 Stats - Live session data with local cache
  */
 
 const TEAM_COLORS = {
     'Mercedes': 'mercedes', 'Ferrari': 'ferrari', 'Red Bull Racing': 'redbull', 'Red Bull': 'redbull',
     'McLaren': 'mclaren', 'Alpine F1 Team': 'alpine', 'Alpine': 'alpine', 'Aston Martin F1 Team': 'astonmartin',
     'Aston Martin': 'astonmartin', 'Haas F1 Team': 'haas', 'Haas': 'haas', 'Williams': 'williams',
-    'Audi': 'audi', 'Cadillac': 'cadillac', 'Racing Bulls': 'racingbulls', 'RB': 'racingbulls', 'Visa RB': 'racingbulls',
+    'Audi': 'audi', 'Cadillac': 'cadillac', 'Racing Bulls': 'racingbulls', 'RB': 'racingbulls', 'Racing Bulls': 'racingbulls',
 };
 
 let dataCache = { drivers: null, constructors: null, schedule: null, qualifying: null, results: null };
 
 async function loadLocalData(file) {
-    const resp = await fetch(`data/${file}.json`);
-    if (!resp.ok) return null;
-    return resp.json();
+    try {
+        const resp = await fetch(`data/${file}.json`);
+        return resp.ok ? resp.json() : null;
+    } catch { return null; }
 }
 
-async function fetchWithTimeout(url, timeout = 5000) {
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
+async function loadLiveData() {
     try {
-        const resp = await fetch(url, { signal: controller.signal });
-        clearTimeout(id);
+        const resp = await fetch('data/live/latest.json');
         return resp.ok ? resp.json() : null;
-    } catch {
-        return null;
-    }
+    } catch { return null; }
 }
 
 async function getDriverStandings() {
@@ -79,69 +75,25 @@ async function getNextRace() {
     return { name: nextRace.raceName, date: raceDate, circuit: nextRace.Circuit?.circuitName || '', country: nextRace.Circuit?.Location?.country || '', sessions };
 }
 
-async function getLiveWeekendSession() {
-    const now = new Date();
-    const meetings = await fetchWithTimeout(`https://api.openf1.org/v1/meetings?year=${now.getFullYear()}`);
-    if (!meetings?.length) return null;
-    
-    let currentMeeting = null;
-    for (const m of meetings) {
-        const start = new Date(m.date_start);
-        const end = new Date(m.date_end);
-        if (now >= start && now <= end) { currentMeeting = m; break; }
-    }
-    
-    if (!currentMeeting) {
-        const past = meetings.filter(m => new Date(m.date_end) < now).sort((a, b) => new Date(b.date_end) - new Date(a.date_end));
-        if (past.length) currentMeeting = past[0];
-    }
-    
-    if (!currentMeeting) return null;
-    
-    const sessions = await fetchWithTimeout(`https://api.openf1.org/v1/sessions?meeting_key=${currentMeeting.meeting_key}`);
-    if (!sessions?.length) return null;
-    
-    const completed = sessions.filter(s => new Date(s.date_end) < now).sort((a, b) => new Date(b.date_end) - new Date(a.date_end));
-    if (!completed.length) return null;
-    
-    const lastSession = completed[0];
-    const results = await fetchWithTimeout(`https://api.openf1.org/v1/position?session_key=${lastSession.session_key}`);
-    
-    if (!results?.length) return null;
-    
-    const drivers = await fetchWithTimeout(`https://api.openf1.org/v1/drivers?session_key=${lastSession.session_key}`);
-    const driverMap = {};
-    if (drivers) for (const d of drivers) driverMap[d.driver_number] = d;
-    
-    const finalPositions = {};
-    for (const r of results) {
-        if (!finalPositions[r.driver_number] || r.date > finalPositions[r.driver_number].date) {
-            finalPositions[r.driver_number] = r;
-        }
-    }
-    
-    const sorted = Object.values(finalPositions).sort((a, b) => a.position - b.position);
-    
-    return {
-        sessionName: lastSession.session_name || 'Session',
-        raceName: `${currentMeeting.meeting_name || currentMeeting.location}`,
-        results: sorted.slice(0, 10).map(r => ({
-            position: r.position,
-            driver: driverMap[r.driver_number]?.name_acronym || driverMap[r.driver_number]?.first_name || `#${r.driver_number}`,
-            team: driverMap[r.driver_number]?.team_name || 'Unknown',
-            time: '',
-            fastestLap: false
-        })),
-        fastestLap: null,
-        live: true,
-        meetingCountry: currentMeeting.country || currentMeeting.location
-    };
-}
-
 async function getLatestSession() {
-    // Try OpenF1 for live weekend data
-    const liveSession = await getLiveWeekendSession();
-    if (liveSession) return liveSession;
+    // Try live local data first
+    const liveData = await loadLiveData();
+    if (liveData?.results) {
+        return {
+            sessionName: liveData.session_name || 'Session',
+            raceName: liveData.meeting_name || liveData.location || 'Grand Prix',
+            results: liveData.results.slice(0, 10).map(r => ({
+                position: r.position,
+                driver: r.driver_code || r.driver_name?.split(' ').pop() || `#${r.driver_number}`,
+                team: r.team || 'Unknown',
+                time: '',
+                fastestLap: false
+            })),
+            fastestLap: null,
+            live: false,
+            cached: true
+        };
+    }
     
     // Fallback to static data
     if (!dataCache.qualifying) dataCache.qualifying = await loadLocalData('qualifying');
@@ -152,12 +104,9 @@ async function getLatestSession() {
     
     const raceData = dataCache.results?.MRData?.RaceTable?.Races?.[0];
     const raceRound = parseInt(dataCache.results?.MRData?.RaceTable?.round) || 0;
-    
-    // Check if race has actually happened
     const raceDate = raceData ? new Date(`${raceData.date}T${raceData.time || '23:59:59Z'}`) : null;
     const raceHappened = raceDate && raceDate < new Date();
     
-    // Show race results only if race has happened
     if (raceData?.Results && raceRound <= currentRound && raceHappened) {
         const fl = raceData.Results.find(r => r.FastestLap?.rank === '1');
         return {
@@ -170,7 +119,6 @@ async function getLatestSession() {
         };
     }
     
-    // Show qualifying if race hasn't happened yet
     const qualiRace = dataCache.qualifying?.MRData?.RaceTable?.Races?.[0];
     if (qualiRace?.QualifyingResults) {
         return {
@@ -254,8 +202,8 @@ function renderLatestResults(data) {
         return;
     }
     
-    const liveBadge = data.live ? '<span class="live-badge">🔴 LIVE</span>' : '';
-    header.innerHTML = `${data.sessionName} - ${data.raceName} ${liveBadge}`;
+    const cacheBadge = data.cached ? '<span class="cache-badge">💾 Cached</span>' : '';
+    header.innerHTML = `${data.sessionName} - ${data.raceName} ${cacheBadge}`;
     
     if (data.fastestLap) {
         header.innerHTML += ` <span class="fastest-lap-header"><span class="fl-badge">FL</span> ${data.fastestLap.driver} (${data.fastestLap.time})</span>`;
