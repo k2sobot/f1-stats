@@ -396,8 +396,6 @@ async function loadAll() {
         renderNextRace(nextRace);
         renderLatestResults(latestSession);
         
-        const status = document.getElementById('cache-status');
-        status.textContent = 'Data updated via GitHub Actions';
         
     } catch (error) {
         console.error('Failed to load data:', error);
