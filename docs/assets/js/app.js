@@ -381,7 +381,7 @@ function showError(container, message) {
  */
 async function loadAll() {
     const refreshBtn = document.getElementById('refresh-btn');
-    refreshBtn.classList.add('loading');
+    refreshBtn?.classList.add('loading');
     
     try {
         const [driverStandings, constructorStandings, nextRace, latestSession] = await Promise.all([
@@ -404,7 +404,7 @@ async function loadAll() {
         showError(document.getElementById('driver-standings'), 'Failed to load');
         showError(document.getElementById('constructor-standings'), 'Failed to load');
     } finally {
-        refreshBtn.classList.remove('loading');
+        refreshBtn?.classList.remove('loading');
     }
 }
 
