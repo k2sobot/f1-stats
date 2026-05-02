@@ -23,7 +23,7 @@ const TEAM_COLORS = {
     'Visa RB': 'racingbulls',
 };
 
-// Cache for loaded data (in-memory)
+// Cache for loaded data
 let dataCache = {
     drivers: null,
     constructors: null,
@@ -32,215 +32,13 @@ let dataCache = {
     results: null
 };
 
-// Countdown state
-let countdownInterval = null;
-let nextRaceDate = null;
-
-// LocalStorage cache key and expiry
-const CACHE_KEY = 'f1-data-cache';
-const CACHE_EXPIRY_DAYS = 7; // Cache for 7 days - fresh enough between race weekends
-
-// Short-term cache for live data (weather, pitstops)
-const LIVE_CACHE_KEY = 'f1-live-cache';
-const LIVE_CACHE_MINUTES = 5; // 5-minute cache for live data
-
 /**
- * Get cached data from localStorage
- */
-function getCachedData() {
-    try {
-        const cached = localStorage.getItem(CACHE_KEY);
-        if (!cached) return null;
-        
-        const data = JSON.parse(cached);
-        const now = new Date();
-        const cachedAt = new Date(data.timestamp);
-        
-        // Check if cache is expired
-        const daysSinceCache = (now - cachedAt) / (1000 * 60 * 60 * 24);
-        if (daysSinceCache > CACHE_EXPIRY_DAYS) {
-            localStorage.removeItem(CACHE_KEY);
-            return null;
-        }
-        
-        return data;
-    } catch (e) {
-        return null;
-    }
-}
-
-/**
- * Save data to localStorage cache
- */
-function setCachedData(data) {
-    try {
-        const cacheData = {
-            timestamp: new Date().toISOString(),
-            drivers: data.drivers,
-            constructors: data.constructors,
-            schedule: data.schedule,
-            qualifying: data.qualifying,
-            results: data.results
-        };
-        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
-    } catch (e) {
-        // localStorage might be full or disabled
-    }
-}
-
-/**
- * Load local JSON data with caching
+ * Load local JSON data
  */
 async function loadLocalData(file) {
-    // Check localStorage cache first
-    const cached = getCachedData();
-    if (cached && cached[file]) {
-        return cached[file];
-    }
-    
-    // Fetch from server
     const resp = await fetch(`data/${file}.json`);
     if (!resp.ok) return null;
     return resp.json();
-}
-
-/**
- * Get live data cache (5-minute expiry)
- */
-function getLiveCache(type) {
-    try {
-        const cached = localStorage.getItem(LIVE_CACHE_KEY);
-        if (!cached) return null;
-        
-        const data = JSON.parse(cached);
-        if (!data[type]) return null;
-        
-        const now = new Date();
-        const cachedAt = new Date(data[type].timestamp);
-        const minutesSinceCache = (now - cachedAt) / (1000 * 60);
-        
-        if (minutesSinceCache > LIVE_CACHE_MINUTES) {
-            delete data[type];
-            localStorage.setItem(LIVE_CACHE_KEY, JSON.stringify(data));
-            return null;
-        }
-        
-        return data[type].data;
-    } catch (e) {
-        return null;
-    }
-}
-
-/**
- * Set live data cache
- */
-function setLiveCache(type, data) {
-    try {
-        let cache = {};
-        const existing = localStorage.getItem(LIVE_CACHE_KEY);
-        if (existing) cache = JSON.parse(existing);
-        
-        cache[type] = {
-            timestamp: new Date().toISOString(),
-            data: data
-        };
-        
-        localStorage.setItem(LIVE_CACHE_KEY, JSON.stringify(cache));
-    } catch (e) {
-        // localStorage might be full
-    }
-}
-
-/**
- * Fetch weather data from OpenF1 (live during sessions)
- */
-async function getWeather(sessionKey) {
-    // Check cache first
-    const cached = getLiveCache('weather');
-    if (cached) return cached;
-    
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-        const resp = await fetch(`https://api.openf1.org/v1/weather?session_key=${sessionKey}`, {
-            signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        
-        if (!resp.ok) return null;
-        
-        const data = await resp.json();
-        if (data && data.length > 0) {
-            // Get latest weather reading
-            const latest = data[data.length - 1];
-            const weather = {
-                airTemp: latest.air_temperature,
-                trackTemp: latest.track_temperature,
-                humidity: latest.humidity,
-                windSpeed: latest.wind_speed,
-                rainfall: latest.rainfall || 0
-            };
-            
-            setLiveCache('weather', weather);
-            return weather;
-        }
-    } catch (e) {
-        console.log('Weather fetch failed:', e.message);
-    }
-    
-    return null;
-}
-
-/**
- * Fetch pit stop data from OpenF1 (live during race)
- */
-async function getPitStops(sessionKey) {
-    // Check cache first
-    const cached = getLiveCache('pitstops');
-    if (cached) return cached;
-    
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-        
-        const [stopsResp, driversResp] = await Promise.all([
-            fetch(`https://api.openf1.org/v1/pit?session_key=${sessionKey}`, {
-                signal: controller.signal
-            }),
-            fetch(`https://api.openf1.org/v1/drivers?session_key=${sessionKey}`, {
-                signal: controller.signal
-            })
-        ]);
-        clearTimeout(timeoutId);
-        
-        if (!stopsResp.ok || !driversResp.ok) return null;
-        
-        const stops = await stopsResp.json();
-        const drivers = await driversResp.json();
-        
-        // Build driver lookup
-        const driverMap = {};
-        for (const d of drivers) {
-            driverMap[d.driver_number] = d.name_acronym || d.first_name?.substring(0, 3).toUpperCase() || `D${d.driver_number}`;
-        }
-        
-        // Sort by lap number, get latest stops
-        const sorted = stops.sort((a, b) => b.lap_number - a.lap_number);
-        const pitstops = sorted.slice(0, 15).map(s => ({
-            lap: s.lap_number,
-            driver: driverMap[s.driver_number] || `D${s.driver_number}`,
-            duration: s.pit_duration ? `${s.pit_duration.toFixed(2)}s` : '-',
-            tire: s.tyre_compound || '-'
-        }));
-        
-        setLiveCache('pitstops', pitstops);
-        return pitstops;
-    } catch (e) {
-        console.log('Pit stops fetch failed:', e.message);
-    }
-    
-    return null;
 }
 
 /**
@@ -287,7 +85,7 @@ async function getConstructorStandings() {
 }
 
 /**
- * Get next race
+ * Get next race with real schedule data
  */
 async function getNextRace() {
     if (!dataCache.schedule) {
@@ -308,23 +106,66 @@ async function getNextRace() {
     
     const raceDate = new Date(`${nextRace.date}T${nextRace.time || '00:00:00Z'}`);
     
-    // Build session times based on typical Suzuka schedule
-    // Race is Sunday, so FP1/FP2 on Friday, FP3/Quali on Saturday
-    const friday = addDays(raceDate, -2);
-    const saturday = addDays(raceDate, -1);
+    // Build sessions from actual schedule data
+    const sessions = [];
     
-    // Suzuka 2026 schedule (UTC times) - based on actual F1 schedule
-    const sessions = [
-        { name: 'FP1', date: new Date('2026-03-27T01:30:00Z') },
-        { name: 'FP2', date: new Date('2026-03-27T05:00:00Z') },
-        { name: 'FP3', date: new Date('2026-03-28T04:30:00Z') },
-        { name: 'Qualifying', date: new Date('2026-03-28T06:00:00Z') },  // 08:00 SAST
-        { name: 'Race', date: raceDate }
-    ];
+    // Sprint weekend format: FP1, Sprint Quali, Sprint, Qualifying, Race
+    // Standard format: FP1, FP2, FP3, Qualifying, Race
+    
+    if (nextRace.FirstPractice) {
+        sessions.push({
+            name: 'FP1',
+            date: new Date(`${nextRace.FirstPractice.date}T${nextRace.FirstPractice.time || '00:00:00Z'}`)
+        });
+    }
+    
+    if (nextRace.SecondPractice) {
+        sessions.push({
+            name: 'FP2',
+            date: new Date(`${nextRace.SecondPractice.date}T${nextRace.SecondPractice.time || '00:00:00Z'}`)
+        });
+    }
+    
+    if (nextRace.ThirdPractice) {
+        sessions.push({
+            name: 'FP3',
+            date: new Date(`${nextRace.ThirdPractice.date}T${nextRace.ThirdPractice.time || '00:00:00Z'}`)
+        });
+    }
+    
+    if (nextRace.SprintQualifying) {
+        sessions.push({
+            name: 'Sprint Quali',
+            date: new Date(`${nextRace.SprintQualifying.date}T${nextRace.SprintQualifying.time || '00:00:00Z'}`)
+        });
+    }
+    
+    if (nextRace.Sprint) {
+        sessions.push({
+            name: 'Sprint',
+            date: new Date(`${nextRace.Sprint.date}T${nextRace.Sprint.time || '00:00:00Z'}`)
+        });
+    }
+    
+    if (nextRace.Qualifying) {
+        sessions.push({
+            name: 'Qualifying',
+            date: new Date(`${nextRace.Qualifying.date}T${nextRace.Qualifying.time || '00:00:00Z'}`)
+        });
+    }
+    
+    // Race is always last
+    sessions.push({
+        name: 'Race',
+        date: raceDate
+    });
+    
+    // Sort by date
+    sessions.sort((a, b) => a.date - b.date);
     
     // Find current session status
     const currentSession = sessions.find(s => {
-        const sessionEnd = new Date(s.date.getTime() + 60 * 60 * 1000); // Assume 1hr duration
+        const sessionEnd = new Date(s.date.getTime() + 90 * 60 * 1000); // Assume 1.5hr duration
         return now >= s.date && now < sessionEnd;
     });
     
@@ -339,25 +180,6 @@ async function getNextRace() {
 }
 
 /**
- * Add days to a date
- */
-function addDays(date, days) {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-}
-
-/**
- * Set time on a date
- */
-function setDateTime(date, timeStr) {
-    const d = new Date(date);
-    const [hours, mins] = timeStr.split(':');
-    d.setUTCHours(parseInt(hours), parseInt(mins), 0, 0);
-    return d;
-}
-
-/**
  * Check if we're in a race weekend and get weekend state
  */
 async function getWeekendState() {
@@ -365,18 +187,7 @@ async function getWeekendState() {
     const year = now.getFullYear();
     
     try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-        const resp = await fetch(`https://api.openf1.org/v1/sessions?year=${year}`, {
-            signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        
-        if (!resp.ok) {
-            return { inWeekend: false };
-        }
-        
+        const resp = await fetch(`https://api.openf1.org/v1/sessions?year=${year}`);
         const sessions = await resp.json();
         
         // Group sessions by meeting
@@ -408,17 +219,15 @@ async function getWeekendState() {
             if (sessionTimes.length === 0) continue;
             
             const weekendStart = new Date(Math.min(...sessionTimes));
-            weekendStart.setHours(weekendStart.getHours() - 12); // Start 12hrs before first session
+            weekendStart.setHours(weekendStart.getHours() - 12);
             const weekendEnd = new Date(Math.max(...sessionTimes));
-            weekendEnd.setHours(weekendEnd.getHours() + 6); // End 6hrs after last session
+            weekendEnd.setHours(weekendEnd.getHours() + 6);
             
             if (now >= weekendStart && now <= weekendEnd) {
-                // We're in this weekend! Find session states
                 let currentSession = null;
                 let lastCompleted = null;
                 let nextSession = null;
                 
-                // Sort sessions by start time
                 const sortedSessions = meeting.sessions.sort((a, b) => 
                     new Date(a.date_start) - new Date(b.date_start)
                 );
@@ -464,20 +273,14 @@ async function getWeekendState() {
  */
 async function fetchLiveSessionResults(sessionKey) {
     try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-        
         const [driversResp, lapsResp] = await Promise.all([
-            fetch(`https://api.openf1.org/v1/drivers?session_key=${sessionKey}`, { signal: controller.signal }),
-            fetch(`https://api.openf1.org/v1/laps?session_key=${sessionKey}`, { signal: controller.signal })
+            fetch(`https://api.openf1.org/v1/drivers?session_key=${sessionKey}`),
+            fetch(`https://api.openf1.org/v1/laps?session_key=${sessionKey}`)
         ]);
-        
-        clearTimeout(timeoutId);
         
         const drivers = await driversResp.json();
         const laps = await lapsResp.json();
         
-        // Build driver lookup
         const driverMap = {};
         for (const d of drivers) {
             driverMap[d.driver_number] = {
@@ -486,7 +289,6 @@ async function fetchLiveSessionResults(sessionKey) {
             };
         }
         
-        // Find best lap per driver
         const bestLaps = {};
         for (const lap of laps) {
             const driverNum = lap.driver_number;
@@ -496,7 +298,6 @@ async function fetchLiveSessionResults(sessionKey) {
             }
         }
         
-        // Sort by lap time
         const results = Object.entries(bestLaps)
             .sort((a, b) => a[1].duration - b[1].duration)
             .slice(0, 10)
@@ -525,14 +326,12 @@ function formatLapTime(seconds) {
 }
 
 /**
- * Get latest session results - now with weekend context
+ * Get latest session results
  */
 async function getLatestSession() {
-    // First check if we're in a race weekend
     const weekendState = await getWeekendState();
     
     if (weekendState.inWeekend && weekendState.lastCompleted) {
-        // During a race weekend - fetch live data for last completed session
         const sessionKey = weekendState.lastCompleted.session_key;
         const sessionName = weekendState.lastCompleted.session_name || 'Session';
         const results = await fetchLiveSessionResults(sessionKey);
@@ -555,7 +354,6 @@ async function getLatestSession() {
         }
     }
     
-    // Outside race weekend or live data failed - use static data
     if (!dataCache.qualifying) {
         dataCache.qualifying = await loadLocalData('qualifying');
     }
@@ -695,71 +493,11 @@ function renderConstructorStandings(standings) {
 }
 
 /**
- * Update countdown timer display
- */
-function updateCountdown() {
-    if (!nextRaceDate) return;
-    
-    const now = new Date();
-    const diff = nextRaceDate - now;
-    
-    if (diff <= 0) {
-        // Race time!
-        document.getElementById('countdown-days').textContent = '00';
-        document.getElementById('countdown-hours').textContent = '00';
-        document.getElementById('countdown-minutes').textContent = '00';
-        document.getElementById('countdown-seconds').textContent = '00';
-        document.getElementById('countdown-banner').classList.add('race-time');
-        
-        if (countdownInterval) {
-            clearInterval(countdownInterval);
-            countdownInterval = null;
-        }
-        return;
-    }
-    
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-    
-    document.getElementById('countdown-days').textContent = String(days).padStart(2, '0');
-    document.getElementById('countdown-hours').textContent = String(hours).padStart(2, '0');
-    document.getElementById('countdown-minutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('countdown-seconds').textContent = String(seconds).padStart(2, '0');
-}
-
-/**
- * Start countdown timer
- */
-function startCountdown(raceDate, raceName) {
-    // Clear existing interval if any
-    if (countdownInterval) {
-        clearInterval(countdownInterval);
-    }
-    
-    nextRaceDate = raceDate;
-    
-    // Update race name
-    document.getElementById('countdown-race').textContent = raceName;
-    
-    // Remove race-time class if present
-    document.getElementById('countdown-banner').classList.remove('race-time');
-    
-    // Initial update
-    updateCountdown();
-    
-    // Update every second
-    countdownInterval = setInterval(updateCountdown, 1000);
-}
-
-/**
  * Render next race
  */
 function renderNextRace(race) {
     if (!race) {
         document.getElementById('next-race-name').textContent = 'No upcoming races';
-        document.getElementById('countdown-race').textContent = 'Season Complete';
         return;
     }
     
@@ -767,10 +505,6 @@ function renderNextRace(race) {
     document.getElementById('next-race-date').textContent = formatDate(race.date);
     document.getElementById('next-race-circuit').textContent = `📍 ${race.circuit}${race.country ? ', ' + race.country : ''}`;
     
-    // Start countdown timer
-    startCountdown(race.date, race.name);
-    
-    // Show/hide live banner at top
     const liveBanner = document.getElementById('live-banner');
     const liveText = document.getElementById('live-text');
     
@@ -781,7 +515,6 @@ function renderNextRace(race) {
         liveBanner.style.display = 'none';
     }
     
-    // Just show session times (no redundant live indicator)
     const sessionsContainer = document.getElementById('session-times');
     sessionsContainer.innerHTML = race.sessions.map(s => `
         <div class="session-item ${s.name === race.currentSession?.name ? 'active' : ''}">
@@ -807,11 +540,9 @@ function renderLatestResults(data) {
         return;
     }
     
-    // Handle weekend context
     if (data.weekendContext?.inWeekend) {
         const ctx = data.weekendContext;
         
-        // Show live banner with context
         if (ctx.currentSession) {
             liveBanner.style.display = 'flex';
             liveText.textContent = `${ctx.currentSession} LIVE - ${ctx.country}GP`;
@@ -823,14 +554,12 @@ function renderLatestResults(data) {
             liveBanner.style.display = 'none';
         }
         
-        // Show session context in results header
         header.innerHTML = `<span class="session-label">${data.sessionName}</span> Results <span class="race-location">${ctx.country}GP</span>`;
     } else {
         liveBanner.style.display = 'none';
         header.textContent = `${data.sessionName} - ${data.raceName}`;
     }
     
-    // Add fastest lap info if available
     if (data.fastestLap) {
         header.innerHTML = `${data.sessionName} - ${data.raceName} <span class="fastest-lap-header"><span class="fl-badge">FL</span> ${data.fastestLap.driver} (${data.fastestLap.time})</span>`;
     }
@@ -839,76 +568,7 @@ function renderLatestResults(data) {
         <tr>
             <td><div class="position ${r.position <= 3 ? 'p' + r.position : ''}">${r.position}</div></td>
             <td>${r.driver} ${r.fastestLap ? '<span class="fl-badge" title="Fastest Lap">FL</span>' : ''} <span class="team-tag team-${TEAM_COLORS[r.team] || 'default'}">${r.team.substring(0, 3).toUpperCase()}</span></td>
-            <td>${r.time}</td>
-        </tr>
-    `).join('');
-}
-
-/**
- * Render weather data
- */
-function renderWeather(weather) {
-    const container = document.getElementById('weather-card');
-    const content = document.getElementById('weather-content');
-    
-    if (!weather) {
-        container.style.display = 'none';
-        return;
-    }
-    
-    container.style.display = 'block';
-    
-    const rainIcon = weather.rainfall > 0 ? '🌧️' : (weather.humidity > 70 ? '⛅' : '☀️');
-    
-    content.innerHTML = `
-        <div class="weather-item">
-            <span class="weather-icon">${rainIcon}</span>
-            <span class="weather-label">Conditions</span>
-            <span class="weather-value">${weather.rainfall > 0 ? 'Rain' : (weather.humidity > 70 ? 'Overcast' : 'Clear')}</span>
-        </div>
-        <div class="weather-item">
-            <span class="weather-icon">🌡️</span>
-            <span class="weather-label">Air Temp</span>
-            <span class="weather-value">${weather.airTemp}°C</span>
-        </div>
-        <div class="weather-item">
-            <span class="weather-icon">🏁</span>
-            <span class="weather-label">Track Temp</span>
-            <span class="weather-value">${weather.trackTemp}°C</span>
-        </div>
-        <div class="weather-item">
-            <span class="weather-icon">💧</span>
-            <span class="weather-label">Humidity</span>
-            <span class="weather-value">${weather.humidity}%</span>
-        </div>
-        <div class="weather-item">
-            <span class="weather-icon">💨</span>
-            <span class="weather-label">Wind</span>
-            <span class="weather-value">${weather.windSpeed} km/h</span>
-        </div>
-    `;
-}
-
-/**
- * Render pit stops data
- */
-function renderPitStops(pitstops) {
-    const container = document.getElementById('pitstops-card');
-    const tbody = document.getElementById('pitstops-results');
-    
-    if (!pitstops || pitstops.length === 0) {
-        container.style.display = 'none';
-        return;
-    }
-    
-    container.style.display = 'block';
-    
-    tbody.innerHTML = pitstops.map(s => `
-        <tr>
-            <td>${s.lap}</td>
-            <td>${s.driver}</td>
-            <td>${s.duration}</td>
-            <td><span class="tire-${s.tire?.toLowerCase()}">${s.tire}</span></td>
+            <td>${nextRace.time}</td>
         </tr>
     `).join('');
 }
@@ -924,21 +584,10 @@ function showError(container, message) {
  * Load all data
  */
 async function loadAll() {
+    const refreshBtn = document.getElementById('refresh-btn');
+    refreshBtn.classList.add('loading');
+    
     try {
-        // Check localStorage cache first
-        const cached = getCachedData();
-        
-        if (cached) {
-            // Use cached data
-            dataCache = {
-                drivers: cached.drivers,
-                constructors: cached.constructors,
-                schedule: cached.schedule,
-                qualifying: cached.qualifying,
-                results: cached.results
-            };
-        }
-        
         const [driverStandings, constructorStandings, nextRace, latestSession] = await Promise.all([
             getDriverStandings().catch(e => ({ standings: [], error: e.message })),
             getConstructorStandings().catch(e => []),
@@ -946,48 +595,27 @@ async function loadAll() {
             getLatestSession().catch(e => null)
         ]);
         
-        // Save to localStorage cache
-        setCachedData(dataCache);
-        
         renderDriverStandings(driverStandings);
         renderConstructorStandings(constructorStandings);
         renderNextRace(nextRace);
         renderLatestResults(latestSession);
         
-        // Fetch live data if in a race weekend
-        const weekendState = await getWeekendState();
-        if (weekendState.inWeekend && weekendState.lastCompleted) {
-            const sessionKey = weekendState.lastCompleted.session_key;
-            
-            // Fetch weather and pitstops in parallel (non-blocking)
-            const [weather, pitstops] = await Promise.all([
-                getWeather(sessionKey).catch(() => null),
-                getPitStops(sessionKey).catch(() => null)
-            ]);
-            
-            renderWeather(weather);
-            renderPitStops(pitstops);
-        } else {
-            // Hide live data cards outside race weekends
-            document.getElementById('weather-card').style.display = 'none';
-            document.getElementById('pitstops-card').style.display = 'none';
-        }
-        
-        // Refresh poll if available
-        if (typeof window.refreshPoll === 'function') {
-            window.refreshPoll();
-        }
+        const status = document.getElementById('cache-status');
+        status.textContent = 'Data updated via GitHub Actions';
         
     } catch (error) {
         console.error('Failed to load data:', error);
         showError(document.getElementById('driver-standings'), 'Failed to load');
         showError(document.getElementById('constructor-standings'), 'Failed to load');
+    } finally {
+        refreshBtn.classList.remove('loading');
     }
 }
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    // Update season year
-    document.getElementById('season-year').textContent = `${new Date().getFullYear()} Season`;
     loadAll();
 });
+
+// Update season year
+document.getElementById('season-year').textContent = `${new Date().getFullYear()} Season`;
