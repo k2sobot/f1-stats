@@ -79,53 +79,40 @@ async function getNextRace() {
     return { name: nextRace.raceName, date: raceDate, circuit: nextRace.Circuit?.circuitName || '', country: nextRace.Circuit?.Location?.country || '', sessions };
 }
 
-
 async function getLiveWeekendSession() {
     const now = new Date();
-    
-    // Get current year's meetings
     const meetings = await fetchWithTimeout(`https://api.openf1.org/v1/meetings?year=${now.getFullYear()}`);
     if (!meetings?.length) return null;
     
-    // Find current or most recent meeting
     let currentMeeting = null;
     for (const m of meetings) {
         const start = new Date(m.date_start);
         const end = new Date(m.date_end);
-        if (now >= start && now <= end) {
-            currentMeeting = m;
-            break;
-        }
+        if (now >= start && now <= end) { currentMeeting = m; break; }
     }
     
     if (!currentMeeting) {
-        // Get most recent past meeting
         const past = meetings.filter(m => new Date(m.date_end) < now).sort((a, b) => new Date(b.date_end) - new Date(a.date_end));
         if (past.length) currentMeeting = past[0];
     }
     
     if (!currentMeeting) return null;
     
-    // Get sessions for this meeting
     const sessions = await fetchWithTimeout(`https://api.openf1.org/v1/sessions?meeting_key=${currentMeeting.meeting_key}`);
     if (!sessions?.length) return null;
     
-    // Find completed sessions
     const completed = sessions.filter(s => new Date(s.date_end) < now).sort((a, b) => new Date(b.date_end) - new Date(a.date_end));
     if (!completed.length) return null;
     
-    // Get results from most recent completed session
     const lastSession = completed[0];
     const results = await fetchWithTimeout(`https://api.openf1.org/v1/position?session_key=${lastSession.session_key}`);
     
     if (!results?.length) return null;
     
-    // Get drivers for names
     const drivers = await fetchWithTimeout(`https://api.openf1.org/v1/drivers?session_key=${lastSession.session_key}`);
     const driverMap = {};
     if (drivers) for (const d of drivers) driverMap[d.driver_number] = d;
     
-    // Process results - get final positions
     const finalPositions = {};
     for (const r of results) {
         if (!finalPositions[r.driver_number] || r.date > finalPositions[r.driver_number].date) {
@@ -142,13 +129,60 @@ async function getLiveWeekendSession() {
             position: r.position,
             driver: driverMap[r.driver_number]?.name_acronym || driverMap[r.driver_number]?.first_name || `#${r.driver_number}`,
             team: driverMap[r.driver_number]?.team_name || 'Unknown',
-            time: '', // OpenF1 doesn't provide lap times in position endpoint
+            time: '',
             fastestLap: false
         })),
         fastestLap: null,
         live: true,
         meetingCountry: currentMeeting.country || currentMeeting.location
     };
+}
+
+async function getLatestSession() {
+    // Try OpenF1 for live weekend data
+    const liveSession = await getLiveWeekendSession();
+    if (liveSession) return liveSession;
+    
+    // Fallback to static data
+    if (!dataCache.qualifying) dataCache.qualifying = await loadLocalData('qualifying');
+    if (!dataCache.results) dataCache.results = await loadLocalData('results');
+    
+    const standingsData = dataCache.drivers || await loadLocalData('drivers');
+    const currentRound = parseInt(standingsData?.MRData?.StandingsTable?.StandingsLists?.[0]?.round) || 1;
+    
+    const raceData = dataCache.results?.MRData?.RaceTable?.Races?.[0];
+    const raceRound = parseInt(dataCache.results?.MRData?.RaceTable?.round) || 0;
+    
+    // Check if race has actually happened
+    const raceDate = raceData ? new Date(`${raceData.date}T${raceData.time || '23:59:59Z'}`) : null;
+    const raceHappened = raceDate && raceDate < new Date();
+    
+    // Show race results only if race has happened
+    if (raceData?.Results && raceRound <= currentRound && raceHappened) {
+        const fl = raceData.Results.find(r => r.FastestLap?.rank === '1');
+        return {
+            sessionName: 'Race', raceName: raceData.raceName,
+            results: raceData.Results.slice(0, 10).map(r => ({
+                position: parseInt(r.position), driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
+                team: r.Constructor.name, time: r.Time?.time || r.status, fastestLap: r.FastestLap?.rank === '1'
+            })),
+            fastestLap: fl ? { driver: fl.Driver.code, time: fl.FastestLap?.Time?.time } : null, live: false
+        };
+    }
+    
+    // Show qualifying if race hasn't happened yet
+    const qualiRace = dataCache.qualifying?.MRData?.RaceTable?.Races?.[0];
+    if (qualiRace?.QualifyingResults) {
+        return {
+            sessionName: 'Qualifying', raceName: qualiRace.raceName,
+            results: qualiRace.QualifyingResults.slice(0, 10).map((r, i) => ({
+                position: i + 1, driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
+                team: r.Constructor.name, time: r.Q3 || r.Q2 || r.Q1 || '-', fastestLap: false
+            })),
+            fastestLap: null, live: false
+        };
+    }
+    return null;
 }
 
 function formatDate(date) {
