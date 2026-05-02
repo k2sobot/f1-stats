@@ -79,46 +79,6 @@ async function getNextRace() {
     return { name: nextRace.raceName, date: raceDate, circuit: nextRace.Circuit?.circuitName || '', country: nextRace.Circuit?.Location?.country || '', sessions };
 }
 
-async function getLatestSession() {
-    // Try OpenF1 for live weekend data with timeout
-    const liveSession = await getLiveWeekendSession();
-    if (liveSession) return liveSession;
-    
-    // Fallback to static data
-    if (!dataCache.qualifying) dataCache.qualifying = await loadLocalData('qualifying');
-    if (!dataCache.results) dataCache.results = await loadLocalData('results');
-    
-    const standingsData = dataCache.drivers || await loadLocalData('drivers');
-    const currentRound = standingsData?.MRData?.StandingsTable?.StandingsLists?.[0]?.round || 1;
-    
-    const raceData = dataCache.results?.MRData?.RaceTable?.Races?.[0];
-    const raceRound = dataCache.results?.MRData?.RaceTable?.round;
-    
-    if (raceData?.Results && raceRound <= currentRound) {
-        const fl = raceData.Results.find(r => r.FastestLap?.rank === '1');
-        return {
-            sessionName: 'Race', raceName: raceData.raceName,
-            results: raceData.Results.slice(0, 10).map(r => ({
-                position: parseInt(r.position), driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
-                team: r.Constructor.name, time: r.Time?.time || r.status, fastestLap: r.FastestLap?.rank === '1'
-            })),
-            fastestLap: fl ? { driver: fl.Driver.code, time: fl.FastestLap?.Time?.time } : null, live: false
-        };
-    }
-    
-    const qualiRace = dataCache.qualifying?.MRData?.RaceTable?.Races?.[0];
-    if (qualiRace?.QualifyingResults) {
-        return {
-            sessionName: 'Qualifying', raceName: qualiRace.raceName,
-            results: qualiRace.QualifyingResults.slice(0, 10).map((r, i) => ({
-                position: i + 1, driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
-                team: r.Constructor.name, time: r.Q3 || r.Q2 || r.Q1 || '-', fastestLap: false
-            })),
-            fastestLap: null, live: false
-        };
-    }
-    return null;
-}
 
 async function getLiveWeekendSession() {
     const now = new Date();
