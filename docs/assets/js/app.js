@@ -395,6 +395,7 @@ async function loadAll() {
         renderConstructorStandings(constructorStandings);
         renderNextRace(nextRace);
         renderLatestResults(latestSession);
+        updateCountdown(nextRace);
         
         
     } catch (error) {
@@ -413,3 +414,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Update season year
 document.getElementById('season-year').textContent = `${new Date().getFullYear()} Season`;
+
+/**
+ * Update countdown timer
+ */
+function updateCountdown(race) {
+    const countdownRace = document.getElementById('countdown-race');
+    const countdownDays = document.getElementById('countdown-days');
+    const countdownHours = document.getElementById('countdown-hours');
+    const countdownMinutes = document.getElementById('countdown-minutes');
+    const countdownSeconds = document.getElementById('countdown-seconds');
+    
+    if (!race || !countdownDays) return;
+    
+    if (countdownRace) countdownRace.textContent = race.name;
+    
+    function tick() {
+        const now = new Date();
+        const diff = race.date - now;
+        
+        if (diff <= 0) {
+            if (countdownDays) countdownDays.textContent = '00';
+            if (countdownHours) countdownHours.textContent = '00';
+            if (countdownMinutes) countdownMinutes.textContent = '00';
+            if (countdownSeconds) countdownSeconds.textContent = '00';
+            return;
+        }
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        if (countdownDays) countdownDays.textContent = String(days).padStart(2, '0');
+        if (countdownHours) countdownHours.textContent = String(hours).padStart(2, '0');
+        if (countdownMinutes) countdownMinutes.textContent = String(minutes).padStart(2, '0');
+        if (countdownSeconds) countdownSeconds.textContent = String(seconds).padStart(2, '0');
+        
+        requestAnimationFrame(tick);
+    }
+    
+    tick();
+}
