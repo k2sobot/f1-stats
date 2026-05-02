@@ -568,7 +568,7 @@ function renderLatestResults(data) {
         <tr>
             <td><div class="position ${r.position <= 3 ? 'p' + r.position : ''}">${r.position}</div></td>
             <td>${r.driver} ${r.fastestLap ? '<span class="fl-badge" title="Fastest Lap">FL</span>' : ''} <span class="team-tag team-${TEAM_COLORS[r.team] || 'default'}">${r.team.substring(0, 3).toUpperCase()}</span></td>
-            <td>${nextRace.time}</td>
+            <td>${r.time}</td>
         </tr>
     `).join('');
 }
