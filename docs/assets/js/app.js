@@ -6,7 +6,7 @@ const TEAM_COLORS = {
     'Mercedes': 'mercedes', 'Ferrari': 'ferrari', 'Red Bull Racing': 'redbull', 'Red Bull': 'redbull',
     'McLaren': 'mclaren', 'Alpine F1 Team': 'alpine', 'Alpine': 'alpine', 'Aston Martin F1 Team': 'astonmartin',
     'Aston Martin': 'astonmartin', 'Haas F1 Team': 'haas', 'Haas': 'haas', 'Williams': 'williams',
-    'Audi': 'audi', 'Cadillac': 'cadillac', 'Racing Bulls': 'racingbulls', 'RB': 'racingbulls', 'Racing Bulls': 'racingbulls',
+    'Audi': 'audi', 'Cadillac': 'cadillac', 'Racing Bulls': 'racingbulls', 'RB': 'racingbulls',
 };
 
 let dataCache = { drivers: null, constructors: null, schedule: null, qualifying: null, results: null };
@@ -82,11 +82,12 @@ async function getLatestSession() {
         return {
             sessionName: liveData.session_name || 'Session',
             raceName: liveData.meeting_name || liveData.location || 'Grand Prix',
+            isRace: liveData.is_race || false,
             results: liveData.results.slice(0, 10).map(r => ({
                 position: r.position,
                 driver: r.driver_code || r.driver_name?.split(' ').pop() || `#${r.driver_number}`,
                 team: r.team || 'Unknown',
-                time: '',
+                time: r.best_lap_time || '',
                 fastestLap: false
             })),
             fastestLap: null,
@@ -110,7 +111,7 @@ async function getLatestSession() {
     if (raceData?.Results && raceRound <= currentRound && raceHappened) {
         const fl = raceData.Results.find(r => r.FastestLap?.rank === '1');
         return {
-            sessionName: 'Race', raceName: raceData.raceName,
+            sessionName: 'Race', raceName: raceData.raceName, isRace: true,
             results: raceData.Results.slice(0, 10).map(r => ({
                 position: parseInt(r.position), driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
                 team: r.Constructor.name, time: r.Time?.time || r.status, fastestLap: r.FastestLap?.rank === '1'
@@ -122,7 +123,7 @@ async function getLatestSession() {
     const qualiRace = dataCache.qualifying?.MRData?.RaceTable?.Races?.[0];
     if (qualiRace?.QualifyingResults) {
         return {
-            sessionName: 'Qualifying', raceName: qualiRace.raceName,
+            sessionName: 'Qualifying', raceName: qualiRace.raceName, isRace: false,
             results: qualiRace.QualifyingResults.slice(0, 10).map((r, i) => ({
                 position: i + 1, driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
                 team: r.Constructor.name, time: r.Q3 || r.Q2 || r.Q1 || '-', fastestLap: false
@@ -213,7 +214,7 @@ function renderLatestResults(data) {
         <tr>
             <td><div class="position ${r.position <= 3 ? 'p' + r.position : ''}">${r.position}</div></td>
             <td>${r.driver} ${r.fastestLap ? '<span class="fl-badge">FL</span>' : ''} <span class="team-tag team-${TEAM_COLORS[r.team] || 'default'}">${r.team.substring(0, 3).toUpperCase()}</span></td>
-            <td>${r.time || '-'}</td>
+            <td class="time-cell">${r.time || '-'}</td>
         </tr>
     `).join('');
 }
