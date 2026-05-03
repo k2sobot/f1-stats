@@ -25,11 +25,9 @@ async function fetchCurrentMeeting() {
     const now = new Date();
     const year = now.getFullYear();
     
-    // Get all meetings for the year
     const meetings = await fetchWithTimeout(`https://api.openf1.org/v1/meetings?year=${year}`);
     if (!meetings?.length) return null;
     
-    // Find current or most recent meeting
     let currentMeeting = null;
     for (const m of meetings) {
         const start = new Date(m.date_start);
@@ -41,7 +39,6 @@ async function fetchCurrentMeeting() {
     }
     
     if (!currentMeeting) {
-        // Most recent past meeting
         const past = meetings.filter(m => new Date(m.date_end) < now)
             .sort((a, b) => new Date(b.date_end) - new Date(a.date_end));
         if (past.length) currentMeeting = past[0];
@@ -75,15 +72,29 @@ async function fetchSessionResults(meeting) {
 }
 
 async function fetchSessionResult(session, meeting) {
-    const [positions, drivers] = await Promise.all([
+    const [positions, drivers, laps, timing] = await Promise.all([
         fetchWithTimeout(`https://api.openf1.org/v1/position?session_key=${session.session_key}`),
-        fetchWithTimeout(`https://api.openf1.org/v1/drivers?session_key=${session.session_key}`)
+        fetchWithTimeout(`https://api.openf1.org/v1/drivers?session_key=${session.session_key}`),
+        fetchWithTimeout(`https://api.openf1.org/v1/laps?session_key=${session.session_key}`),
+        fetchWithTimeout(`https://api.openf1.org/v1/car_data?session_key=${session.session_key}`)
     ]);
     
     if (!positions?.length) return null;
     
     const driverMap = {};
     if (drivers) for (const d of drivers) driverMap[d.driver_number] = d;
+    
+    // Build driver best laps
+    const driverBestLaps = {};
+    if (laps) {
+        for (const lap of laps) {
+            if (!lap.lap_duration) continue;
+            const dr = lap.driver_number;
+            if (!driverBestLaps[dr] || lap.lap_duration < driverBestLaps[dr]) {
+                driverBestLaps[dr] = lap.lap_duration;
+            }
+        }
+    }
     
     // Get final positions
     const finalPositions = {};
@@ -95,6 +106,42 @@ async function fetchSessionResult(session, meeting) {
     
     const sorted = Object.values(finalPositions).sort((a, b) => a.position - b.position);
     
+    // Winner's fastest lap for gap calculation
+    const winnerNum = sorted[0]?.driver_number;
+    const winnerBestLap = driverBestLaps[winnerNum] || null;
+    
+    // Determine if this is a race session
+    const isRace = ['Race', 'Sprint'].includes(session.session_type);
+    
+    const resultsWithTimes = sorted.map((r, idx) => {
+        const dr = r.driver_number;
+        const bestLap = driverBestLaps[dr];
+        let gap = null;
+        let timeStr = null;
+        
+        if (bestLap) {
+            if (idx === 0) {
+                timeStr = formatLapTime(bestLap);
+            } else if (winnerBestLap) {
+                gap = bestLap - winnerBestLap;
+                timeStr = `+${gap.toFixed(3)}`;
+            }
+        }
+        
+        return {
+            position: r.position,
+            driver_number: dr,
+            driver_code: driverMap[dr]?.name_acronym || null,
+            driver_name: driverMap[dr]?.first_name 
+                ? `${driverMap[dr].first_name} ${driverMap[dr].last_name}`
+                : null,
+            team: driverMap[dr]?.team_name || null,
+            best_lap: bestLap || null,
+            best_lap_time: timeStr,
+            gap_to_fastest: gap
+        };
+    });
+    
     return {
         session_key: session.session_key,
         session_name: session.session_name,
@@ -105,27 +152,25 @@ async function fetchSessionResult(session, meeting) {
         meeting_name: meeting.meeting_name,
         location: meeting.location,
         country: meeting.country,
-        results: sorted.map(r => ({
-            position: r.position,
-            driver_number: r.driver_number,
-            driver_code: driverMap[r.driver_number]?.name_acronym || null,
-            driver_name: driverMap[r.driver_number]?.first_name 
-                ? `${driverMap[r.driver_number].first_name} ${driverMap[r.driver_number].last_name}`
-                : null,
-            team: driverMap[r.driver_number]?.team_name || null
-        }))
+        is_race: isRace,
+        results: resultsWithTimes
     };
+}
+
+function formatLapTime(seconds) {
+    if (!seconds) return null;
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return mins > 0 ? `${mins}:${secs.toFixed(3).padStart(6, '0')}` : secs.toFixed(3);
 }
 
 function saveData(data) {
     if (!data) return;
     
-    // Ensure directory exists
     if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
     }
     
-    // Save each session
     for (const session of data) {
         const filename = `${session.meeting_key}_${session.session_key}_${session.session_name.toLowerCase().replace(/\s+/g, '_')}.json`;
         const filepath = path.join(DATA_DIR, filename);
@@ -133,7 +178,6 @@ function saveData(data) {
         console.log(`Saved: ${filename}`);
     }
     
-    // Save latest session reference
     const latest = data[data.length - 1];
     const latestPath = path.join(DATA_DIR, 'latest.json');
     fs.writeFileSync(latestPath, JSON.stringify(latest, null, 2));
