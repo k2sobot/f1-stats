@@ -8,16 +8,16 @@
     "total": "22",
     "StandingsTable": {
       "season": "2026",
-      "round": "3",
+      "round": "4",
       "StandingsLists": [
         {
           "season": "2026",
-          "round": "3",
+          "round": "4",
           "DriverStandings": [
             {
               "position": "1",
               "positionText": "1",
-              "points": "72",
+              "points": "75",
               "wins": "2",
               "Driver": {
                 "driverId": "antonelli",
@@ -41,7 +41,7 @@
             {
               "position": "2",
               "positionText": "2",
-              "points": "63",
+              "points": "68",
               "wins": "1",
               "Driver": {
                 "driverId": "russell",
@@ -65,7 +65,7 @@
             {
               "position": "3",
               "positionText": "3",
-              "points": "49",
+              "points": "55",
               "wins": "0",
               "Driver": {
                 "driverId": "leclerc",
@@ -89,7 +89,7 @@
             {
               "position": "4",
               "positionText": "4",
-              "points": "41",
+              "points": "43",
               "wins": "0",
               "Driver": {
                 "driverId": "hamilton",
@@ -113,7 +113,7 @@
             {
               "position": "5",
               "positionText": "5",
-              "points": "25",
+              "points": "33",
               "wins": "0",
               "Driver": {
                 "driverId": "norris",
@@ -137,7 +137,7 @@
             {
               "position": "6",
               "positionText": "6",
-              "points": "21",
+              "points": "28",
               "wins": "0",
               "Driver": {
                 "driverId": "piastri",
@@ -185,7 +185,7 @@
             {
               "position": "8",
               "positionText": "8",
-              "points": "15",
+              "points": "16",
               "wins": "0",
               "Driver": {
                 "driverId": "gasly",
@@ -209,7 +209,7 @@
             {
               "position": "9",
               "positionText": "9",
-              "points": "12",
+              "points": "16",
               "wins": "0",
               "Driver": {
                 "driverId": "max_verstappen",
