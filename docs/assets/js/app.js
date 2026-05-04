@@ -27,9 +27,9 @@ async function loadLiveData() {
 
 async function getDriverStandings() {
     if (!dataCache.drivers) dataCache.drivers = await loadLocalData('drivers');
-    if (!dataCache.drivers) return { standings: [], round: 0 };
+    if (!dataCache.drivers) return { standings: [], round: 0, lastUpdated: null };
     const table = dataCache.drivers.MRData?.StandingsTable?.StandingsLists?.[0];
-    if (!table) return { standings: [], round: 0 };
+    if (!table) return { standings: [], round: 0, lastUpdated: null };
     return {
         standings: table.DriverStandings.map(s => ({
             position: parseInt(s.position),
@@ -37,7 +37,8 @@ async function getDriverStandings() {
             team: s.Constructors[0]?.name || 'Unknown',
             points: parseInt(s.points), wins: parseInt(s.wins)
         })),
-        round: parseInt(table.round)
+        round: parseInt(table.round),
+        lastUpdated: dataCache.drivers.lastUpdated || null
     };
 }
 
@@ -76,7 +77,6 @@ async function getNextRace() {
 }
 
 async function getLatestSession() {
-    // Try live local data first
     const liveData = await loadLiveData();
     if (liveData?.results) {
         return {
@@ -96,7 +96,6 @@ async function getLatestSession() {
         };
     }
     
-    // Fallback to static data
     if (!dataCache.qualifying) dataCache.qualifying = await loadLocalData('qualifying');
     if (!dataCache.results) dataCache.results = await loadLocalData('results');
     
@@ -152,9 +151,28 @@ function formatUTC(date) {
     return `${day} ${time} UTC`;
 }
 
+function getTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    if (seconds < 60) return 'just now';
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+}
+
 function renderDriverStandings(data) {
     const container = document.getElementById('driver-standings');
     if (!data?.standings?.length) { container.innerHTML = '<div class="error-message">No standings</div>'; return; }
+    
+    let lastUpdatedHtml = '';
+    if (data.lastUpdated) {
+        const date = new Date(data.lastUpdated);
+        const timeAgo = getTimeAgo(date);
+        lastUpdatedHtml = `<div class="last-updated" title="${date.toLocaleString()}">Updated ${timeAgo}</div>`;
+    }
+    
     container.innerHTML = data.standings.slice(0, 10).map(s => `
         <div class="driver-row">
             <div class="position ${s.position <= 3 ? 'p' + s.position : ''}">${s.position}</div>
@@ -164,7 +182,7 @@ function renderDriverStandings(data) {
             </div>
             <div class="driver-points">${s.points} pts</div>
         </div>
-    `).join('');
+    `).join('') + lastUpdatedHtml;
 }
 
 function renderConstructorStandings(standings) {

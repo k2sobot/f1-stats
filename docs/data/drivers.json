@@ -2,7 +2,7 @@
   "MRData": {
     "xmlns": "",
     "series": "f1",
-    "url": "https://api.jolpi.ca/ergast/f1/2026/driverstandings.json",
+    "url": "https://api.jolpi.ca/ergast/f1/current/driverstandings.json",
     "limit": "30",
     "offset": "0",
     "total": "22",
@@ -17,8 +17,8 @@
             {
               "position": "1",
               "positionText": "1",
-              "points": "75",
-              "wins": "2",
+              "points": "100",
+              "wins": "3",
               "Driver": {
                 "driverId": "antonelli",
                 "permanentNumber": "12",
@@ -41,7 +41,7 @@
             {
               "position": "2",
               "positionText": "2",
-              "points": "68",
+              "points": "80",
               "wins": "1",
               "Driver": {
                 "driverId": "russell",
@@ -65,7 +65,7 @@
             {
               "position": "3",
               "positionText": "3",
-              "points": "55",
+              "points": "59",
               "wins": "0",
               "Driver": {
                 "driverId": "leclerc",
@@ -89,31 +89,7 @@
             {
               "position": "4",
               "positionText": "4",
-              "points": "43",
-              "wins": "0",
-              "Driver": {
-                "driverId": "hamilton",
-                "permanentNumber": "44",
-                "code": "HAM",
-                "url": "http://en.wikipedia.org/wiki/Lewis_Hamilton",
-                "givenName": "Lewis",
-                "familyName": "Hamilton",
-                "dateOfBirth": "1985-01-07",
-                "nationality": "British"
-              },
-              "Constructors": [
-                {
-                  "constructorId": "ferrari",
-                  "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
-                  "name": "Ferrari",
-                  "nationality": "Italian"
-                }
-              ]
-            },
-            {
-              "position": "5",
-              "positionText": "5",
-              "points": "33",
+              "points": "51",
               "wins": "0",
               "Driver": {
                 "driverId": "norris",
@@ -135,9 +111,33 @@
               ]
             },
             {
+              "position": "5",
+              "positionText": "5",
+              "points": "51",
+              "wins": "0",
+              "Driver": {
+                "driverId": "hamilton",
+                "permanentNumber": "44",
+                "code": "HAM",
+                "url": "http://en.wikipedia.org/wiki/Lewis_Hamilton",
+                "givenName": "Lewis",
+                "familyName": "Hamilton",
+                "dateOfBirth": "1985-01-07",
+                "nationality": "British"
+              },
+              "Constructors": [
+                {
+                  "constructorId": "ferrari",
+                  "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                  "name": "Ferrari",
+                  "nationality": "Italian"
+                }
+              ]
+            },
+            {
               "position": "6",
               "positionText": "6",
-              "points": "28",
+              "points": "43",
               "wins": "0",
               "Driver": {
                 "driverId": "piastri",
@@ -161,6 +161,30 @@
             {
               "position": "7",
               "positionText": "7",
+              "points": "26",
+              "wins": "0",
+              "Driver": {
+                "driverId": "max_verstappen",
+                "permanentNumber": "3",
+                "code": "VER",
+                "url": "http://en.wikipedia.org/wiki/Max_Verstappen",
+                "givenName": "Max",
+                "familyName": "Verstappen",
+                "dateOfBirth": "1997-09-30",
+                "nationality": "Dutch"
+              },
+              "Constructors": [
+                {
+                  "constructorId": "red_bull",
+                  "url": "https://en.wikipedia.org/wiki/Red_Bull_Racing",
+                  "name": "Red Bull",
+                  "nationality": "Austrian"
+                }
+              ]
+            },
+            {
+              "position": "8",
+              "positionText": "8",
               "points": "17",
               "wins": "0",
               "Driver": {
@@ -183,8 +207,8 @@
               ]
             },
             {
-              "position": "8",
-              "positionText": "8",
+              "position": "9",
+              "positionText": "9",
               "points": "16",
               "wins": "0",
               "Driver": {
@@ -203,30 +227,6 @@
                   "url": "https://en.wikipedia.org/wiki/Alpine_F1_Team",
                   "name": "Alpine F1 Team",
                   "nationality": "French"
-                }
-              ]
-            },
-            {
-              "position": "9",
-              "positionText": "9",
-              "points": "16",
-              "wins": "0",
-              "Driver": {
-                "driverId": "max_verstappen",
-                "permanentNumber": "3",
-                "code": "VER",
-                "url": "http://en.wikipedia.org/wiki/Max_Verstappen",
-                "givenName": "Max",
-                "familyName": "Verstappen",
-                "dateOfBirth": "1997-09-30",
-                "nationality": "Dutch"
-              },
-              "Constructors": [
-                {
-                  "constructorId": "red_bull",
-                  "url": "https://en.wikipedia.org/wiki/Red_Bull_Racing",
-                  "name": "Red Bull",
-                  "nationality": "Austrian"
                 }
               ]
             },
@@ -257,6 +257,30 @@
             {
               "position": "11",
               "positionText": "11",
+              "points": "7",
+              "wins": "0",
+              "Driver": {
+                "driverId": "colapinto",
+                "permanentNumber": "43",
+                "code": "COL",
+                "url": "http://en.wikipedia.org/wiki/Franco_Colapinto",
+                "givenName": "Franco",
+                "familyName": "Colapinto",
+                "dateOfBirth": "2003-05-27",
+                "nationality": "Argentine"
+              },
+              "Constructors": [
+                {
+                  "constructorId": "alpine",
+                  "url": "https://en.wikipedia.org/wiki/Alpine_F1_Team",
+                  "name": "Alpine F1 Team",
+                  "nationality": "French"
+                }
+              ]
+            },
+            {
+              "position": "12",
+              "positionText": "12",
               "points": "4",
               "wins": "0",
               "Driver": {
@@ -279,8 +303,8 @@
               ]
             },
             {
-              "position": "12",
-              "positionText": "12",
+              "position": "13",
+              "positionText": "13",
               "points": "4",
               "wins": "0",
               "Driver": {
@@ -303,33 +327,9 @@
               ]
             },
             {
-              "position": "13",
-              "positionText": "13",
-              "points": "2",
-              "wins": "0",
-              "Driver": {
-                "driverId": "bortoleto",
-                "permanentNumber": "5",
-                "code": "BOR",
-                "url": "https://en.wikipedia.org/wiki/Gabriel_Bortoleto",
-                "givenName": "Gabriel",
-                "familyName": "Bortoleto",
-                "dateOfBirth": "2004-10-14",
-                "nationality": "Brazilian"
-              },
-              "Constructors": [
-                {
-                  "constructorId": "audi",
-                  "url": "https://en.wikipedia.org/wiki/Audi_in_Formula_One",
-                  "name": "Audi",
-                  "nationality": "German"
-                }
-              ]
-            },
-            {
               "position": "14",
               "positionText": "14",
-              "points": "2",
+              "points": "4",
               "wins": "0",
               "Driver": {
                 "driverId": "sainz",
@@ -353,6 +353,30 @@
             {
               "position": "15",
               "positionText": "15",
+              "points": "2",
+              "wins": "0",
+              "Driver": {
+                "driverId": "bortoleto",
+                "permanentNumber": "5",
+                "code": "BOR",
+                "url": "https://en.wikipedia.org/wiki/Gabriel_Bortoleto",
+                "givenName": "Gabriel",
+                "familyName": "Bortoleto",
+                "dateOfBirth": "2004-10-14",
+                "nationality": "Brazilian"
+              },
+              "Constructors": [
+                {
+                  "constructorId": "audi",
+                  "url": "https://en.wikipedia.org/wiki/Audi_in_Formula_One",
+                  "name": "Audi",
+                  "nationality": "German"
+                }
+              ]
+            },
+            {
+              "position": "16",
+              "positionText": "16",
               "points": "1",
               "wins": "0",
               "Driver": {
@@ -375,32 +399,32 @@
               ]
             },
             {
-              "position": "16",
-              "positionText": "16",
+              "position": "17",
+              "positionText": "17",
               "points": "1",
               "wins": "0",
               "Driver": {
-                "driverId": "colapinto",
-                "permanentNumber": "43",
-                "code": "COL",
-                "url": "http://en.wikipedia.org/wiki/Franco_Colapinto",
-                "givenName": "Franco",
-                "familyName": "Colapinto",
-                "dateOfBirth": "2003-05-27",
-                "nationality": "Argentine"
+                "driverId": "albon",
+                "permanentNumber": "23",
+                "code": "ALB",
+                "url": "http://en.wikipedia.org/wiki/Alexander_Albon",
+                "givenName": "Alexander",
+                "familyName": "Albon",
+                "dateOfBirth": "1996-03-23",
+                "nationality": "Thai"
               },
               "Constructors": [
                 {
-                  "constructorId": "alpine",
-                  "url": "https://en.wikipedia.org/wiki/Alpine_F1_Team",
-                  "name": "Alpine F1 Team",
-                  "nationality": "French"
+                  "constructorId": "williams",
+                  "url": "https://en.wikipedia.org/wiki/Williams_Racing",
+                  "name": "Williams",
+                  "nationality": "British"
                 }
               ]
             },
             {
-              "position": "17",
-              "positionText": "17",
+              "position": "18",
+              "positionText": "18",
               "points": "0",
               "wins": "0",
               "Driver": {
@@ -419,30 +443,6 @@
                   "url": "https://en.wikipedia.org/wiki/Audi_in_Formula_One",
                   "name": "Audi",
                   "nationality": "German"
-                }
-              ]
-            },
-            {
-              "position": "18",
-              "positionText": "18",
-              "points": "0",
-              "wins": "0",
-              "Driver": {
-                "driverId": "albon",
-                "permanentNumber": "23",
-                "code": "ALB",
-                "url": "http://en.wikipedia.org/wiki/Alexander_Albon",
-                "givenName": "Alexander",
-                "familyName": "Albon",
-                "dateOfBirth": "1996-03-23",
-                "nationality": "Thai"
-              },
-              "Constructors": [
-                {
-                  "constructorId": "williams",
-                  "url": "https://en.wikipedia.org/wiki/Williams_Racing",
-                  "name": "Williams",
-                  "nationality": "British"
                 }
               ]
             },
@@ -546,5 +546,6 @@
         }
       ]
     }
-  }
+  },
+  "lastUpdated": "2026-05-04T06:58:10.740Z"
 }
