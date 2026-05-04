@@ -9,6 +9,17 @@ const path = require('path');
 const DATA_DIR = path.join(__dirname, '../docs/data/live');
 const API_TIMEOUT = 10000;
 
+// Session priority (higher = more important for "latest")
+const SESSION_PRIORITY = {
+    'Race': 10,
+    'Sprint': 9,
+    'Qualifying': 8,
+    'Sprint Qualifying': 7,
+    'Practice 3': 6,
+    'Practice 2': 5,
+    'Practice 1': 4
+};
+
 async function fetchWithTimeout(url, timeout = API_TIMEOUT) {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
@@ -68,15 +79,22 @@ async function fetchSessionResults(meeting) {
         }
     }
     
+    // Sort by priority (highest first), then by date (most recent first)
+    results.sort((a, b) => {
+        const priA = SESSION_PRIORITY[a.session_type] || 0;
+        const priB = SESSION_PRIORITY[b.session_type] || 0;
+        if (priA !== priB) return priB - priA;
+        return new Date(b.date_end) - new Date(a.date_end);
+    });
+    
     return results.length ? results : null;
 }
 
 async function fetchSessionResult(session, meeting) {
-    const [positions, drivers, laps, timing] = await Promise.all([
+    const [positions, drivers, laps] = await Promise.all([
         fetchWithTimeout(`https://api.openf1.org/v1/position?session_key=${session.session_key}`),
         fetchWithTimeout(`https://api.openf1.org/v1/drivers?session_key=${session.session_key}`),
-        fetchWithTimeout(`https://api.openf1.org/v1/laps?session_key=${session.session_key}`),
-        fetchWithTimeout(`https://api.openf1.org/v1/car_data?session_key=${session.session_key}`)
+        fetchWithTimeout(`https://api.openf1.org/v1/laps?session_key=${session.session_key}`)
     ]);
     
     if (!positions?.length) return null;
@@ -178,7 +196,8 @@ function saveData(data) {
         console.log(`Saved: ${filename}`);
     }
     
-    const latest = data[data.length - 1];
+    // Latest is now the first (highest priority) session
+    const latest = data[0];
     const latestPath = path.join(DATA_DIR, 'latest.json');
     fs.writeFileSync(latestPath, JSON.stringify(latest, null, 2));
     console.log('Updated: latest.json');
