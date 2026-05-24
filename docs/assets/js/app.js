@@ -6,10 +6,10 @@ const TEAM_COLORS = {
     'Mercedes': 'mercedes', 'Ferrari': 'ferrari', 'Red Bull Racing': 'redbull', 'Red Bull': 'redbull',
     'McLaren': 'mclaren', 'Alpine F1 Team': 'alpine', 'Alpine': 'alpine', 'Aston Martin F1 Team': 'astonmartin',
     'Aston Martin': 'astonmartin', 'Haas F1 Team': 'haas', 'Haas': 'haas', 'Williams': 'williams',
-    'Audi': 'audi', 'Cadillac': 'cadillac', 'Racing Bulls': 'racingbulls', 'RB': 'racingbulls',
+    'Audi': 'audi', 'Cadillac': 'cadillac', 'Cadillac F1 Team': 'cadillac', 'Racing Bulls': 'racingbulls', 'RB': 'racingbulls', 'RB F1 Team': 'racingbulls',
 };
 
-let dataCache = { drivers: null, constructors: null, schedule: null, qualifying: null, results: null };
+let dataCache = { drivers: null, constructors: null, schedule: null, qualifying: null, results: null, driverMap: null };
 
 async function loadLocalData(file) {
     try {
@@ -23,6 +23,29 @@ async function loadLiveData() {
         const resp = await fetch('data/live/latest.json');
         return resp.ok ? resp.json() : null;
     } catch { return null; }
+}
+
+async function loadDriverMap() {
+    if (dataCache.driverMap) return dataCache.driverMap;
+    const data = await loadLocalData('drivers_2026');
+    if (!data?.drivers) return {};
+    dataCache.driverMap = {};
+    for (const d of data.drivers) {
+        dataCache.driverMap[d.driver_number] = d;
+    }
+    return dataCache.driverMap;
+}
+
+function enrichDriver(result, driverMap) {
+    const num = String(result.driver_number);
+    const mapped = driverMap[num];
+    return {
+        position: result.position,
+        driver: result.driver_code || mapped?.driver_code || result.driver_name?.split(' ').pop() || `#${num}`,
+        team: result.team || mapped?.team || 'Unknown',
+        time: result.best_lap_time || '',
+        fastestLap: false
+    };
 }
 
 async function getDriverStandings() {
@@ -78,18 +101,13 @@ async function getNextRace() {
 
 async function getLatestSession() {
     const liveData = await loadLiveData();
-    if (liveData?.results) {
+    if (liveData?.results?.length) {
+        const driverMap = await loadDriverMap();
         return {
             sessionName: liveData.session_name || 'Session',
             raceName: liveData.meeting_name || liveData.location || 'Grand Prix',
             isRace: liveData.is_race || false,
-            results: liveData.results.slice(0, 10).map(r => ({
-                position: r.position,
-                driver: r.driver_code || r.driver_name?.split(' ').pop() || `#${r.driver_number}`,
-                team: r.team || 'Unknown',
-                time: r.best_lap_time || '',
-                fastestLap: false
-            })),
+            results: liveData.results.slice(0, 10).map(r => enrichDriver(r, driverMap)),
             fastestLap: null,
             live: false,
             cached: true
