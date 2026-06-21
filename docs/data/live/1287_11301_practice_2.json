@@ -15,8 +15,8 @@
       "driver_code": "NOR",
       "driver_name": "Lando Norris",
       "team": "McLaren",
-      "best_lap": 75.426,
-      "best_lap_time": "1:15.426",
+      "best_lap": null,
+      "best_lap_time": null,
       "gap_to_fastest": null
     },
     {
@@ -25,9 +25,9 @@
       "driver_code": "RUS",
       "driver_name": "George Russell",
       "team": "Mercedes",
-      "best_lap": 75.435,
-      "best_lap_time": "+0.009",
-      "gap_to_fastest": 0.009000000000000341
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 3,
@@ -35,9 +35,9 @@
       "driver_code": "PIA",
       "driver_name": "Oscar Piastri",
       "team": "McLaren",
-      "best_lap": 75.483,
-      "best_lap_time": "+0.057",
-      "gap_to_fastest": 0.05700000000000216
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 4,
@@ -45,9 +45,9 @@
       "driver_code": "LEC",
       "driver_name": "Charles Leclerc",
       "team": "Ferrari",
-      "best_lap": 75.799,
-      "best_lap_time": "+0.373",
-      "gap_to_fastest": 0.37300000000000466
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 5,
@@ -55,9 +55,9 @@
       "driver_code": "ANT",
       "driver_name": "Kimi Antonelli",
       "team": "Mercedes",
-      "best_lap": 76.015,
-      "best_lap_time": "+0.589",
-      "gap_to_fastest": 0.5889999999999986
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 6,
@@ -65,9 +65,9 @@
       "driver_code": "VER",
       "driver_name": "Max Verstappen",
       "team": "Red Bull Racing",
-      "best_lap": 76.321,
-      "best_lap_time": "+0.895",
-      "gap_to_fastest": 0.894999999999996
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 7,
@@ -75,9 +75,9 @@
       "driver_code": "LIN",
       "driver_name": "Arvid Lindblad",
       "team": "Racing Bulls",
-      "best_lap": 76.411,
-      "best_lap_time": "+0.985",
-      "gap_to_fastest": 0.9849999999999994
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 8,
@@ -85,9 +85,9 @@
       "driver_code": "BOR",
       "driver_name": "Gabriel Bortoleto",
       "team": "Audi",
-      "best_lap": 76.611,
-      "best_lap_time": "+1.185",
-      "gap_to_fastest": 1.1850000000000023
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 9,
@@ -95,9 +95,9 @@
       "driver_code": "HAM",
       "driver_name": "Lewis Hamilton",
       "team": "Ferrari",
-      "best_lap": 76.631,
-      "best_lap_time": "+1.205",
-      "gap_to_fastest": 1.2049999999999983
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 10,
@@ -105,9 +105,9 @@
       "driver_code": "HAD",
       "driver_name": "Isack Hadjar",
       "team": "Red Bull Racing",
-      "best_lap": 76.674,
-      "best_lap_time": "+1.248",
-      "gap_to_fastest": 1.2480000000000047
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 11,
@@ -115,9 +115,9 @@
       "driver_code": "HUL",
       "driver_name": "Nico Hulkenberg",
       "team": "Audi",
-      "best_lap": 76.934,
-      "best_lap_time": "+1.508",
-      "gap_to_fastest": 1.5079999999999956
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 12,
@@ -125,9 +125,9 @@
       "driver_code": "BEA",
       "driver_name": "Oliver Bearman",
       "team": "Haas F1 Team",
-      "best_lap": 76.945,
-      "best_lap_time": "+1.519",
-      "gap_to_fastest": 1.5189999999999912
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 13,
@@ -135,9 +135,9 @@
       "driver_code": "LAW",
       "driver_name": "Liam Lawson",
       "team": "Racing Bulls",
-      "best_lap": 76.967,
-      "best_lap_time": "+1.541",
-      "gap_to_fastest": 1.5409999999999968
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 14,
@@ -145,9 +145,9 @@
       "driver_code": "SAI",
       "driver_name": "Carlos Sainz",
       "team": "Williams",
-      "best_lap": 77.02,
-      "best_lap_time": "+1.594",
-      "gap_to_fastest": 1.593999999999994
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 15,
@@ -155,9 +155,9 @@
       "driver_code": "COL",
       "driver_name": "Franco Colapinto",
       "team": "Alpine",
-      "best_lap": 77.051,
-      "best_lap_time": "+1.625",
-      "gap_to_fastest": 1.625
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 16,
@@ -165,9 +165,9 @@
       "driver_code": "GAS",
       "driver_name": "Pierre Gasly",
       "team": "Alpine",
-      "best_lap": 77.26,
-      "best_lap_time": "+1.834",
-      "gap_to_fastest": 1.8340000000000032
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 17,
@@ -175,9 +175,9 @@
       "driver_code": "OCO",
       "driver_name": "Esteban Ocon",
       "team": "Haas F1 Team",
-      "best_lap": 77.538,
-      "best_lap_time": "+2.112",
-      "gap_to_fastest": 2.1119999999999948
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 18,
@@ -185,9 +185,9 @@
       "driver_code": "BOT",
       "driver_name": "Valtteri Bottas",
       "team": "Cadillac",
-      "best_lap": 78.225,
-      "best_lap_time": "+2.799",
-      "gap_to_fastest": 2.7989999999999924
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 19,
@@ -195,9 +195,9 @@
       "driver_code": "ALB",
       "driver_name": "Alexander Albon",
       "team": "Williams",
-      "best_lap": 78.79,
-      "best_lap_time": "+3.364",
-      "gap_to_fastest": 3.3640000000000043
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 20,
@@ -205,9 +205,9 @@
       "driver_code": "PER",
       "driver_name": "Sergio Perez",
       "team": "Cadillac",
-      "best_lap": 79.261,
-      "best_lap_time": "+3.835",
-      "gap_to_fastest": 3.8349999999999937
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 21,
@@ -215,9 +215,9 @@
       "driver_code": "ALO",
       "driver_name": "Fernando Alonso",
       "team": "Aston Martin",
-      "best_lap": 79.286,
-      "best_lap_time": "+3.860",
-      "gap_to_fastest": 3.8599999999999994
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     },
     {
       "position": 22,
@@ -225,9 +225,9 @@
       "driver_code": "STR",
       "driver_name": "Lance Stroll",
       "team": "Aston Martin",
-      "best_lap": 79.459,
-      "best_lap_time": "+4.033",
-      "gap_to_fastest": 4.033000000000001
+      "best_lap": null,
+      "best_lap_time": null,
+      "gap_to_fastest": null
     }
   ]
 }
