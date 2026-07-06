@@ -110,7 +110,7 @@ async function main() {
   });
   
   // Keep top 20
-  const news = allNews.slice(0, 20);
+  const news = allNews.slice(0, 5);
   
   // Add metadata
   const output = {
