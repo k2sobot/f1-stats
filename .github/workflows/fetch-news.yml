@@ -1,0 +1,33 @@
+name: Fetch F1 News Daily
+
+on:
+  schedule:
+    # Run daily at 6:00 UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-news:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Fetch RSS feeds
+        run: |
+          node scripts/fetch-news.js
+      
+      - name: Commit news data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions"
+          git add docs/data/news.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update F1 news - $(date +%Y-%m-%d)"
+          git push

@@ -8,8 +8,8 @@
     <meta http-equiv="Expires" content="0">
     <title>Simple F1 Stats - Live Formula 1 Dashboard</title>
     <meta name="description" content="Real-time Formula 1 statistics, standings, and session results">
-    <link rel="stylesheet" href="assets/css/style.css?t=202603310800">
-    <script src="assets/js/app.js?t=202605022328" defer>
+    <link rel="stylesheet" href="assets/css/style.css?t=202607062100">
+    <script src="assets/js/app.js?t=202607062100" defer></script>
     <script src="assets/js/poll.js?t=202603310800" defer></script>
 </head>
 <body>
@@ -147,6 +147,21 @@
                     </tbody>
                 </table>
             </section>
+
+            <!-- F1 News -->
+            <section class="card news-card" aria-labelledby="news-title">
+                <h2 id="news-title">
+                    <span class="icon">📰</span> F1 News
+                    <span class="news-disclaimer">External Links</span>
+                </h2>
+                <p class="news-intro">Latest headlines from trusted sources. Articles open in new tabs.</p>
+                <div id="news-list" class="news-list">
+                    <div class="loading-skeleton"></div>
+                </div>
+                <div class="news-footer">
+                    <span id="news-updated">Updated daily</span>
+                </div>
+            </section>
         </div>
     </main>
 
@@ -174,6 +189,40 @@
             const current = document.documentElement.getAttribute('data-theme');
             setTheme(current === 'dark' ? 'light' : 'dark');
         });
+
+        // Load news
+        async function loadNews() {
+            try {
+                const res = await fetch('data/news.json');
+                const data = await res.json();
+                const container = document.getElementById('news-list');
+                const updatedEl = document.getElementById('news-updated');
+                
+                if (data.articles && data.articles.length > 0) {
+                    container.innerHTML = data.articles.map(article => `
+                        <a href="${article.link}" target="_blank" rel="noopener noreferrer" class="news-item">
+                            <div class="news-item-content">
+                                <span class="news-source">${article.source}</span>
+                                <h3 class="news-headline">${article.title}</h3>
+                                ${article.description ? `<p class="news-excerpt">${article.description}</p>` : ''}
+                            </div>
+                            <span class="news-arrow">↗</span>
+                        </a>
+                    `).join('');
+                    
+                    // Show last updated time
+                    const lastUpdated = new Date(data.lastUpdated);
+                    updatedEl.textContent = `Updated ${lastUpdated.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`;
+                } else {
+                    container.innerHTML = '<p class="news-empty">No news available</p>';
+                }
+            } catch (err) {
+                console.error('Failed to load news:', err);
+                document.getElementById('news-list').innerHTML = '<p class="news-empty">News unavailable</p>';
+            }
+        }
+        
+        loadNews();
     </script>
 </body>
 </html>
