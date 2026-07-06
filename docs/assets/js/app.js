@@ -326,8 +326,8 @@ async function loadFastestPitStop() {
         }
         
         // Filter valid pit stops and sort by duration
-        const validStops = data.filter(p => p.pit_duration && p.pit_duration > 0);
-        validStops.sort((a, b) => a.pit_duration - b.pit_duration);
+        const validStops = data.filter(p => p.stop_duration && p.stop_duration > 0);
+        validStops.sort((a, b) => a.stop_duration - b.stop_duration);
         
         const fastest = validStops[0];
         if (!fastest) {
@@ -342,7 +342,7 @@ async function loadFastestPitStop() {
         
         document.getElementById('fastest-pitstop').innerHTML = `
             <div class="pitstop-fastest">
-                <div class="pitstop-time">${fastest.pit_duration.toFixed(2)}s</div>
+                <div class="pitstop-time">${fastest.stop_duration.toFixed(2)}s</div>
                 <div class="pitstop-driver">${driver ? `${driver.first_name} ${driver.last_name}` : `Driver #${fastest.driver_number}`}</div>
                 <div class="pitstop-lap">Lap ${fastest.lap_number}</div>
             </div>
@@ -351,7 +351,7 @@ async function loadFastestPitStop() {
                 ${validStops.slice(0, 3).map((stop, i) => `
                     <div class="pitstop-row" style="display: flex; justify-content: space-between; padding: 0.25rem 0; font-size: 0.875rem;">
                         <span>${i + 1}. Driver #${stop.driver_number}</span>
-                        <span style="font-weight: 600;">${stop.pit_duration.toFixed(2)}s</span>
+                        <span style="font-weight: 600;">${stop.stop_duration.toFixed(2)}s</span>
                     </div>
                 `).join('')}
             </div>
