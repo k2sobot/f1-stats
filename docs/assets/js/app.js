@@ -312,3 +312,131 @@ function updateCountdown(race) {
 
 document.addEventListener('DOMContentLoaded', loadAll);
 document.getElementById('season-year').textContent = `${new Date().getFullYear()} Season`;
+
+
+// Fastest Pit Stop
+async function loadFastestPitStop() {
+    try {
+        const res = await fetch('https://api.openf1.org/v1/pit?session_key=latest');
+        const data = await res.json();
+        
+        if (!data || data.length === 0) {
+            document.getElementById('fastest-pitstop').innerHTML = '<p class="no-data">No pit stop data available</p>';
+            return;
+        }
+        
+        // Filter valid pit stops and sort by duration
+        const validStops = data.filter(p => p.pit_duration && p.pit_duration > 0);
+        validStops.sort((a, b) => a.pit_duration - b.pit_duration);
+        
+        const fastest = validStops[0];
+        if (!fastest) {
+            document.getElementById('fastest-pitstop').innerHTML = '<p class="no-data">No pit stop data available</p>';
+            return;
+        }
+        
+        // Get driver info
+        const driverRes = await fetch(`https://api.openf1.org/v1/drivers?driver_number=${fastest.driver_number}&session_key=latest`);
+        const driverData = await driverRes.json();
+        const driver = driverData[0];
+        
+        document.getElementById('fastest-pitstop').innerHTML = `
+            <div class="pitstop-fastest">
+                <div class="pitstop-time">${fastest.pit_duration.toFixed(2)}s</div>
+                <div class="pitstop-driver">${driver ? `${driver.first_name} ${driver.last_name}` : `Driver #${fastest.driver_number}`}</div>
+                <div class="pitstop-lap">Lap ${fastest.lap_number}</div>
+            </div>
+            <div class="pitstop-top3">
+                <h3 style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;">TOP 3 THIS SESSION</h3>
+                ${validStops.slice(0, 3).map((stop, i) => `
+                    <div class="pitstop-row" style="display: flex; justify-content: space-between; padding: 0.25rem 0; font-size: 0.875rem;">
+                        <span>${i + 1}. Driver #${stop.driver_number}</span>
+                        <span style="font-weight: 600;">${stop.pit_duration.toFixed(2)}s</span>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } catch (err) {
+        console.error('Failed to load pit stop data:', err);
+        document.getElementById('fastest-pitstop').innerHTML = '<p class="no-data">Pit stop data unavailable</p>';
+    }
+}
+
+// Driver Head-to-Head
+let allDrivers = [];
+let driverStandings = [];
+
+async function loadHeadToHead() {
+    try {
+        // Fetch drivers and standings if not already loaded
+        if (allDrivers.length === 0) {
+            const [driversRes, standingsRes] = await Promise.all([
+                fetch('https://api.openf1.org/v1/drivers?session_key=latest'),
+                fetch('https://api.openf1.org/v1/driver_standings?session_key=latest')
+            ]);
+            allDrivers = await driversRes.json();
+            driverStandings = await standingsRes.json();
+        }
+        
+        if (allDrivers.length < 2) {
+            document.getElementById('h2h-container').innerHTML = '<p class="no-data">Not enough drivers</p>';
+            return;
+        }
+        
+        // Pick 2 random drivers
+        const shuffled = [...allDrivers].sort(() => Math.random() - 0.5);
+        const driver1 = shuffled[0];
+        const driver2 = shuffled[1];
+        
+        // Get their standings
+        const standing1 = driverStandings.find(s => s.driver_number === driver1.driver_number) || {};
+        const standing2 = driverStandings.find(s => s.driver_number === driver2.driver_number) || {};
+        
+        const points1 = standing1.championship_points || 0;
+        const points2 = standing2.championship_points || 0;
+        const winner1 = points1 > points2;
+        const winner2 = points2 > points1;
+        
+        document.getElementById('h2h-container').innerHTML = `
+            <div class="h2h-driver ${winner1 ? 'winner' : ''}">
+                <div class="h2h-driver-name">${driver1.first_name} ${driver1.last_name}</div>
+                <div class="h2h-driver-team">${driver1.team_name || ''}</div>
+                <div class="h2h-stat">
+                    <span class="h2h-stat-label">Points</span>
+                    <span class="h2h-stat-value">${points1}</span>
+                </div>
+                <div class="h2h-stat">
+                    <span class="h2h-stat-label">Position</span>
+                    <span class="h2h-stat-value">${standing1.position || '-'}</span>
+                </div>
+            </div>
+            <div class="h2h-vs">VS</div>
+            <div class="h2h-driver ${winner2 ? 'winner' : ''}">
+                <div class="h2h-driver-name">${driver2.first_name} ${driver2.last_name}</div>
+                <div class="h2h-driver-team">${driver2.team_name || ''}</div>
+                <div class="h2h-stat">
+                    <span class="h2h-stat-label">Points</span>
+                    <span class="h2h-stat-value">${points2}</span>
+                </div>
+                <div class="h2h-stat">
+                    <span class="h2h-stat-label">Position</span>
+                    <span class="h2h-stat-value">${standing2.position || '-'}</span>
+                </div>
+            </div>
+        `;
+    } catch (err) {
+        console.error('Failed to load head-to-head:', err);
+        document.getElementById('h2h-container').innerHTML = '<p class="no-data">Head-to-head unavailable</p>';
+    }
+}
+
+// Initialize additional features
+document.addEventListener('DOMContentLoaded', () => {
+    loadFastestPitStop();
+    loadHeadToHead();
+    
+    // Refresh button
+    document.getElementById('h2h-refresh')?.addEventListener('click', () => {
+        loadHeadToHead();
+    });
+});

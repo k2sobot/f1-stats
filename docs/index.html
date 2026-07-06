@@ -55,8 +55,8 @@
     }
     </script>
     
-    <link rel="stylesheet" href="assets/css/style.css?t=202607062200">
-    <script src="assets/js/app.js?t=202607062200" defer></script>
+    <link rel="stylesheet" href="assets/css/style.css?t=202607062210">
+    <script src="assets/js/app.js?t=202607062210" defer></script>
 </head>
 <body>
     <header class="header">
@@ -140,6 +140,23 @@
             </section>
 
             <!-- Race Winner Poll -->
+            <!-- Fastest Pit Stop -->
+            <section class="card" aria-labelledby="fastest-pitstop-title">
+                <h2 id="fastest-pitstop-title"><span class="icon">🛞</span> Fastest Pit Stop</h2>
+                <div id="fastest-pitstop" class="pitstop-content">
+                    <div class="loading-skeleton"></div>
+                </div>
+            </section>
+
+            <!-- Driver Head-to-Head -->
+            <section class="card h2h-card" aria-labelledby="h2h-title">
+                <h2 id="h2h-title"><span class="icon">⚔️</span> Driver Head-to-Head</h2>
+                <div id="h2h-container" class="h2h-content">
+                    <div class="loading-skeleton"></div>
+                </div>
+                <button class="h2h-refresh" id="h2h-refresh" aria-label="New matchup">🔄 New Matchup</button>
+            </section>
+
             <!-- Latest Results -->
             <section class="card" aria-labelledby="latest-results-title">
                 <h2 id="latest-results-title"><span class="icon">🏁</span> Latest Results</h2>
