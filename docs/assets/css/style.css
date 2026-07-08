@@ -768,7 +768,7 @@ body {
 
 /* News Section */
 .news-card {
-    grid-column: span 2;
+    grid-column: span 1;
 }
 
 .news-card h2 {
