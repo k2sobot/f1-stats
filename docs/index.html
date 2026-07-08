@@ -55,8 +55,8 @@
     }
     </script>
     
-    <link rel="stylesheet" href="assets/css/style.css?t=202607062225">
-    <script src="assets/js/app.js?t=202607062225" defer></script>
+    <link rel="stylesheet" href="assets/css/style.css?t=20260708">
+    <script src="assets/js/app.js?t=20260708" defer></script>
 </head>
 <body>
     <header class="header">
@@ -139,7 +139,6 @@
                 </div>
             </section>
 
-            <!-- Race Winner Poll -->
             <!-- Latest Results -->
             <section class="card" aria-labelledby="latest-results-title">
                 <h2 id="latest-results-title"><span class="icon">🏁</span> Latest Results</h2>
@@ -156,6 +155,21 @@
                         <tr><td colspan="3" class="loading-cell">Loading...</td></tr>
                     </tbody>
                 </table>
+            </section>
+
+            <!-- F1 News -->
+            <section class="card news-card" aria-labelledby="news-title">
+                <h2 id="news-title">
+                    <span class="icon">📰</span> F1 News
+                    <span class="news-disclaimer">External Links</span>
+                </h2>
+                <p class="news-intro">Latest headlines from trusted sources. Articles open in new tabs.</p>
+                <div id="news-list" class="news-list">
+                    <div class="loading-skeleton"></div>
+                </div>
+                <div class="news-footer">
+                    <span id="news-updated">Updated daily</span>
+                </div>
             </section>
 
             <!-- Weather (Live during sessions) -->
@@ -181,21 +195,6 @@
                     <tbody id="pitstops-results">
                     </tbody>
                 </table>
-            </section>
-
-            <!-- F1 News -->
-            <section class="card news-card" aria-labelledby="news-title">
-                <h2 id="news-title">
-                    <span class="icon">📰</span> F1 News
-                    <span class="news-disclaimer">External Links</span>
-                </h2>
-                <p class="news-intro">Latest headlines from trusted sources. Articles open in new tabs.</p>
-                <div id="news-list" class="news-list">
-                    <div class="loading-skeleton"></div>
-                </div>
-                <div class="news-footer">
-                    <span id="news-updated">Updated daily</span>
-                </div>
             </section>
         </div>
     </main>
