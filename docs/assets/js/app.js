@@ -127,13 +127,37 @@ async function getLatestSession() {
     
     if (raceData?.Results && raceRound <= currentRound && raceHappened) {
         const fl = raceData.Results.find(r => r.FastestLap?.rank === '1');
-        return {
-            sessionName: 'Race', raceName: raceData.raceName, isRace: true,
-            results: raceData.Results.slice(0, 10).map(r => ({
-                position: parseInt(r.position), driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
-                team: r.Constructor.name, time: r.Time?.time || r.status, fastestLap: r.FastestLap?.rank === '1'
+        
+        // Separate finishers and DNFs
+        const finishers = raceData.Results.filter(r => r.status !== 'Retired').slice(0, 10);
+        const dnfs = raceData.Results.filter(r => r.status === 'Retired');
+        
+        const allResults = [
+            ...finishers.map(r => ({
+                position: parseInt(r.position),
+                driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
+                team: r.Constructor.name,
+                time: r.Time?.time || r.status,
+                fastestLap: r.FastestLap?.rank === '1',
+                isDNF: false
             })),
-            fastestLap: fl ? { driver: fl.Driver.code, time: fl.FastestLap?.Time?.time } : null, live: false
+            ...dnfs.map(r => ({
+                position: 'DNF',
+                driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
+                team: r.Constructor.name,
+                time: '-',
+                fastestLap: false,
+                isDNF: true
+            }))
+        ];
+        
+        return {
+            sessionName: 'Race',
+            raceName: raceData.raceName,
+            isRace: true,
+            results: allResults,
+            fastestLap: fl ? { driver: fl.Driver.code, time: fl.FastestLap?.Time?.time } : null,
+            live: false
         };
     }
     
@@ -143,7 +167,7 @@ async function getLatestSession() {
             sessionName: 'Qualifying', raceName: qualiRace.raceName, isRace: false,
             results: qualiRace.QualifyingResults.slice(0, 10).map((r, i) => ({
                 position: i + 1, driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
-                team: r.Constructor.name, time: r.Q3 || r.Q2 || r.Q1 || '-', fastestLap: false
+                team: r.Constructor.name, time: r.Q3 || r.Q2 || r.Q1 || '-', fastestLap: false, isDNF: false
             })),
             fastestLap: null, live: false
         };
@@ -247,8 +271,8 @@ function renderLatestResults(data) {
     }
     
     tbody.innerHTML = data.results.map(r => `
-        <tr>
-            <td><div class="position ${r.position <= 3 ? 'p' + r.position : ''}">${r.position}</div></td>
+        <tr class="${r.isDNF ? 'dnf-row' : ''}">
+            <td><div class="position ${typeof r.position === 'number' && r.position <= 3 ? 'p' + r.position : ''} ${r.isDNF ? 'dnf-pos' : ''}">${r.position}</div></td>
             <td>${r.driver} ${r.fastestLap ? '<span class="fl-badge">FL</span>' : ''} <span class="team-tag team-${TEAM_COLORS[r.team] || 'default'}">${r.team.substring(0, 3).toUpperCase()}</span></td>
             <td class="time-cell">${r.time || '-'}</td>
         </tr>
