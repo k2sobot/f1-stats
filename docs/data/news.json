@@ -1,27 +1,13 @@
 {
-  "lastUpdated": "2026-07-08T08:29:06.501Z",
+  "lastUpdated": "2026-07-09T09:40:09.409Z",
   "total": 5,
   "articles": [
-    {
-      "title": "Horner 'will get back' to Formula 1, says FIA boss",
-      "link": "https://www.espn.com/f1/story/_/id/49224497/fia-boss-confident-christian-horner-get-back-formula-1-everybody-makes-mistakes",
-      "description": "Christian Horner will return to Formula 1, the ruler of the sport has said as the former Red Bull team principal made his comeback at the British Grand Prix.",
-      "pubDate": "Tue, 7 Jul 2026 08:37:32 EST",
-      "source": "ESPN F1"
-    },
     {
       "title": "Safety car finish and Verstappen's future - F1 Q&A",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/c30y2r72dg6o?at_medium=RSS",
       "description": "BBC Sport F1 correspondent Andrew Benson answers your latest questions after the British Grand Prix at Silverstone.",
       "pubDate": "Tue, 07 Jul 2026 06:57:30 GMT",
       "source": "BBC Sport F1"
-    },
-    {
-      "title": "Leclerc: 'A lot of negativity around me in general'",
-      "link": "https://www.espn.com/f1/story/_/id/49224502/british-grand-prix-formula-1-silverstone-charles-leclerc-negative-comments-try-cancel-noise-much-possible",
-      "description": "British Grand Prix winner Charles Leclerc has revealed he went on a digital detox to avoid negative comments during his struggles earlier this season.",
-      "pubDate": "Mon, 6 Jul 2026 11:41:57 EST",
-      "source": "ESPN F1"
     },
     {
       "title": "The personal story of a dad who took his autistic son to the British Grand Prix",
@@ -31,11 +17,25 @@
       "source": "BBC Sport F1"
     },
     {
-      "title": "Russell: 'Performances need to be better'",
-      "link": "https://www.espn.com/f1/story/_/id/49224501/british-grand-prix-formula-1-silverstone-george-russell-world-championship-fight-performances-need-better",
-      "description": "George Russell was grateful for a late turn of fortune which earned him a British Grand Prix podium but has said he believes he cannot contend for the championship unless his performances improve.",
-      "pubDate": "Mon, 6 Jul 2026 10:42:52 EST",
-      "source": "ESPN F1"
+      "title": "Speed, shots and scoops – stories from Silverstone",
+      "link": "https://www.bbc.co.uk/news/articles/cnv98vnz69mo?at_medium=RSS",
+      "description": "The 2026 British Grand Prix is the highest attended Formula 1 race weekend yet.",
+      "pubDate": "Mon, 06 Jul 2026 05:19:45 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Safety car software error 'frustrating'",
+      "link": "https://www.bbc.co.uk/sport/formula1/videos/c4gyy2grvn1o?at_medium=RSS",
+      "description": "Rosanna Tenant, Harry Benjamin and former Formula 1 world champion Damon Hill discuss the end to the British Grand Prix as a 'software error' led people to believe there would be one final lap of raci",
+      "pubDate": "Sun, 05 Jul 2026 22:46:57 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Safety car decisive again in confusing end to chaotic race",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cd6eejgnpg8o?at_medium=RSS",
+      "description": "The safety car staying out might have been an unsatisfactory way to end the British Grand Prix but this time the rules were followed, writes Andrew Benson.",
+      "pubDate": "Sun, 05 Jul 2026 21:25:46 GMT",
+      "source": "BBC Sport F1"
     }
   ]
 }
