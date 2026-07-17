@@ -1,7 +1,28 @@
 {
-  "lastUpdated": "2026-07-16T08:13:38.886Z",
+  "lastUpdated": "2026-07-17T08:10:13.263Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Norris to have 10-place grid penalty in Belgium",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cj038y0levyo?at_medium=RSS",
+      "description": "Lando Norris will have a 10-place grid penalty at the Belgian Grand Prix as a result of exceeding the permitted number of engine parts.",
+      "pubDate": "Thu, 16 Jul 2026 16:04:25 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Red Bull to change wing after Verstappen crashes",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cr7kr0lx081o?at_medium=RSS",
+      "description": "Red Bull are reverting to a conventional rear wing for the Belgian Grand Prix following high-speed crashes for Max Verstappen in the previous two races.",
+      "pubDate": "Thu, 16 Jul 2026 12:46:08 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "How to follow Belgian Grand Prix on the BBC",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cr47gkqerdpo?at_medium=RSS",
+      "description": "All the key BBC coverage details for the Belgian Grand Prix at Spa-Francorchamps, from 17-19 July.",
+      "pubDate": "Thu, 16 Jul 2026 11:20:35 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Could it work if Verstappen wanted to go to McLaren? F1 Q&A",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/c872v408y2xo?at_medium=RSS",
@@ -10,31 +31,10 @@
       "source": "BBC Sport F1"
     },
     {
-      "title": "How to follow Belgian Grand Prix on the BBC",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cr47gkqerdpo?at_medium=RSS",
-      "description": "All the key BBC coverage details for the Belgian Grand Prix at Spa-Francorchamps, from 17-19 July.",
-      "pubDate": "Mon, 13 Jul 2026 06:34:49 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
       "title": "F1: Chequered Flag",
       "link": "https://www.bbc.co.uk/sounds/play/p0ny007v?at_medium=RSS",
       "description": "Harry and Becky are at Goodwood and chat to Oscar Piastri and Alisha Palmowski",
       "pubDate": "Fri, 10 Jul 2026 07:33:00 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Safety car finish and Verstappen's future - F1 Q&A",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c30y2r72dg6o?at_medium=RSS",
-      "description": "BBC Sport F1 correspondent Andrew Benson answers your latest questions after the British Grand Prix at Silverstone.",
-      "pubDate": "Tue, 07 Jul 2026 06:57:30 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "The personal story of a dad who took his autistic son to the British Grand Prix",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c4g7glkj614o?at_medium=RSS",
-      "description": "My autistic son loves Formula 1 - and Silverstone have made it viable for him to go and watch it live.",
-      "pubDate": "Mon, 06 Jul 2026 16:28:31 GMT",
       "source": "BBC Sport F1"
     }
   ]
