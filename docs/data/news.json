@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-07-28T08:34:35.918Z",
+  "lastUpdated": "2026-07-29T08:40:51.553Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Five things we've learned from first half of F1 season",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/clyj898j2p0o?at_medium=RSS",
+      "description": "BBC F1 correspondent Andrew Benson analyses the five key things we've learned from the 2026 season so far.",
+      "pubDate": "Wed, 29 Jul 2026 07:29:19 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Why is Hamilton getting so many penalties? - F1 Q&A",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cp9e188m751o?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sounds/play/p0p0zy3h?at_medium=RSS",
       "description": "The BBC F1 team reflect on a dramatic, action-packed Hungarian GP.",
       "pubDate": "Sun, 26 Jul 2026 22:02:00 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Norris and McLaren almost perfect as Ferrari flounder",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cz7d9p3yplno?at_medium=RSS",
-      "description": "Lando Norris' first grand prix win of 2026 was a long time coming as the mistakes piled up for Ferrari in Hungary, writes Andrew Benson.",
-      "pubDate": "Sun, 26 Jul 2026 19:19:43 GMT",
       "source": "BBC Sport F1"
     }
   ]
