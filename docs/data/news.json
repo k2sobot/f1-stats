@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-07-29T08:40:51.553Z",
+  "lastUpdated": "2026-07-30T08:26:59.879Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Season to end in Europe if war continues - F1 boss",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cx2r0ne2ky1o?at_medium=RSS",
+      "description": "Formula 1 president Stefano Domenicali says the 2026 championship will end in Europe if the conflict in the Middle East makes it impossible to hold the season-closing races in Qatar and Abu Dhabi.",
+      "pubDate": "Wed, 29 Jul 2026 11:04:52 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Five things we've learned from first half of F1 season",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/clyj898j2p0o?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/videos/c4gkrd4e8kno?at_medium=RSS",
       "description": "The BBC F1 team discuss Ferrari's performance at the Hungarian Grand Prix as, despite appearing to be the car to beat in practice, Charles Leclerc and Lewis Hamilton finish the race in fourth and fift",
       "pubDate": "Mon, 27 Jul 2026 09:00:38 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "F1: Chequered Flag",
-      "link": "https://www.bbc.co.uk/sounds/play/p0p0zy3h?at_medium=RSS",
-      "description": "The BBC F1 team reflect on a dramatic, action-packed Hungarian GP.",
-      "pubDate": "Sun, 26 Jul 2026 22:02:00 GMT",
       "source": "BBC Sport F1"
     }
   ]
