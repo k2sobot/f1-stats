@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-08-02T08:24:11.500Z",
+  "lastUpdated": "2026-08-03T09:45:14.555Z",
   "total": 5,
   "articles": [
+    {
+      "title": "The Chequered Flag Podcast",
+      "link": "https://www.bbc.co.uk/iplayer/episode/m00305z5?at_medium=RSS",
+      "description": "Harry Benjamin and Nicola Hume dive into the biggest transfer rumours in Formula 1",
+      "pubDate": "Fri, 31 Jul 2026 17:00:00 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Andrew Benson Q&A: Send us your questions",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/ckg3y15zje8o?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cp9e188m751o?at_medium=RSS",
       "description": "BBC Sport F1 correspondent Andrew Benson answers your latest questions after the Hungarian Grand Prix.",
       "pubDate": "Tue, 28 Jul 2026 06:42:23 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Mercedes driver scout Lagrue to join Red Bull",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cvg7kdnv4p2o?at_medium=RSS",
-      "description": "The Mercedes driver scout involved in discovering Kimi Antonelli is leaving the team to join rivals Red Bull.",
-      "pubDate": "Mon, 27 Jul 2026 12:48:10 GMT",
       "source": "BBC Sport F1"
     }
   ]
