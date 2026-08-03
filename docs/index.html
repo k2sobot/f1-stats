@@ -358,15 +358,16 @@
         const installSection = document.getElementById('install-section');
         const installCloseBtn = document.getElementById('install-close');
         
-        // Check if user previously dismissed
-        if (localStorage.getItem('f1-install-dismissed') === 'true') {
+        // Check if user previously dismissed (24h cooldown)
+        const dismissedAt = localStorage.getItem('f1-install-dismissed');
+        if (dismissedAt && (Date.now() - parseInt(dismissedAt)) < 86400000) {
             installSection.classList.add('dismissed');
         }
         
         if (installCloseBtn) {
             installCloseBtn.addEventListener('click', () => {
                 installSection.classList.add('dismissed');
-                localStorage.setItem('f1-install-dismissed', 'true');
+                localStorage.setItem('f1-install-dismissed', Date.now().toString());
             });
         }
 
