@@ -997,3 +997,122 @@ body {
     font-size: 1.2rem;
     color: var(--accent-color, #e10600);
 }
+
+/* Install App Card */
+.install-card {
+    grid-column: span 2;
+}
+
+.install-content {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.install-qr {
+    flex-shrink: 0;
+    text-align: center;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.qr-image {
+    width: 150px;
+    height: 150px;
+    display: block;
+    border-radius: 0.5rem;
+}
+
+.qr-hint {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.install-steps {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.install-platform {
+    background: var(--bg-secondary);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+}
+
+.install-platform h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.install-platform ol {
+    margin-left: 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.8;
+}
+
+.install-platform li {
+    margin-bottom: 0.25rem;
+}
+
+.install-platform strong {
+    color: var(--text-primary);
+}
+
+.share-icon, .menu-icon {
+    display: inline-block;
+    font-size: 0.9rem;
+}
+
+.install-note {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .install-card {
+        grid-column: span 1;
+    }
+    
+    .install-content {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .install-qr {
+        order: 1;
+    }
+    
+    .install-steps {
+        order: 2;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .install-steps {
+        gap: 1rem;
+    }
+    
+    .install-platform {
+        padding: 1rem;
+    }
+    
+    .install-platform ol {
+        font-size: 0.85rem;
+        line-height: 1.7;
+    }
+}

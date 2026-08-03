@@ -63,8 +63,8 @@
     }
     </script>
     
-    <link rel="stylesheet" href="assets/css/style.css?t=202607081033">
-    <script src="assets/js/app.js?t=202607081033" defer></script>
+    <link rel="stylesheet" href="assets/css/style.css?t=202608031503">
+    <script src="assets/js/app.js?t=202608031503" defer></script>
 </head>
 <body>
     <header class="header">
@@ -208,6 +208,38 @@
                     </tbody>
                 </table>
             </section>
+            <!-- Install App Section -->
+            <section class="card install-card" aria-labelledby="install-title">
+                <h2 id="install-title"><span class="icon">📲</span> Install App</h2>
+                <div class="install-content">
+                    <div class="install-qr">
+                        <img src="assets/qr-code.png" alt="Scan to visit Simple F1 Stats" class="qr-image">
+                        <p class="qr-hint">Scan to open</p>
+                    </div>
+                    <div class="install-steps">
+                        <div class="install-platform" id="ios-instructions">
+                            <h3>📱 iOS (iPhone/iPad)</h3>
+                            <ol>
+                                <li>Open in <strong>Safari</strong></li>
+                                <li>Tap the <strong>Share</strong> button <span class="share-icon">⬆️</span></li>
+                                <li>Tap <strong>"Add to Home Screen"</strong></li>
+                                <li>Tap <strong>"Add"</strong> in the top right</li>
+                            </ol>
+                        </div>
+                        <div class="install-platform" id="android-instructions">
+                            <h3>🤖 Android</h3>
+                            <ol>
+                                <li>Open in <strong>Chrome</strong></li>
+                                <li>Tap the <strong>menu</strong> button <span class="menu-icon">⋮</span></li>
+                                <li>Tap <strong>"Add to Home screen"</strong></li>
+                                <li>Tap <strong>"Install"</strong></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <p class="install-note">Works offline after first load. No app store needed.</p>
+            </section>
+
         </div>
     </main>
 
@@ -303,6 +335,25 @@
         }
         
         loadNews();
+        // Platform detection for install instructions
+        function highlightPlatformInstructions() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isAndroid = /Android/.test(navigator.userAgent);
+            
+            const iosSection = document.getElementById('ios-instructions');
+            const androidSection = document.getElementById('android-instructions');
+            
+            if (isIOS && iosSection) {
+                iosSection.style.background = 'var(--bg-card)';
+                iosSection.style.border = '2px solid #e10600';
+            } else if (isAndroid && androidSection) {
+                androidSection.style.background = 'var(--bg-card)';
+                androidSection.style.border = '2px solid #e10600';
+            }
+        }
+        
+        highlightPlatformInstructions();
+
     </script>
 </body>
 </html>
