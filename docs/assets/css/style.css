@@ -1116,3 +1116,38 @@ body {
         line-height: 1.7;
     }
 }
+
+/* Install card close button */
+.install-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.install-close:hover {
+    background: var(--border-color);
+    color: var(--text-primary);
+    transform: scale(1.1);
+}
+
+.install-card {
+    position: relative;
+}
+
+.install-card.dismissed {
+    display: none;
+}

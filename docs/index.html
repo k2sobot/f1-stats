@@ -63,8 +63,8 @@
     }
     </script>
     
-    <link rel="stylesheet" href="assets/css/style.css?t=202608031503">
-    <script src="assets/js/app.js?t=202608031503" defer></script>
+    <link rel="stylesheet" href="assets/css/style.css?t=202608031546">
+    <script src="assets/js/app.js?t=202608031546" defer></script>
 </head>
 <body>
     <header class="header">
@@ -209,7 +209,8 @@
                 </table>
             </section>
             <!-- Install App Section -->
-            <section class="card install-card" aria-labelledby="install-title">
+            <section class="card install-card" id="install-section" aria-labelledby="install-title">
+                <button class="install-close" id="install-close" aria-label="Close install instructions">×</button>
                 <h2 id="install-title"><span class="icon">📲</span> Install App</h2>
                 <div class="install-content">
                     <div class="install-qr">
@@ -353,6 +354,22 @@
         }
         
         highlightPlatformInstructions();
+        // Install section dismiss handler
+        const installSection = document.getElementById('install-section');
+        const installCloseBtn = document.getElementById('install-close');
+        
+        // Check if user previously dismissed
+        if (localStorage.getItem('f1-install-dismissed') === 'true') {
+            installSection.classList.add('dismissed');
+        }
+        
+        if (installCloseBtn) {
+            installCloseBtn.addEventListener('click', () => {
+                installSection.classList.add('dismissed');
+                localStorage.setItem('f1-install-dismissed', 'true');
+            });
+        }
+
 
     </script>
 </body>
