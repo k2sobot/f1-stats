@@ -337,8 +337,12 @@ document.getElementById('season-year').textContent = `${new Date().getFullYear()
     
     // Check if we're at the top of the page
     function isAtTop() {
-        return window.scrollY <= 0 && window.visualViewport ? window.visualViewport.pageTop <= 0 : true;
+        // Check multiple scroll properties for mobile compatibility
+        const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+        const scrollTop = document.body.scrollTop || document.documentElement.scrollTop || 0;
+        return scrollY <= 1 && scrollTop <= 1;
     }
+    
     
     // Handle touch start
     document.addEventListener('touchstart', (e) => {
