@@ -321,3 +321,153 @@ document.getElementById('season-year').textContent = `${new Date().getFullYear()
 
 
 // Fastest Pit Stop
+
+/**
+ * Pull to Refresh
+ */
+(function() {
+    const indicator = document.getElementById('pull-indicator');
+    if (!indicator) return;
+    
+    let startY = 0;
+    let currentY = 0;
+    let pulling = false;
+    let refreshing = false;
+    const threshold = 80;
+    
+    // Check if we're at the top of the page
+    function isAtTop() {
+        return window.scrollY <= 0 && window.visualViewport ? window.visualViewport.pageTop <= 0 : true;
+    }
+    
+    // Handle touch start
+    document.addEventListener('touchstart', (e) => {
+        if (!isAtTop() || refreshing) return;
+        startY = e.touches[0].clientY;
+        pulling = true;
+    }, { passive: true });
+    
+    // Handle touch move
+    document.addEventListener('touchmove', (e) => {
+        if (!pulling || refreshing) return;
+        currentY = e.touches[0].clientY;
+        const diff = Math.max(0, currentY - startY);
+        
+        if (diff > 0 && isAtTop()) {
+            const progress = Math.min(diff / threshold, 1);
+            indicator.style.transform = `translateY(${Math.min(diff, threshold + 20)}px)`;
+            
+            if (diff >= threshold) {
+                indicator.classList.add('ready');
+                indicator.querySelector('.arrow')?.classList.add('rotate');
+            } else {
+                indicator.classList.remove('ready');
+            }
+            
+            indicator.classList.add('visible');
+        }
+    }, { passive: true });
+    
+    // Handle touch end
+    document.addEventListener('touchend', async (e) => {
+        if (!pulling) return;
+        pulling = false;
+        
+        const diff = currentY - startY;
+        
+        if (diff >= threshold && !refreshing) {
+            // Trigger refresh
+            refreshing = true;
+            indicator.innerHTML = '<div class="spinner"></div>';
+            indicator.classList.add('refreshing');
+            indicator.classList.remove('ready');
+            
+            try {
+                // Clear cache and reload
+                dataCache = { drivers: null, constructors: null, schedule: null, qualifying: null, results: null, driverMap: null };
+                await loadAll();
+                await loadNews();
+            } catch (err) {
+                console.error('Refresh failed:', err);
+            }
+            
+            // Reset after animation
+            setTimeout(() => {
+                indicator.classList.remove('visible', 'refreshing');
+                indicator.style.transform = '';
+                indicator.innerHTML = '<span class="arrow">↓</span>';
+                refreshing = false;
+            }, 300);
+        } else {
+            // Cancel pull
+            indicator.classList.remove('visible', 'ready');
+            indicator.style.transform = '';
+        }
+        
+        startY = 0;
+        currentY = 0;
+    }, { passive: true });
+    
+    // Also allow pull-to-refresh with mouse (for desktop testing)
+    let mouseDown = false;
+    
+    document.addEventListener('mousedown', (e) => {
+        if (!isAtTop() || refreshing) return;
+        mouseDown = true;
+        startY = e.clientY;
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (!mouseDown || refreshing) return;
+        currentY = e.clientY;
+        const diff = Math.max(0, currentY - startY);
+        
+        if (diff > 0 && isAtTop()) {
+            const progress = Math.min(diff / threshold, 1);
+            indicator.style.transform = `translateY(${Math.min(diff, threshold + 20)}px)`;
+            
+            if (diff >= threshold) {
+                indicator.classList.add('ready');
+            } else {
+                indicator.classList.remove('ready');
+            }
+            
+            indicator.classList.add('visible');
+        }
+    });
+    
+    document.addEventListener('mouseup', async (e) => {
+        if (!mouseDown) return;
+        mouseDown = false;
+        
+        const diff = currentY - startY;
+        
+        if (diff >= threshold && !refreshing && isAtTop()) {
+            refreshing = true;
+            indicator.innerHTML = '<div class="spinner"></div>';
+            indicator.classList.add('refreshing');
+            indicator.classList.remove('ready');
+            
+            try {
+                dataCache = { drivers: null, constructors: null, schedule: null, qualifying: null, results: null, driverMap: null };
+                await loadAll();
+                await loadNews();
+            } catch (err) {
+                console.error('Refresh failed:', err);
+            }
+            
+            setTimeout(() => {
+                indicator.classList.remove('visible', 'refreshing');
+                indicator.style.transform = '';
+                indicator.innerHTML = '<span class="arrow">↓</span>';
+                refreshing = false;
+            }, 300);
+        } else {
+            indicator.classList.remove('visible', 'ready');
+            indicator.style.transform = '';
+        }
+        
+        startY = 0;
+        currentY = 0;
+    });
+})();
