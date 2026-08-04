@@ -1152,11 +1152,6 @@ body {
     display: none;
 }
 
-/* YouTube Video Section */
-.youtube-card {
-    overflow: hidden;
-}
-
 .youtube-container {
     position: relative;
     width: 100%;
