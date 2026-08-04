@@ -1,10 +1,13 @@
-const CACHE_NAME = 'f1-stats-v1';
+const CACHE_NAME = 'f1-stats-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/assets/css/style.css',
   '/assets/js/app.js',
-  '/assets/favicon.svg'
+  '/assets/favicon.svg',
+  '/assets/icon-192.png',
+  '/assets/icon-512.png',
+  '/manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
