@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-05T08:35:40.242Z",
+  "lastUpdated": "2026-08-06T08:35:52.072Z",
   "total": 5,
   "articles": [
     {
@@ -7,6 +7,13 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cpd79ln1p93o?at_medium=RSS",
       "description": "BBC Sport F1 correspondent Andrew Benson answers your latest questions.",
       "pubDate": "Tue, 04 Aug 2026 06:59:34 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Superman 1978: The classic superhero blockbuster",
+      "link": "https://www.bbc.co.uk/iplayer/episode/m002zvky?at_mid=ApEbsgA1pn",
+      "description": "Relive the film that made audiences believe a man could fly",
+      "pubDate": "Sat, 01 Aug 2026 18:56:30 GMT",
       "source": "BBC Sport F1"
     },
     {
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cx2r0ne2ky1o?at_medium=RSS",
       "description": "Formula 1 president Stefano Domenicali says the 2026 championship will end in Europe if the conflict in the Middle East makes it impossible to hold the season-closing races in Qatar and Abu Dhabi.",
       "pubDate": "Wed, 29 Jul 2026 11:04:52 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Five things we've learned from first half of F1 season",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/clyj898j2p0o?at_medium=RSS",
-      "description": "BBC F1 correspondent Andrew Benson analyses the five key things we've learned from the 2026 season so far.",
-      "pubDate": "Wed, 29 Jul 2026 07:29:19 GMT",
       "source": "BBC Sport F1"
     }
   ]
