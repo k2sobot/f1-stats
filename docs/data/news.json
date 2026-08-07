@@ -1,19 +1,26 @@
 {
-  "lastUpdated": "2026-08-06T08:35:52.072Z",
+  "lastUpdated": "2026-08-07T07:15:14.631Z",
   "total": 5,
   "articles": [
+    {
+      "title": "'Verstappen to McLaren!' - Mid-season F1 predictions",
+      "link": "https://www.bbc.co.uk/sport/formula1/videos/cy07p71522po?at_medium=RSS",
+      "description": "The Chequered Flag podcast look ahead to the second half of the F1 season and make some predictions for the remainder.",
+      "pubDate": "Thu, 06 Aug 2026 16:10:36 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "'It's highly likely to be Imola' - Will F1 have a European finale?",
+      "link": "https://www.bbc.co.uk/sport/formula1/videos/c8en9njp2nxo?at_medium=RSS",
+      "description": "The Chequered Flag podcast discuss the statement issued by the CEO of Formula 1, Stefano Domenicali, in which he states 'If the Qatar or Abu Dhabi Grand Prix can't be put on, the F1 season will be fin",
+      "pubDate": "Thu, 06 Aug 2026 14:20:48 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Why we are still waiting for the 'Newey effect' - F1 Q&A",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cpd79ln1p93o?at_medium=RSS",
       "description": "BBC Sport F1 correspondent Andrew Benson answers your latest questions.",
       "pubDate": "Tue, 04 Aug 2026 06:59:34 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Superman 1978: The classic superhero blockbuster",
-      "link": "https://www.bbc.co.uk/iplayer/episode/m002zvky?at_mid=ApEbsgA1pn",
-      "description": "Relive the film that made audiences believe a man could fly",
-      "pubDate": "Sat, 01 Aug 2026 18:56:30 GMT",
       "source": "BBC Sport F1"
     },
     {
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/ckg3y15zje8o?at_medium=RSS",
       "description": "Our F1 correspondent Andrew Benson is doing a weekly Q&A this season, so get your questions in now.",
       "pubDate": "Fri, 31 Jul 2026 05:57:23 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Season to end in Europe if war continues - F1 boss",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cx2r0ne2ky1o?at_medium=RSS",
-      "description": "Formula 1 president Stefano Domenicali says the 2026 championship will end in Europe if the conflict in the Middle East makes it impossible to hold the season-closing races in Qatar and Abu Dhabi.",
-      "pubDate": "Wed, 29 Jul 2026 11:04:52 GMT",
       "source": "BBC Sport F1"
     }
   ]
