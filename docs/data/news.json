@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-08-16T06:39:22.594Z",
+  "lastUpdated": "2026-08-17T06:55:09.717Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Dutch GP in pictures as F1 prepares for Zandvoort farewell",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/c0l58802270o?at_medium=RSS",
+      "description": "A selection of images from the Dutch Grand Prix, as Zandvoort prepares to host a Formula 1 race for the final time.",
+      "pubDate": "Mon, 17 Aug 2026 06:31:36 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "The Chequered Flag Podcast",
       "link": "https://www.bbc.co.uk/iplayer/episode/m0030f0p?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/ckg3y15zje8o?at_medium=RSS",
       "description": "Our F1 correspondent Andrew Benson is doing a weekly Q&A this season, so get your questions in now.",
       "pubDate": "Thu, 13 Aug 2026 05:30:02 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Cadillac replace team boss Lowdon with Budkowski",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c1412k74mzlo?at_medium=RSS",
-      "description": "Formula 1 team Cadillac have a new team principal in former Alpine boss Marcin Budkowski, replacing Graeme Lowdon.",
-      "pubDate": "Wed, 12 Aug 2026 16:48:17 GMT",
       "source": "BBC Sport F1"
     }
   ]
