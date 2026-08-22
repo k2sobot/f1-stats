@@ -1,7 +1,28 @@
 {
-  "lastUpdated": "2026-08-21T06:46:41.027Z",
+  "lastUpdated": "2026-08-22T06:39:31.174Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Russell takes pole position for Dutch GP sprint race",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/c8xn09wkw79o?at_medium=RSS",
+      "description": "Mercedes' George Russell secures pole position for the Dutch Grand Prix sprint race, ahead of Lando Norris and Charles Leclerc.",
+      "pubDate": "Fri, 21 Aug 2026 16:27:20 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "How to follow Dutch Grand Prix on the BBC",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/clyeq93y903o?at_medium=RSS",
+      "description": "All the key BBC coverage details for the Dutch Grand Prix at Zandvoort, from 21-23 August.",
+      "pubDate": "Fri, 21 Aug 2026 16:26:25 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Antonelli leads Norris in Dutch GP first practice",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cx2l701nxnxo?at_medium=RSS",
+      "description": "Mercedes' Kimi Antonelli heads McLaren's Lando Norris in practice at the Dutch Grand Prix at Zandvoort.",
+      "pubDate": "Fri, 21 Aug 2026 11:57:36 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Closer to retiring than changing teams - why Verstappen stayed at Red Bull",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/c0qvkj40zk4o?at_medium=RSS",
@@ -10,31 +31,10 @@
       "source": "BBC Sport F1"
     },
     {
-      "title": "How to follow Dutch Grand Prix on the BBC",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/clyeq93y903o?at_medium=RSS",
-      "description": "All the key BBC coverage details for the Dutch Grand Prix at Zandvoort, from 21-23 August.",
-      "pubDate": "Thu, 20 Aug 2026 12:15:02 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
       "title": "Verstappen extends Red Bull deal to 2030",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/c20j3j2mnpxo?at_medium=RSS",
       "description": "Four-time world champion Max Verstappen signs a contract extension with Red Bull, keeping him with the Formula One team until 2030.",
       "pubDate": "Thu, 20 Aug 2026 07:09:34 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "'Leader' Sainz commits to Williams with new deal",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cly8ervvyggo?at_medium=RSS",
-      "description": "Carlos Sainz signs a new contract to stay at the Williams team into 2027 and beyond.",
-      "pubDate": "Wed, 19 Aug 2026 14:43:49 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Hadjar to miss Dutch Grand Prix with wrist injury",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/crrvyzz0w0vo?at_medium=RSS",
-      "description": "Red Bull's Isack Hadjar will miss this weekend's Dutch Grand Prix after injuring his wrist during the summer break.",
-      "pubDate": "Wed, 19 Aug 2026 09:22:22 GMT",
       "source": "BBC Sport F1"
     }
   ]
