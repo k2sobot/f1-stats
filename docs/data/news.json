@@ -1,12 +1,26 @@
 {
-  "lastUpdated": "2026-08-27T17:22:57.240Z",
+  "lastUpdated": "2026-08-28T18:16:24.316Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Andrew Benson Q&A: Send us your questions",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/ckg3y15zje8o?at_medium=RSS",
+      "description": "Our F1 correspondent Andrew Benson is doing a weekly Q&A this season, so get your questions in now.",
+      "pubDate": "Fri, 28 Aug 2026 09:53:26 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Ukraine file complaint over FIA lifting Russia ban",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/ckgv00jrm7ro?at_medium=RSS",
       "description": "The Ukrainian Automobile Federation requests an urgent investigation into its Russian counterpart, the RAF.",
       "pubDate": "Thu, 27 Aug 2026 17:21:15 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "The Chequered Flag Podcast",
+      "link": "https://www.bbc.co.uk/iplayer/episode/m00319qc?at_medium=RSS",
+      "description": "Harry Benjamin and Nicola Hume investigate why the Antonelli has cause for concern.",
+      "pubDate": "Thu, 27 Aug 2026 17:00:00 GMT",
       "source": "BBC Sport F1"
     },
     {
@@ -21,20 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/c046p1pz55po?at_medium=RSS",
       "description": "In the FIA's latest rankings, Red Bull have again been found to have the most powerful engine in F1.",
       "pubDate": "Wed, 26 Aug 2026 18:09:18 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Mercedes' upgrades & Ferrari team orders - F1 Q&A",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c3v0v4951k6o?at_medium=RSS",
-      "description": "BBC Sport F1 correspondent Andrew Benson answers your latest questions after the Dutch Grand Prix.",
-      "pubDate": "Tue, 25 Aug 2026 06:35:52 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Norris beats Antonelli to claim final Dutch GP win",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/ce8l8jek1k1o?at_medium=RSS",
-      "description": "Lando Norris and McLaren beats Mercedes' Kimi Antonelli to take a masterful strategic victory in a compelling Dutch Grand Prix.",
-      "pubDate": "Sun, 23 Aug 2026 20:29:10 GMT",
       "source": "BBC Sport F1"
     }
   ]
