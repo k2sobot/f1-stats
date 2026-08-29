@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-08-28T18:16:24.316Z",
+  "lastUpdated": "2026-08-29T12:24:50.095Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Slow start makes me want to stay - Norris extends McLaren deal to 2030",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cj06j11ej4lo?at_medium=RSS",
+      "description": "In an exclusive BBC Sport interview, Lando Norris explains why he has signed a new contract that will keep him at McLaren until at least the end of 2030.",
+      "pubDate": "Sat, 29 Aug 2026 09:52:52 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Andrew Benson Q&A: Send us your questions",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/ckg3y15zje8o?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/c8jdyl78022o?at_medium=RSS",
       "description": "Franco Colapinto will remain with Alpine for the 2027 season, the Formula 1 team announces.",
       "pubDate": "Thu, 27 Aug 2026 11:56:09 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Red Bull still have F1's most powerful engine",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c046p1pz55po?at_medium=RSS",
-      "description": "In the FIA's latest rankings, Red Bull have again been found to have the most powerful engine in F1.",
-      "pubDate": "Wed, 26 Aug 2026 18:09:18 GMT",
       "source": "BBC Sport F1"
     }
   ]
