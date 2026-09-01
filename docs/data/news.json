@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-08-31T12:52:58.715Z",
+  "lastUpdated": "2026-09-01T11:12:23.240Z",
   "total": 5,
   "articles": [
+    {
+      "title": "What does Norris deal mean for Piastri? F1 Q&A",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/ckgx017vmjeo?at_medium=RSS",
+      "description": "BBC Sport F1 correspondent Andrew Benson answers your latest questions before the Italian Grand Prix.",
+      "pubDate": "Tue, 01 Sep 2026 06:59:56 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Ukraine escalates protest over FIA lifting Russia ban",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/ckgv00jrm7ro?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cj06j11ej4lo?at_medium=RSS",
       "description": "In an exclusive BBC Sport interview, Lando Norris explains why he has signed a new contract that will keep him at McLaren until at least the end of 2030.",
       "pubDate": "Sat, 29 Aug 2026 09:52:52 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Andrew Benson Q&A: Send us your questions",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/ckg3y15zje8o?at_medium=RSS",
-      "description": "Our F1 correspondent Andrew Benson is doing a weekly Q&A this season, so get your questions in now.",
-      "pubDate": "Fri, 28 Aug 2026 09:53:26 GMT",
       "source": "BBC Sport F1"
     }
   ]
