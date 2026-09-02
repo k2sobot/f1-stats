@@ -1,5 +1,5 @@
 /**
- * F1 Stats - Live session data with Tailwind CSS rendering
+ * F1 Stats - Live session data with local cache
  */
 
 const TEAM_COLORS = {
@@ -7,20 +7,6 @@ const TEAM_COLORS = {
     'McLaren': 'mclaren', 'Alpine F1 Team': 'alpine', 'Alpine': 'alpine', 'Aston Martin F1 Team': 'astonmartin',
     'Aston Martin': 'astonmartin', 'Haas F1 Team': 'haas', 'Haas': 'haas', 'Williams': 'williams',
     'Audi': 'audi', 'Cadillac': 'cadillac', 'Cadillac F1 Team': 'cadillac', 'Racing Bulls': 'racingbulls', 'RB': 'racingbulls', 'RB F1 Team': 'racingbulls',
-};
-
-const TEAM_BG_COLORS = {
-    'mercedes': 'bg-teal-500',
-    'ferrari': 'bg-red-600',
-    'redbull': 'bg-blue-700',
-    'mclaren': 'bg-orange-500',
-    'alpine': 'bg-blue-500',
-    'astonmartin': 'bg-green-800',
-    'haas': 'bg-gray-400',
-    'williams': 'bg-blue-600',
-    'audi': 'bg-red-800',
-    'cadillac': 'bg-gray-300',
-    'racingbulls': 'bg-gray-600',
 };
 
 let dataCache = { drivers: null, constructors: null, schedule: null, qualifying: null, results: null, driverMap: null };
@@ -48,6 +34,18 @@ async function loadDriverMap() {
         dataCache.driverMap[d.driver_number] = d;
     }
     return dataCache.driverMap;
+}
+
+function enrichDriver(result, driverMap) {
+    const num = String(result.driver_number);
+    const mapped = driverMap[num];
+    return {
+        position: result.position,
+        driver: result.driver_code || mapped?.driver_code || result.driver_name?.split(' ').pop() || `#${num}`,
+        team: result.team || mapped?.team || 'Unknown',
+        time: result.best_lap_time || '',
+        fastestLap: false
+    };
 }
 
 async function getDriverStandings() {
@@ -109,17 +107,7 @@ async function getLatestSession() {
             sessionName: liveData.session_name || 'Session',
             raceName: liveData.meeting_name || liveData.location || 'Grand Prix',
             isRace: liveData.is_race || false,
-            results: liveData.results.slice(0, 10).map(r => {
-                const num = String(r.driver_number);
-                const mapped = driverMap[num];
-                return {
-                    position: r.position,
-                    driver: r.driver_code || mapped?.driver_code || r.driver_name?.split(' ').pop() || `#${num}`,
-                    team: r.team || mapped?.team || 'Unknown',
-                    time: r.best_lap_time || '',
-                    fastestLap: false
-                };
-            }),
+            results: liveData.results.slice(0, 10).map(r => enrichDriver(r, driverMap)),
             fastestLap: null,
             live: false,
             cached: true
@@ -198,76 +186,51 @@ function getTimeAgo(date) {
     return `${days}d ago`;
 }
 
-function getTeamBadgeClass(team) {
-    const key = TEAM_COLORS[team] || 'default';
-    return TEAM_BG_COLORS[key] || 'bg-gray-600';
-}
-
-function getPositionClass(pos) {
-    if (pos === 1) return 'pos-1';
-    if (pos === 2) return 'pos-2';
-    if (pos === 3) return 'pos-3';
-    return 'bg-gray-700';
-}
-
 function renderDriverStandings(data) {
     const container = document.getElementById('driver-standings');
-    if (!data?.standings?.length) {
-        container.innerHTML = '<div class="text-center text-gray-500 py-8">No standings available</div>';
-        return;
-    }
+    if (!data?.standings?.length) { container.innerHTML = '<div class="error-message">No standings</div>'; return; }
     
     let lastUpdatedHtml = '';
     if (data.lastUpdated) {
         const date = new Date(data.lastUpdated);
-        lastUpdatedHtml = `<div class="mt-4 pt-3 border-t border-gray-800 text-right text-xs text-gray-500" title="${date.toLocaleString()}">Updated ${getTimeAgo(date)}</div>`;
+        const timeAgo = getTimeAgo(date);
+        lastUpdatedHtml = `<div class="last-updated" title="${date.toLocaleString()}">Updated ${timeAgo}</div>`;
     }
     
     container.innerHTML = data.standings.slice(0, 10).map(s => `
-        <div class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-800/50 transition-colors">
-            <div class="w-8 h-8 rounded-md ${getPositionClass(s.position)} flex items-center justify-center font-bold text-sm">${s.position}</div>
-            <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-2">
-                    <span class="font-semibold truncate">${s.driver}</span>
-                    <span class="px-1.5 py-0.5 text-[10px] font-bold uppercase rounded ${getTeamBadgeClass(s.team)} text-white">${s.team.substring(0, 3).toUpperCase()}</span>
-                </div>
+        <div class="driver-row">
+            <div class="position ${s.position <= 3 ? 'p' + s.position : ''}">${s.position}</div>
+            <div class="driver-info">
+                <span class="driver-name">${s.driver}</span>
+                <span class="team-tag team-${TEAM_COLORS[s.team] || 'default'}">${s.team.substring(0, 3).toUpperCase()}</span>
             </div>
-            <div class="text-sm font-medium text-gray-400">${s.points}<span class="text-gray-600 ml-1">pts</span></div>
+            <div class="driver-points">${s.points} pts</div>
         </div>
     `).join('') + lastUpdatedHtml;
 }
 
 function renderConstructorStandings(standings) {
     const container = document.getElementById('constructor-standings');
-    if (!standings?.length) {
-        container.innerHTML = '<div class="text-center text-gray-500 py-8">No standings available</div>';
-        return;
-    }
-    
+    if (!standings?.length) { container.innerHTML = '<div class="error-message">No standings</div>'; return; }
     container.innerHTML = standings.slice(0, 10).map(s => `
-        <div class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-800/50 transition-colors">
-            <div class="w-8 h-8 rounded-md ${getPositionClass(s.position)} flex items-center justify-center font-bold text-sm">${s.position}</div>
-            <div class="flex-1 min-w-0">
-                <span class="font-semibold truncate">${s.constructor}</span>
-            </div>
-            <div class="text-sm font-medium text-gray-400">${s.points}<span class="text-gray-600 ml-1">pts</span></div>
+        <div class="driver-row">
+            <div class="position ${s.position <= 3 ? 'p' + s.position : ''}">${s.position}</div>
+            <div class="driver-info"><span class="driver-name">${s.constructor}</span></div>
+            <div class="driver-points">${s.points} pts</div>
         </div>
     `).join('');
 }
 
 function renderNextRace(race) {
-    if (!race) {
-        document.getElementById('next-race-name').textContent = 'No upcoming races';
-        return;
-    }
+    if (!race) { document.getElementById('next-race-name').textContent = 'No upcoming races'; return; }
     document.getElementById('next-race-name').textContent = race.name;
     document.getElementById('next-race-date').textContent = formatDate(race.date);
     document.getElementById('next-race-circuit').textContent = `📍 ${race.circuit}${race.country ? ', ' + race.country : ''}`;
     document.getElementById('session-times').innerHTML = race.sessions.map(s => `
-        <div class="flex flex-col px-3 py-2 bg-gray-800/50 rounded-lg border border-gray-700/50 text-center min-w-[100px]">
-            <span class="text-[10px] font-semibold uppercase tracking-wider text-gray-500">${s.name}</span>
-            <span class="text-sm font-semibold mt-0.5">${formatDateTime(s.date)}</span>
-            <span class="text-[10px] text-gray-600 mt-0.5">${formatUTC(s.date)}</span>
+        <div class="session-item">
+            <span class="session-name">${s.name}</span>
+            <span class="session-time">${formatDateTime(s.date)}</span>
+            <span class="session-utc">${formatUTC(s.date)}</span>
         </div>
     `).join('');
 }
@@ -278,35 +241,34 @@ function renderLatestResults(data) {
     
     if (!data) {
         header.textContent = 'No session results';
-        tbody.innerHTML = '<tr><td colspan="3" class="py-8 text-center text-gray-500">Check back after a session</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" class="loading-cell">Check back after a session</td></tr>';
         return;
     }
     
-    const cacheBadge = data.cached ? '<span class="ml-2 px-2 py-0.5 text-[10px] bg-gray-700 rounded font-medium">💾 Cached</span>' : '';
-    header.innerHTML = `<span class="font-semibold text-white">${data.sessionName}</span> - ${data.raceName}${cacheBadge}`;
+    const cacheBadge = data.cached ? '<span class="cache-badge">💾 Cached</span>' : '';
+    header.innerHTML = `${data.sessionName} - ${data.raceName} ${cacheBadge}`;
     
     if (data.fastestLap) {
-        header.innerHTML += ` <span class="ml-2 text-purple-400 text-xs"><span class="px-1.5 py-0.5 bg-purple-500 rounded text-white font-bold">FL</span> ${data.fastestLap.driver}</span>`;
+        header.innerHTML += ` <span class="fastest-lap-header"><span class="fl-badge">FL</span> ${data.fastestLap.driver} (${data.fastestLap.time})</span>`;
     }
     
     tbody.innerHTML = data.results.map(r => `
-        <tr class="border-b border-gray-800/50 last:border-0 hover:bg-gray-800/30 transition-colors">
-            <td class="py-2.5"><div class="w-7 h-7 rounded-md ${getPositionClass(r.position)} flex items-center justify-center font-bold text-xs">${r.position}</div></td>
-            <td class="py-2.5">
-                <span class="font-medium">${r.driver}</span>
-                ${r.fastestLap ? '<span class="ml-1 px-1.5 py-0.5 bg-purple-500 rounded text-[10px] font-bold">FL</span>' : ''}
-                <span class="ml-2 px-1.5 py-0.5 text-[10px] font-bold uppercase rounded ${getTeamBadgeClass(r.team)} text-white">${r.team.substring(0, 3).toUpperCase()}</span>
-            </td>
-            <td class="py-2.5 text-right text-gray-400 font-mono text-sm">${r.time || '-'}</td>
+        <tr>
+            <td><div class="position ${r.position <= 3 ? 'p' + r.position : ''}">${r.position}</div></td>
+            <td>${r.driver} ${r.fastestLap ? '<span class="fl-badge">FL</span>' : ''} <span class="team-tag team-${TEAM_COLORS[r.team] || 'default'}">${r.team.substring(0, 3).toUpperCase()}</span></td>
+            <td class="time-cell">${r.time || '-'}</td>
         </tr>
     `).join('');
 }
 
 function showError(container, message) {
-    container.innerHTML = `<div class="text-center text-red-400 py-8">${message}</div>`;
+    container.innerHTML = `<div class="error-message">${message}</div>`;
 }
 
 async function loadAll() {
+    const refreshBtn = document.getElementById('refresh-btn');
+    refreshBtn?.classList.add('loading');
+    
     try {
         const [driverStandings, constructorStandings, nextRace, latestSession] = await Promise.all([
             getDriverStandings().catch(e => ({ standings: [] })),
@@ -324,6 +286,8 @@ async function loadAll() {
         console.error('Failed to load:', error);
         showError(document.getElementById('driver-standings'), 'Failed to load');
         showError(document.getElementById('constructor-standings'), 'Failed to load');
+    } finally {
+        refreshBtn?.classList.remove('loading');
     }
 }
 
@@ -355,7 +319,12 @@ function updateCountdown(race) {
 document.addEventListener('DOMContentLoaded', loadAll);
 document.getElementById('season-year').textContent = `${new Date().getFullYear()} Season`;
 
-// Pull to Refresh
+
+// Fastest Pit Stop
+
+/**
+ * Pull to Refresh
+ */
 (function() {
     const indicator = document.getElementById('pull-indicator');
     if (!indicator) return;
@@ -366,28 +335,44 @@ document.getElementById('season-year').textContent = `${new Date().getFullYear()
     let refreshing = false;
     const threshold = 80;
     
+    // Check if we're at the top of the page
     function isAtTop() {
-        return (window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0) <= 1;
+        // Check multiple scroll properties for mobile compatibility
+        const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+        const scrollTop = document.body.scrollTop || document.documentElement.scrollTop || 0;
+        return scrollY <= 1 && scrollTop <= 1;
     }
     
+    
+    // Handle touch start
     document.addEventListener('touchstart', (e) => {
         if (!isAtTop() || refreshing) return;
         startY = e.touches[0].clientY;
         pulling = true;
     }, { passive: true });
     
+    // Handle touch move
     document.addEventListener('touchmove', (e) => {
         if (!pulling || refreshing) return;
         currentY = e.touches[0].clientY;
         const diff = Math.max(0, currentY - startY);
         
         if (diff > 0 && isAtTop()) {
+            const progress = Math.min(diff / threshold, 1);
             indicator.style.transform = `translateY(${Math.min(diff, threshold + 20)}px)`;
-            indicator.style.opacity = Math.min(diff / threshold, 1);
-            indicator.classList.toggle('rotate', diff >= threshold);
+            
+            if (diff >= threshold) {
+                indicator.classList.add('ready');
+                indicator.querySelector('.arrow')?.classList.add('rotate');
+            } else {
+                indicator.classList.remove('ready');
+            }
+            
+            indicator.classList.add('visible');
         }
     }, { passive: true });
     
+    // Handle touch end
     document.addEventListener('touchend', async (e) => {
         if (!pulling) return;
         pulling = false;
@@ -395,8 +380,77 @@ document.getElementById('season-year').textContent = `${new Date().getFullYear()
         const diff = currentY - startY;
         
         if (diff >= threshold && !refreshing) {
+            // Trigger refresh
             refreshing = true;
-            indicator.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-gray-600 border-t-ferrari rounded-full"></div>';
+            indicator.innerHTML = '<div class="spinner"></div>';
+            indicator.classList.add('refreshing');
+            indicator.classList.remove('ready');
+            
+            try {
+                // Clear cache and reload
+                dataCache = { drivers: null, constructors: null, schedule: null, qualifying: null, results: null, driverMap: null };
+                await loadAll();
+                await loadNews();
+            } catch (err) {
+                console.error('Refresh failed:', err);
+            }
+            
+            // Reset after animation
+            setTimeout(() => {
+                indicator.classList.remove('visible', 'refreshing');
+                indicator.style.transform = '';
+                indicator.innerHTML = '<span class="arrow">↓</span>';
+                refreshing = false;
+            }, 300);
+        } else {
+            // Cancel pull
+            indicator.classList.remove('visible', 'ready');
+            indicator.style.transform = '';
+        }
+        
+        startY = 0;
+        currentY = 0;
+    }, { passive: true });
+    
+    // Also allow pull-to-refresh with mouse (for desktop testing)
+    let mouseDown = false;
+    
+    document.addEventListener('mousedown', (e) => {
+        if (!isAtTop() || refreshing) return;
+        mouseDown = true;
+        startY = e.clientY;
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (!mouseDown || refreshing) return;
+        currentY = e.clientY;
+        const diff = Math.max(0, currentY - startY);
+        
+        if (diff > 0 && isAtTop()) {
+            const progress = Math.min(diff / threshold, 1);
+            indicator.style.transform = `translateY(${Math.min(diff, threshold + 20)}px)`;
+            
+            if (diff >= threshold) {
+                indicator.classList.add('ready');
+            } else {
+                indicator.classList.remove('ready');
+            }
+            
+            indicator.classList.add('visible');
+        }
+    });
+    
+    document.addEventListener('mouseup', async (e) => {
+        if (!mouseDown) return;
+        mouseDown = false;
+        
+        const diff = currentY - startY;
+        
+        if (diff >= threshold && !refreshing && isAtTop()) {
+            refreshing = true;
+            indicator.innerHTML = '<div class="spinner"></div>';
+            indicator.classList.add('refreshing');
+            indicator.classList.remove('ready');
             
             try {
                 dataCache = { drivers: null, constructors: null, schedule: null, qualifying: null, results: null, driverMap: null };
@@ -407,17 +461,17 @@ document.getElementById('season-year').textContent = `${new Date().getFullYear()
             }
             
             setTimeout(() => {
+                indicator.classList.remove('visible', 'refreshing');
                 indicator.style.transform = '';
-                indicator.style.opacity = '0';
-                indicator.innerHTML = '<span class="text-2xl">↓</span>';
+                indicator.innerHTML = '<span class="arrow">↓</span>';
                 refreshing = false;
             }, 300);
         } else {
+            indicator.classList.remove('visible', 'ready');
             indicator.style.transform = '';
-            indicator.style.opacity = '0';
         }
         
         startY = 0;
         currentY = 0;
-    }, { passive: true });
+    });
 })();
