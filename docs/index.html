@@ -2,9 +2,16 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
+    <!-- Theme script - prevent flash -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('f1-theme') || 'dark';
+            document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+        })();
+    </script>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#e10600">
+    <meta name="theme-color" content="#030712">
     
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -327,6 +334,11 @@
             document.documentElement.classList.toggle('dark', theme === 'dark');
             if (themeIcon) themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
             localStorage.setItem('f1-theme', theme);
+            // Update theme-color for mobile browsers
+            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (metaThemeColor) {
+                metaThemeColor.content = theme === 'dark' ? '#030712' : '#f3f4f6';
+            }
         }
         
         const savedTheme = localStorage.getItem('f1-theme') || 'dark';
