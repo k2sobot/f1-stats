@@ -1,4 +1,4 @@
-const CACHE_NAME = 'f1-stats-v3';
+const CACHE_NAME = 'f1-stats-v4';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -6,6 +6,7 @@ const ASSETS_TO_CACHE = [
   '/assets/js/app.js',
   '/assets/favicon.svg',
   '/assets/icon-192.png',
+  '/assets/icon-192.svg',
   '/assets/icon-512.png',
   '/manifest.json'
 ];
@@ -32,6 +33,20 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
-      .then((response) => response || fetch(event.request))
+      .then((response) => {
+        // Return cached version or fetch from network
+        if (response) {
+          // Fetch in background to update cache
+          fetch(event.request).then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, networkResponse);
+              });
+            }
+          }).catch(() => {});
+          return response;
+        }
+        return fetch(event.request);
+      })
   );
 });
