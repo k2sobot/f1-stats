@@ -1,40 +1,40 @@
 {
-  "lastUpdated": "2026-09-02T10:46:01.889Z",
+  "lastUpdated": "2026-09-03T10:46:41.614Z",
   "total": 5,
   "articles": [
+    {
+      "title": "How to follow Italian Grand Prix on the BBC",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/c05q5qdrmz3o?at_medium=RSS",
+      "description": "All the key BBC coverage details for the Italian Grand Prix, which takes place from 4-6 September.",
+      "pubDate": "Thu, 03 Sep 2026 09:55:28 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Italian Grand Prix declared heat-hazard race",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/c99dp0zeymjo?at_medium=RSS",
+      "description": "The Italian Grand Prix is declared a heat-hazard race as high temperatures continue in the country following the summer heatwave.",
+      "pubDate": "Thu, 03 Sep 2026 09:41:30 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Norris sets up junior team to help drivers to F1",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cwyzpy818nlo?at_medium=RSS",
+      "description": "World champion Lando Norris is setting up his own junior team to support young drivers on their route to Formula 1.",
+      "pubDate": "Wed, 02 Sep 2026 18:51:01 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Wrist injury to keep Hadjar out of Italian GP",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/c62ekd32rk7o?at_medium=RSS",
+      "description": "Red Bull will be without Isack Hadjar at this weekend's Italian Grand Prix as he continues to recover from a wrist injury.",
+      "pubDate": "Wed, 02 Sep 2026 16:03:34 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "FIA wrong to lift Russia ban - Ukraine minister",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/c4gj0z94dw2o?at_medium=RSS",
       "description": "The FIA was wrong to lift the ban on Russian competitors because nothing has changed since it was imposed, the Ukrainian Minister for Youth and Sport says.",
       "pubDate": "Wed, 02 Sep 2026 10:25:43 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Red Bull hire Aston Martin engineer McCullough as head of racing",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c74k38vxl40o?at_medium=RSS",
-      "description": "Red Bull have head-hunted former Aston Martin performance director Tom McCullough to become their head of racing from 2027.",
-      "pubDate": "Tue, 01 Sep 2026 18:38:40 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "What does Norris deal mean for Piastri? F1 Q&A",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/ckgx017vmjeo?at_medium=RSS",
-      "description": "BBC Sport F1 correspondent Andrew Benson answers your latest questions before the Italian Grand Prix.",
-      "pubDate": "Tue, 01 Sep 2026 12:02:53 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Ukraine escalates protest over FIA lifting Russia ban",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/ckgv00jrm7ro?at_medium=RSS",
-      "description": "Ukraine escalates its complaint against the FIA decision to lift the ban on Russian competitors taking part in international events.",
-      "pubDate": "Mon, 31 Aug 2026 12:37:52 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "How to follow Italian Grand Prix on the BBC",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c05q5qdrmz3o?at_medium=RSS",
-      "description": "All the key BBC coverage details for the Italian Grand Prix, which takes place from 4-6 September.",
-      "pubDate": "Mon, 31 Aug 2026 07:52:40 GMT",
       "source": "BBC Sport F1"
     }
   ]
