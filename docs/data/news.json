@@ -1,7 +1,21 @@
 {
-  "lastUpdated": "2026-09-03T10:46:41.614Z",
+  "lastUpdated": "2026-09-04T10:45:01.379Z",
   "total": 5,
   "articles": [
+    {
+      "title": "F1: Chequered Flag",
+      "link": "https://www.bbc.co.uk/sounds/play/p0p7vvj8?at_medium=RSS",
+      "description": "The team discuss Ferrari's dreams, Antonelli's charge and the fight for victory at Monza.",
+      "pubDate": "Thu, 03 Sep 2026 17:59:00 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Ferrari upgrade a step but not all we need - Hamilton",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cvgyqlne25do?at_medium=RSS",
+      "description": "Lewis Hamilton says an upgraded Ferrari engine for this weekend's Italian Grand Prix is a \"step forward but not the whole amount we need\".",
+      "pubDate": "Thu, 03 Sep 2026 13:41:52 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "How to follow Italian Grand Prix on the BBC",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/c05q5qdrmz3o?at_medium=RSS",
@@ -21,20 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cwyzpy818nlo?at_medium=RSS",
       "description": "World champion Lando Norris is setting up his own junior team to support young drivers on their route to Formula 1.",
       "pubDate": "Wed, 02 Sep 2026 18:51:01 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Wrist injury to keep Hadjar out of Italian GP",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c62ekd32rk7o?at_medium=RSS",
-      "description": "Red Bull will be without Isack Hadjar at this weekend's Italian Grand Prix as he continues to recover from a wrist injury.",
-      "pubDate": "Wed, 02 Sep 2026 16:03:34 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "FIA wrong to lift Russia ban - Ukraine minister",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c4gj0z94dw2o?at_medium=RSS",
-      "description": "The FIA was wrong to lift the ban on Russian competitors because nothing has changed since it was imposed, the Ukrainian Minister for Youth and Sport says.",
-      "pubDate": "Wed, 02 Sep 2026 10:25:43 GMT",
       "source": "BBC Sport F1"
     }
   ]
