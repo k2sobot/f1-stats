@@ -269,7 +269,7 @@ function renderNextRace(race) {
     const otherSessions = race.sessions.filter(s => s.name !== 'Race');
     
     // Build HTML: 2-column grid for other sessions, Race spans both columns
-    let html = '<div class="grid grid-cols-2 gap-2">';
+    let html = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">';
     
     // Other sessions in 2-column grid
     otherSessions.forEach(s => {
