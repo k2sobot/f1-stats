@@ -268,34 +268,51 @@ function renderNextRace(race) {
     const raceSession = race.sessions.find(s => s.name === 'Race');
     const otherSessions = race.sessions.filter(s => s.name !== 'Race');
     
-    // Build HTML: 2-column grid for other sessions, Race spans both columns
-    let html = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">';
-    
-    // Other sessions in 2-column grid
+    // Group sessions by day
+    const sessionsByDay = {};
     otherSessions.forEach(s => {
+        const day = s.date.toLocaleDateString('en-US', { weekday: 'short' });
+        if (!sessionsByDay[day]) sessionsByDay[day] = [];
+        sessionsByDay[day].push(s);
+    });
+    
+    let html = '';
+    
+    // Render sessions grouped by day
+    Object.entries(sessionsByDay).forEach(([day, sessions]) => {
         html += `
-            <div class="flex flex-col px-3 py-2 bg-gray-800/50 rounded-lg border border-gray-700/50 text-center">
-                <span class="text-[10px] font-semibold uppercase tracking-wider text-gray-500">${s.name}</span>
-                <span class="text-sm font-semibold mt-0.5">${formatDateTime(s.date)}</span>
-                <span class="text-[10px] text-gray-600 mt-0.5">${formatUTC(s.date)}</span>
+            <div class="mb-3">
+                <div class="text-[10px] font-semibold uppercase tracking-widest text-gray-600 mb-1.5">${day}</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    ${sessions.map(s => `
+                        <div class="flex flex-col px-3 py-2.5 bg-gray-800/60 hover:bg-gray-800/80 rounded-lg border border-gray-700/50 hover:border-gray-600/50 transition-all text-center">
+                            <span class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">${s.name}</span>
+                            <span class="text-sm font-bold text-white mt-1">${formatDateTime(s.date)}</span>
+                            <span class="text-[10px] text-gray-500 mt-0.5">${formatUTC(s.date)}</span>
+                        </div>
+                    `).join('')}
+                </div>
             </div>`;
     });
     
-    html += '</div>';
-    
-    // Race session - spans both columns, more prominent
+    // Race - full width, prominent
     if (raceSession) {
         html += `
-            <div class="mt-3 flex flex-col px-4 py-3 bg-gradient-to-br from-ferrari/20 to-red-900/30 rounded-xl border-2 border-ferrari/40 text-center">
-                <span class="text-xs font-bold uppercase tracking-widest text-ferrari">🏁 Race</span>
-                <span class="text-lg font-bold mt-1">${formatDateTime(raceSession.date)}</span>
-                <span class="text-xs text-gray-400 mt-0.5">${formatUTC(raceSession.date)}</span>
+            <div class="relative overflow-hidden rounded-xl border-2 border-ferrari/50 bg-gradient-to-br from-red-950/50 via-gray-900 to-red-950/30">
+                <div class="absolute inset-0 bg-gradient-to-r from-ferrari/10 via-transparent to-ferrari/10"></div>
+                <div class="relative flex flex-col items-center px-4 py-4 text-center">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-xl">🏁</span>
+                        <span class="text-xs font-black uppercase tracking-[0.2em] text-ferrari">Race</span>
+                    </div>
+                    <span class="text-xl font-black text-white">${formatDateTime(raceSession.date)}</span>
+                    <span class="text-xs text-gray-400 mt-1">${formatUTC(raceSession.date)}</span>
+                </div>
             </div>`;
     }
     
     document.getElementById('session-times').innerHTML = html;
 }
-
 function renderLatestResults(data) {
     const header = document.getElementById('results-header');
     const tbody = document.getElementById('latest-results');
