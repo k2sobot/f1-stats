@@ -67,7 +67,7 @@
             100% { background-position: 200% 0; }
         }
         .skeleton {
-            background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+            background: linear-gradient(90deg, #e5e7eb dark:#1f2937 25%, #d1d5db dark:#374151 50%, #e5e7eb dark:#1f2937 75%);
             background-size: 200% 100%;
             animation: shimmer 1.5s infinite;
         }
@@ -97,7 +97,7 @@
     <link rel="stylesheet" href="assets/css/style.css?t=20260902">
     <script src="assets/js/app.js?t=20260905g" defer></script>
 </head>
-<body class="bg-gray-950 text-gray-100 font-f1 antialiased">
+<body class="bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-f1 antialiased">
     
     <!-- Pull to Refresh Indicator -->
     <div id="pull-indicator" class="fixed top-0 left-0 right-0 h-14 flex items-center justify-center bg-gradient-to-b from-red-950/30 to-transparent pull-indicator opacity-0 -translate-y-full pointer-events-none z-50">
@@ -105,7 +105,7 @@
     </div>
 
     <!-- Header -->
-    <header class="sticky top-0 z-40 bg-gray-950/95 backdrop-blur-md border-b border-gray-800/50">
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-gray-950/95 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-200/50 dark:border-gray-800/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <!-- Logo -->
             <div class="flex items-center gap-3">
@@ -116,16 +116,16 @@
                     <h1 class="text-xl font-bold tracking-tight">F1 Stats</h1>
                     <span class="px-2 py-0.5 text-[10px] font-semibold bg-gradient-to-r from-orange-500 to-red-500 rounded-full uppercase tracking-wider">Beta</span>
                 </div>
-                <span id="season-year" class="hidden sm:inline-block px-2.5 py-1 text-xs font-semibold bg-gray-800 rounded-full text-gray-400">2026 Season</span>
+                <span id="season-year" class="hidden sm:inline-block px-2.5 py-1 text-xs font-semibold bg-gray-800 rounded-full text-gray-400 dark:text-gray-600 dark:text-gray-400">2026 Season</span>
             </div>
             
             <!-- Actions -->
             <div class="flex items-center gap-2">
-                <button id="install-btn" class="hidden items-center gap-2 px-3 py-2 text-sm font-medium bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors">
+                <button id="install-btn" class="hidden items-center gap-2 px-3 py-2 text-sm font-medium bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-lg transition-colors">
                     <span>📲</span>
                     <span class="hidden sm:inline">Install</span>
                 </button>
-                <button id="theme-toggle" class="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-800/50 hover:bg-gray-800 transition-colors" aria-label="Toggle theme">
+                <button id="theme-toggle" class="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-200/50 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle theme">
                     <span class="theme-icon text-lg">🌙</span>
                 </button>
             </div>
@@ -133,30 +133,30 @@
     </header>
 
     <!-- Countdown Banner -->
-    <div id="countdown-banner" class="relative overflow-hidden bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-800">
+    <div id="countdown-banner" class="relative overflow-hidden bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 border-b border-gray-800">
         <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23e10600%22 fill-opacity=%220.03%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <span class="text-xs uppercase tracking-widest text-gray-500">Next Race</span>
+            <span class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500">Next Race</span>
             <span id="countdown-race" class="text-lg sm:text-xl font-bold bg-gradient-to-r from-ferrari to-orange-500 bg-clip-text text-transparent">Loading...</span>
             <div id="countdown-timer" class="flex items-center gap-1 sm:gap-2">
                 <div class="flex flex-col items-center min-w-[3rem]">
                     <span id="countdown-days" class="text-2xl sm:text-3xl font-black tabular-nums">--</span>
-                    <span class="text-[10px] uppercase tracking-wider text-gray-500">Days</span>
+                    <span class="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500">Days</span>
                 </div>
-                <span class="text-xl font-bold text-gray-600">:</span>
+                <span class="text-xl font-bold text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-400 dark:text-gray-600">:</span>
                 <div class="flex flex-col items-center min-w-[3rem]">
                     <span id="countdown-hours" class="text-2xl sm:text-3xl font-black tabular-nums">--</span>
-                    <span class="text-[10px] uppercase tracking-wider text-gray-500">Hrs</span>
+                    <span class="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500">Hrs</span>
                 </div>
-                <span class="text-xl font-bold text-gray-600">:</span>
+                <span class="text-xl font-bold text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-400 dark:text-gray-600">:</span>
                 <div class="flex flex-col items-center min-w-[3rem]">
                     <span id="countdown-minutes" class="text-2xl sm:text-3xl font-black tabular-nums">--</span>
-                    <span class="text-[10px] uppercase tracking-wider text-gray-500">Min</span>
+                    <span class="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500">Min</span>
                 </div>
-                <span class="text-xl font-bold text-gray-600">:</span>
+                <span class="text-xl font-bold text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-400 dark:text-gray-600">:</span>
                 <div class="flex flex-col items-center min-w-[3rem]">
                     <span id="countdown-seconds" class="text-2xl sm:text-3xl font-black tabular-nums">--</span>
-                    <span class="text-[10px] uppercase tracking-wider text-gray-500">Sec</span>
+                    <span class="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500">Sec</span>
                 </div>
             </div>
         </div>
@@ -175,23 +175,23 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
             
             <!-- Next Race Card - Full Width -->
-            <section class="lg:col-span-2 bg-gradient-to-br from-gray-900 to-gray-800/50 rounded-2xl p-6 border border-gray-800/50 shadow-xl" aria-labelledby="next-race-title">
-                <h2 id="next-race-title" class="flex items-center gap-2 text-lg font-semibold mb-4">
+            <section class="lg:col-span-2 bg-gradient-to-br from-white to-gray-100 dark:from-gray-900 dark:to-gray-800/50 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-200/50 dark:border-gray-800/50 shadow-xl" aria-labelledby="next-race-title">
+                <h2 id="next-race-title" class="flex items-center gap-2 text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
                     <span class="text-xl">📅</span> Next Race
                 </h2>
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-5">
                     <div>
                         <div id="next-race-name" class="text-2xl sm:text-3xl font-black tracking-tight">Loading...</div>
-                        <div id="next-race-date" class="text-gray-400 mt-1"></div>
+                        <div id="next-race-date" class="text-gray-400 dark:text-gray-600 dark:text-gray-400 mt-1"></div>
                     </div>
-                    <div id="next-race-circuit" class="text-sm text-gray-500"></div>
+                    <div id="next-race-circuit" class="text-sm text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500"></div>
                 </div>
                 <div id="session-times" class="flex flex-wrap gap-2"></div>
             </section>
 
             <!-- Driver Standings -->
-            <section class="bg-gray-900/80 rounded-2xl p-5 border border-gray-800/50 shadow-xl" aria-labelledby="driver-standings-title">
-                <h2 id="driver-standings-title" class="flex items-center gap-2 text-lg font-semibold mb-4">
+            <section class="bg-white/80 dark:bg-white/80 dark:bg-white/80 dark:bg-gray-900/80 rounded-2xl p-5 border border-gray-200/50 dark:border-gray-200/50 dark:border-gray-800/50 shadow-xl" aria-labelledby="driver-standings-title">
+                <h2 id="driver-standings-title" class="flex items-center gap-2 text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
                     <span class="text-xl">🏆</span> Driver Standings
                 </h2>
                 <div id="driver-standings" class="space-y-2">
@@ -202,8 +202,8 @@
             </section>
 
             <!-- Constructor Standings -->
-            <section class="bg-gray-900/80 rounded-2xl p-5 border border-gray-800/50 shadow-xl" aria-labelledby="constructor-standings-title">
-                <h2 id="constructor-standings-title" class="flex items-center gap-2 text-lg font-semibold mb-4">
+            <section class="bg-white/80 dark:bg-white/80 dark:bg-white/80 dark:bg-gray-900/80 rounded-2xl p-5 border border-gray-200/50 dark:border-gray-200/50 dark:border-gray-800/50 shadow-xl" aria-labelledby="constructor-standings-title">
+                <h2 id="constructor-standings-title" class="flex items-center gap-2 text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
                     <span class="text-xl">🏭</span> Constructor Standings
                 </h2>
                 <div id="constructor-standings" class="space-y-2">
@@ -214,63 +214,63 @@
             </section>
 
             <!-- Latest Results -->
-            <section class="bg-gray-900/80 rounded-2xl p-5 border border-gray-800/50 shadow-xl" aria-labelledby="latest-results-title">
+            <section class="bg-white/80 dark:bg-white/80 dark:bg-white/80 dark:bg-gray-900/80 rounded-2xl p-5 border border-gray-200/50 dark:border-gray-200/50 dark:border-gray-800/50 shadow-xl" aria-labelledby="latest-results-title">
                 <h2 id="latest-results-title" class="flex items-center gap-2 text-lg font-semibold mb-2">
                     <span class="text-xl">🏁</span> Latest Results
                 </h2>
-                <div id="results-header" class="text-sm text-gray-400 mb-4"></div>
+                <div id="results-header" class="text-sm text-gray-400 dark:text-gray-600 dark:text-gray-400 mb-4"></div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
-                            <tr class="text-gray-500 text-xs uppercase tracking-wider">
+                            <tr class="text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 text-xs uppercase tracking-wider">
                                 <th class="py-2 text-left w-12">Pos</th>
                                 <th class="py-2 text-left">Driver</th>
                                 <th class="py-2 text-right">Time</th>
                             </tr>
                         </thead>
                         <tbody id="latest-results">
-                            <tr><td colspan="3" class="py-8 text-center text-gray-500">Loading...</td></tr>
+                            <tr><td colspan="3" class="py-8 text-center text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </section>
 
             <!-- F1 News -->
-            <section class="bg-gray-900/80 rounded-2xl p-5 border border-gray-800/50 shadow-xl" aria-labelledby="news-title">
+            <section class="bg-white/80 dark:bg-white/80 dark:bg-white/80 dark:bg-gray-900/80 rounded-2xl p-5 border border-gray-200/50 dark:border-gray-200/50 dark:border-gray-800/50 shadow-xl" aria-labelledby="news-title">
                 <h2 id="news-title" class="flex items-center justify-between gap-2 text-lg font-semibold mb-2">
                     <span class="flex items-center gap-2">
                         <span class="text-xl">📰</span> F1 News
                     </span>
-                    <span class="text-[10px] font-medium text-gray-500 bg-gray-800 px-2 py-1 rounded">External Links</span>
+                    <span class="text-[10px] font-medium text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 bg-gray-800 px-2 py-1 rounded">External Links</span>
                 </h2>
-                <p class="text-sm text-gray-400 mb-4">Latest headlines from trusted sources.</p>
-                <div id="news-list" class="space-y-0 divide-y divide-gray-800">
+                <p class="text-sm text-gray-400 dark:text-gray-600 dark:text-gray-400 mb-4">Latest headlines from trusted sources.</p>
+                <div id="news-list" class="space-y-0 divide-y divide-gray-200 dark:divide-gray-800">
                     <div class="skeleton h-16 rounded-lg"></div>
                     <div class="skeleton h-16 rounded-lg"></div>
                     <div class="skeleton h-16 rounded-lg"></div>
                 </div>
                 <div class="mt-4 text-right">
-                    <span id="news-updated" class="text-xs text-gray-500">Updated daily</span>
+                    <span id="news-updated" class="text-xs text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500">Updated daily</span>
                 </div>
             </section>
 
             <!-- Weather Card (Live during sessions) -->
-            <section id="weather-card" class="hidden bg-gradient-to-br from-blue-900/30 to-gray-900 rounded-2xl p-5 border border-blue-800/30 shadow-xl" aria-labelledby="weather-title">
-                <h2 id="weather-title" class="flex items-center gap-2 text-lg font-semibold mb-4">
+            <section id="weather-card" class="hidden bg-gradient-to-br from-blue-100/30 to-white dark:from-blue-900/30 dark:to-gray-900 rounded-2xl p-5 border border-blue-200/30 dark:border-blue-800/30 shadow-xl" aria-labelledby="weather-title">
+                <h2 id="weather-title" class="flex items-center gap-2 text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
                     <span class="text-xl">🌦️</span> Track Weather
                 </h2>
                 <div id="weather-content" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
             </section>
 
             <!-- Pit Stops (Live during race) -->
-            <section id="pitstops-card" class="hidden bg-gray-900/80 rounded-2xl p-5 border border-gray-800/50 shadow-xl" aria-labelledby="pitstops-title">
-                <h2 id="pitstops-title" class="flex items-center gap-2 text-lg font-semibold mb-4">
+            <section id="pitstops-card" class="hidden bg-white/80 dark:bg-white/80 dark:bg-white/80 dark:bg-gray-900/80 rounded-2xl p-5 border border-gray-200/50 dark:border-gray-200/50 dark:border-gray-800/50 shadow-xl" aria-labelledby="pitstops-title">
+                <h2 id="pitstops-title" class="flex items-center gap-2 text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
                     <span class="text-xl">🛞</span> Pit Stops
                 </h2>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
-                            <tr class="text-gray-500 text-xs uppercase tracking-wider">
+                            <tr class="text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 text-xs uppercase tracking-wider">
                                 <th class="py-2 text-left">Lap</th>
                                 <th class="py-2 text-left">Driver</th>
                                 <th class="py-2 text-right">Time</th>
@@ -283,18 +283,18 @@
             </section>
 
             <!-- Install App Card -->
-            <section id="install-section" class="lg:col-span-2 bg-gradient-to-br from-gray-800/50 to-gray-900 rounded-2xl p-6 border border-gray-700/50 shadow-xl relative" aria-labelledby="install-title">
-                <button id="install-close" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 transition-colors text-gray-400 hover:text-white" aria-label="Close">×</button>
-                <h2 id="install-title" class="flex items-center gap-2 text-lg font-semibold mb-4">
+            <section id="install-section" class="lg:col-span-2 bg-gradient-to-br from-gray-100/50 to-white dark:from-gray-800/50 dark:to-gray-900 rounded-2xl p-6 border border-gray-300/50 dark:border-gray-700/50 shadow-xl relative" aria-labelledby="install-title">
+                <button id="install-close" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 transition-colors text-gray-400 dark:text-gray-600 dark:text-gray-400 hover:text-white" aria-label="Close">×</button>
+                <h2 id="install-title" class="flex items-center gap-2 text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
                     <span class="text-xl">📲</span> Install App
                 </h2>
                 <div class="flex flex-col md:flex-row gap-6 items-start">
                     <div class="flex-shrink-0 bg-white p-3 rounded-xl shadow-lg">
                         <img src="assets/qr-code.png" alt="Scan to visit F1 Stats" class="w-36 h-36 rounded-lg">
-                        <p class="mt-2 text-xs text-gray-600 text-center">Scan to open</p>
+                        <p class="mt-2 text-xs text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-400 dark:text-gray-600 text-center">Scan to open</p>
                     </div>
                     <div class="flex-1 space-y-4">
-                        <div class="bg-gray-800/50 rounded-xl p-4 border border-gray-700/50">
+                        <div class="bg-gray-800/50 rounded-xl p-4 border border-gray-300/50 dark:border-gray-700/50">
                             <h3 class="font-semibold mb-2">📱 iOS (iPhone/iPad)</h3>
                             <ol class="text-sm text-gray-300 space-y-1 list-decimal list-inside">
                                 <li>Open in <strong class="text-white">Safari</strong></li>
@@ -303,7 +303,7 @@
                                 <li>Tap <strong class="text-white">"Add"</strong> in the top right</li>
                             </ol>
                         </div>
-                        <div class="bg-gray-800/50 rounded-xl p-4 border border-gray-700/50">
+                        <div class="bg-gray-800/50 rounded-xl p-4 border border-gray-300/50 dark:border-gray-700/50">
                             <h3 class="font-semibold mb-2">🤖 Android</h3>
                             <ol class="text-sm text-gray-300 space-y-1 list-decimal list-inside">
                                 <li>Open in <strong class="text-white">Chrome</strong></li>
@@ -314,14 +314,14 @@
                         </div>
                     </div>
                 </div>
-                <p class="mt-4 text-sm text-gray-500 text-center italic">Works offline after first load. No app store needed.</p>
+                <p class="mt-4 text-sm text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 text-center italic">Works offline after first load. No app store needed.</p>
             </section>
 
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="mt-12 py-8 text-center text-gray-600 text-sm border-t border-gray-800/50">
+    <footer class="mt-12 py-8 text-center text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-400 dark:text-gray-600 text-sm border-t border-gray-200/50 dark:border-gray-200/50 dark:border-gray-800/50">
         <p>&copy; 2026 F1 Stats · Data from <a href="https://openf1.org" class="text-ferrari hover:underline">OpenF1</a></p>
     </footer>
 
@@ -401,23 +401,23 @@
                 
                 if (data?.articles?.length) {
                     container.innerHTML = data.articles.map(a => `
-                        <a href="${a.link}" target="_blank" rel="noopener noreferrer" class="group flex items-start justify-between gap-4 py-3 hover:bg-gray-800/50 -mx-2 px-2 rounded-lg transition-colors">
+                        <a href="${a.link}" target="_blank" rel="noopener noreferrer" class="group flex items-start justify-between gap-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-100 dark:hover:bg-gray-800/50 -mx-2 px-2 rounded-lg transition-colors">
                             <div class="min-w-0">
                                 <span class="text-[10px] font-semibold uppercase tracking-wider text-ferrari">${a.source || 'F1'}</span>
-                                <h3 class="font-medium text-gray-100 group-hover:text-white transition-colors mt-0.5 line-clamp-2">${a.title}</h3>
-                                ${a.description ? `<p class="text-sm text-gray-400 mt-1 line-clamp-2">${a.description}</p>` : ''}
+                                <h3 class="font-medium text-gray-900 dark:text-gray-100 group-hover:text-gray-700 dark:group-hover:text-white transition-colors mt-0.5 line-clamp-2">${a.title}</h3>
+                                ${a.description ? `<p class="text-sm text-gray-400 dark:text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">${a.description}</p>` : ''}
                             </div>
-                            <span class="text-gray-500 group-hover:text-ferrari transition-colors flex-shrink-0">↗</span>
+                            <span class="text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 group-hover:text-ferrari transition-colors flex-shrink-0">↗</span>
                         </a>
                     `).join('');
                     
                     const lastUpdated = new Date(data.lastUpdated);
                     updatedEl.textContent = `Updated ${lastUpdated.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`;
                 } else {
-                    container.innerHTML = '<p class="text-center text-gray-500 py-8">No news available</p>';
+                    container.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 py-8">No news available</p>';
                 }
             } catch {
-                document.getElementById('news-list').innerHTML = '<p class="text-center text-gray-500 py-8">News unavailable</p>';
+                document.getElementById('news-list').innerHTML = '<p class="text-center text-gray-500 dark:text-gray-500 dark:text-gray-500 dark:text-gray-500 py-8">News unavailable</p>';
             }
         }
         

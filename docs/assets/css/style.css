@@ -4,14 +4,21 @@
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+.dark ::-webkit-scrollbar-thumb { background: #374151; }
+html:not(.dark) ::-webkit-scrollbar-thumb { background: #9ca3af; }
 
 /* Loading skeleton */
 @keyframes shimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
 }
-.skeleton {
+.dark .skeleton {
     background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+html:not(.dark) .skeleton {
+    background: linear-gradient(90deg, #e5e7eb 25%, #d1d5db 50%, #e5e7eb 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
 }
@@ -22,13 +29,22 @@
 .pos-3 { background: linear-gradient(135deg, #cd7f32, #b06c2a); color: #fff; }
 
 /* DNF pattern */
-.dnf-row {
+.dark .dnf-row {
     background: repeating-linear-gradient(
         135deg,
         transparent,
         transparent 10px,
         rgba(225, 6, 0, 0.05) 10px,
         rgba(225, 6, 0, 0.05) 20px
+    );
+}
+html:not(.dark) .dnf-row {
+    background: repeating-linear-gradient(
+        135deg,
+        transparent,
+        transparent 10px,
+        rgba(225, 6, 0, 0.08) 10px,
+        rgba(225, 6, 0, 0.08) 20px
     );
 }
 
@@ -39,13 +55,13 @@ html:not(.dark) body {
 }
 
 html:not(.dark) header {
-    background: #ffffff;
-    border-color: #e5e7eb;
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(229, 231, 235, 0.5);
 }
 
 html:not(.dark) section {
     background: #ffffff;
-    border-color: #e5e7eb;
+    border-color: rgba(229, 231, 235, 0.5);
 }
 
 html:not(.dark) .text-gray-100 { color: #111827; }
@@ -63,7 +79,29 @@ html:not(.dark) .border-gray-800 { border-color: #e5e7eb; }
 html:not(.dark) .border-gray-700 { border-color: #e5e7eb; }
 
 html:not(.dark) .hover\:bg-gray-800\/50:hover { background: rgba(243, 244, 246, 0.5); }
+html:not(.dark) .hover\:bg-gray-100:hover { background: #f3f4f6; }
 
 html:not(.dark) #countdown-banner {
     background: linear-gradient(to right, #f3f4f6, #e5e7eb, #f3f4f6);
+}
+
+html:not(.dark) .divide-gray-800 { border-color: #e5e7eb; }
+
+html:not(.dark) .bg-gradient-to-br.from-gray-900 {
+    --tw-gradient-from: #ffffff;
+    --tw-gradient-stops: var(--tw-gradient-from);
+}
+
+/* News link styling for light mode */
+html:not(.dark) #news-list a {
+    border-bottom-color: #e5e7eb;
+}
+
+/* Table styling */
+html:not(.dark) thead tr {
+    color: #6b7280;
+}
+
+html:not(.dark) tbody tr:hover {
+    background: rgba(243, 244, 246, 0.5);
 }
