@@ -27,7 +27,7 @@ let dataCache = { drivers: null, constructors: null, schedule: null, qualifying:
 
 async function loadLocalData(file) {
     try {
-        const resp = await fetch(\`data/\${file}.json\`);
+        const resp = await fetch(`data/${file}.json`);
         return resp.ok ? resp.json() : null;
     } catch { return null; }
 }
@@ -58,7 +58,7 @@ async function getDriverStandings() {
     return {
         standings: table.DriverStandings.map(s => ({
             position: parseInt(s.position),
-            driver: s.Driver.code || \`\${s.Driver.givenName[0]}. \${s.Driver.familyName}\`,
+            driver: s.Driver.code || `${s.Driver.givenName[0]}. ${s.Driver.familyName}`,
             team: s.Constructors[0]?.name || 'Unknown',
             points: parseInt(s.points), wins: parseInt(s.wins)
         })),
@@ -83,18 +83,18 @@ async function getNextRace() {
     if (!dataCache.schedule) return null;
     const races = dataCache.schedule.MRData?.RaceTable?.Races || [];
     const now = new Date();
-    const nextRace = races.find(r => new Date(\`\${r.date}T\${r.time || '00:00:00Z'}\`) > now);
+    const nextRace = races.find(r => new Date(`${r.date}T${r.time || '00:00:00Z'}`) > now);
     if (!nextRace) return null;
     
-    const raceDate = new Date(\`\${nextRace.date}T\${nextRace.time || '00:00:00Z'}\`);
+    const raceDate = new Date(`${nextRace.date}T${nextRace.time || '00:00:00Z'}`);
     const sessions = [];
     
-    if (nextRace.FirstPractice) sessions.push({ name: 'FP1', date: new Date(\`\${nextRace.FirstPractice.date}T\${nextRace.FirstPractice.time || '00:00:00Z'}\`) });
-    if (nextRace.SecondPractice) sessions.push({ name: 'FP2', date: new Date(\`\${nextRace.SecondPractice.date}T\${nextRace.SecondPractice.time || '00:00:00Z'}\`) });
-    if (nextRace.ThirdPractice) sessions.push({ name: 'FP3', date: new Date(\`\${nextRace.ThirdPractice.date}T\${nextRace.ThirdPractice.time || '00:00:00Z'}\`) });
-    if (nextRace.SprintQualifying) sessions.push({ name: 'Sprint Quali', date: new Date(\`\${nextRace.SprintQualifying.date}T\${nextRace.SprintQualifying.time || '00:00:00Z'}\`) });
-    if (nextRace.Sprint) sessions.push({ name: 'Sprint', date: new Date(\`\${nextRace.Sprint.date}T\${nextRace.Sprint.time || '00:00:00Z'}\`) });
-    if (nextRace.Qualifying) sessions.push({ name: 'Qualifying', date: new Date(\`\${nextRace.Qualifying.date}T\${nextRace.Qualifying.time || '00:00:00Z'}\`) });
+    if (nextRace.FirstPractice) sessions.push({ name: 'FP1', date: new Date(`${nextRace.FirstPractice.date}T${nextRace.FirstPractice.time || '00:00:00Z'}`) });
+    if (nextRace.SecondPractice) sessions.push({ name: 'FP2', date: new Date(`${nextRace.SecondPractice.date}T${nextRace.SecondPractice.time || '00:00:00Z'}`) });
+    if (nextRace.ThirdPractice) sessions.push({ name: 'FP3', date: new Date(`${nextRace.ThirdPractice.date}T${nextRace.ThirdPractice.time || '00:00:00Z'}`) });
+    if (nextRace.SprintQualifying) sessions.push({ name: 'Sprint Quali', date: new Date(`${nextRace.SprintQualifying.date}T${nextRace.SprintQualifying.time || '00:00:00Z'}`) });
+    if (nextRace.Sprint) sessions.push({ name: 'Sprint', date: new Date(`${nextRace.Sprint.date}T${nextRace.Sprint.time || '00:00:00Z'}`) });
+    if (nextRace.Qualifying) sessions.push({ name: 'Qualifying', date: new Date(`${nextRace.Qualifying.date}T${nextRace.Qualifying.time || '00:00:00Z'}`) });
     sessions.push({ name: 'Race', date: raceDate });
     sessions.sort((a, b) => a.date - b.date);
     
@@ -114,7 +114,7 @@ async function getLatestSession() {
                 const mapped = driverMap[num];
                 return {
                     position: r.position,
-                    driver: r.driver_code || mapped?.driver_code || r.driver_name?.split(' ').pop() || \`#\${num}\`,
+                    driver: r.driver_code || mapped?.driver_code || r.driver_name?.split(' ').pop() || `#${num}`,
                     team: r.team || mapped?.team || 'Unknown',
                     time: r.best_lap_time || '',
                     fastestLap: false
@@ -134,7 +134,7 @@ async function getLatestSession() {
     
     const raceData = dataCache.results?.MRData?.RaceTable?.Races?.[0];
     const raceRound = parseInt(dataCache.results?.MRData?.RaceTable?.round) || 0;
-    const raceDate = raceData ? new Date(\`\${raceData.date}T\${raceData.time || '23:59:59Z'}\`) : null;
+    const raceDate = raceData ? new Date(`${raceData.date}T${raceData.time || '23:59:59Z'}`) : null;
     const raceHappened = raceDate && raceDate < new Date();
     
     if (raceData?.Results && raceRound <= currentRound && raceHappened) {
@@ -145,7 +145,7 @@ async function getLatestSession() {
             isRace: true,
             results: raceData.Results.slice(0, 10).map(r => ({
                 position: parseInt(r.position),
-                driver: r.Driver.code || \`\${r.Driver.givenName[0]}. \${r.Driver.familyName}\`,
+                driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
                 team: r.Constructor.name,
                 time: r.Time?.time || '-',
                 fastestLap: r.FastestLap?.rank === '1'
@@ -160,7 +160,7 @@ async function getLatestSession() {
         return {
             sessionName: 'Qualifying', raceName: qualiRace.raceName, isRace: false,
             results: qualiRace.QualifyingResults.slice(0, 10).map((r, i) => ({
-                position: i + 1, driver: r.Driver.code || \`\${r.Driver.givenName[0]}. \${r.Driver.familyName}\`,
+                position: i + 1, driver: r.Driver.code || `${r.Driver.givenName[0]}. ${r.Driver.familyName}`,
                 team: r.Constructor.name, time: r.Q3 || r.Q2 || r.Q1 || '-', fastestLap: false
             })),
             fastestLap: null, live: false
@@ -175,27 +175,27 @@ function formatDate(date) {
 
 function formatDateTime(date) {
     const offset = -new Date().getTimezoneOffset() / 60;
-    const offsetStr = offset >= 0 ? \`UTC+\${offset}\` : \`UTC\${offset}\`;
+    const offsetStr = offset >= 0 ? `UTC+${offset}` : `UTC${offset}`;
     const day = date.toLocaleDateString('en-US', { weekday: 'short' });
     const time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-    return \`\${day} \${time} (\${offsetStr})\`;
+    return `${day} ${time} (${offsetStr})`;
 }
 
 function formatUTC(date) {
     const day = date.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' });
     const time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' });
-    return \`\${day} \${time} UTC\`;
+    return `${day} ${time} UTC`;
 }
 
 function getTimeAgo(date) {
     const seconds = Math.floor((new Date() - date) / 1000);
     if (seconds < 60) return 'just now';
     const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return \`\${minutes}m ago\`;
+    if (minutes < 60) return `${minutes}m ago`;
     const hours = Math.floor(minutes / 60);
-    if (hours < 24) return \`\${hours}h ago\`;
+    if (hours < 24) return `${hours}h ago`;
     const days = Math.floor(hours / 24);
-    return \`\${days}d ago\`;
+    return `${days}d ago`;
 }
 
 function getTeamBadgeClass(team) {
@@ -220,21 +220,21 @@ function renderDriverStandings(data) {
     let lastUpdatedHtml = '';
     if (data.lastUpdated) {
         const date = new Date(data.lastUpdated);
-        lastUpdatedHtml = \`<div class="mt-4 pt-3 border-t border-gray-800 text-right text-xs text-gray-500" title="\${date.toLocaleString()}">Updated \${getTimeAgo(date)}</div>\`;
+        lastUpdatedHtml = `<div class="mt-4 pt-3 border-t border-gray-800 text-right text-xs text-gray-500" title="${date.toLocaleString()}">Updated ${getTimeAgo(date)}</div>`;
     }
     
-    container.innerHTML = data.standings.slice(0, 10).map(s => \`
+    container.innerHTML = data.standings.slice(0, 10).map(s => `
         <div class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-800/50 transition-colors">
-            <div class="w-8 h-8 rounded-md \${getPositionClass(s.position)} flex items-center justify-center font-bold text-sm">\${s.position}</div>
+            <div class="w-8 h-8 rounded-md ${getPositionClass(s.position)} flex items-center justify-center font-bold text-sm">${s.position}</div>
             <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2">
-                    <span class="font-semibold truncate">\${s.driver}</span>
-                    <span class="px-1.5 py-0.5 text-[10px] font-bold uppercase rounded \${getTeamBadgeClass(s.team)} text-white">\${s.team.substring(0, 3).toUpperCase()}</span>
+                    <span class="font-semibold truncate">${s.driver}</span>
+                    <span class="px-1.5 py-0.5 text-[10px] font-bold uppercase rounded ${getTeamBadgeClass(s.team)} text-white">${s.team.substring(0, 3).toUpperCase()}</span>
                 </div>
             </div>
-            <div class="text-sm font-medium text-gray-400">\${s.points}<span class="text-gray-600 ml-1">pts</span></div>
+            <div class="text-sm font-medium text-gray-400">${s.points}<span class="text-gray-600 ml-1">pts</span></div>
         </div>
-    \`).join('') + lastUpdatedHtml;
+    `).join('') + lastUpdatedHtml;
 }
 
 function renderConstructorStandings(standings) {
@@ -244,15 +244,15 @@ function renderConstructorStandings(standings) {
         return;
     }
     
-    container.innerHTML = standings.slice(0, 10).map(s => \`
+    container.innerHTML = standings.slice(0, 10).map(s => `
         <div class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-800/50 transition-colors">
-            <div class="w-8 h-8 rounded-md \${getPositionClass(s.position)} flex items-center justify-center font-bold text-sm">\${s.position}</div>
+            <div class="w-8 h-8 rounded-md ${getPositionClass(s.position)} flex items-center justify-center font-bold text-sm">${s.position}</div>
             <div class="flex-1 min-w-0">
-                <span class="font-semibold truncate">\${s.constructor}</span>
+                <span class="font-semibold truncate">${s.constructor}</span>
             </div>
-            <div class="text-sm font-medium text-gray-400">\${s.points}<span class="text-gray-600 ml-1">pts</span></div>
+            <div class="text-sm font-medium text-gray-400">${s.points}<span class="text-gray-600 ml-1">pts</span></div>
         </div>
-    \`).join('');
+    `).join('');
 }
 
 function renderNextRace(race) {
@@ -262,37 +262,11 @@ function renderNextRace(race) {
     }
     document.getElementById('next-race-name').textContent = race.name;
     document.getElementById('next-race-date').textContent = formatDate(race.date);
-    document.getElementById('next-race-circuit').textContent = \`📍 \${race.circuit}\${race.country ? ', ' + race.country : ''}\`;
+    document.getElementById('next-race-circuit').textContent = `📍 ${race.circuit}${race.country ? ', ' + race.country : ''}`;
     
     // Separate Race from other sessions
     const raceSession = race.sessions.find(s => s.name === 'Race');
     const otherSessions = race.sessions.filter(s => s.name !== 'Race');
-    
-    // Build HTML: flex-wrap for sessions, Race at bottom full width
-    let html = '<div class="flex flex-wrap gap-2">';
-    
-    // Other sessions - 50% width each on desktop
-    otherSessions.forEach(s => {
-        html += \`
-            <div class="flex flex-col px-3 py-2 bg-gray-800/50 rounded-lg border border-gray-700/50 text-center" style="flex: 1 1 calc(50% - 0.5rem); min-width: 140px;">
-                <span class="text-[10px] font-semibold uppercase tracking-wider text-gray-500">\${s.name}</span>
-                <span class="text-sm font-semibold mt-0.5">\${formatDateTime(s.date)}</span>
-                <span class="text-[10px] text-gray-600 mt-0.5">\${formatUTC(s.date)}</span>
-            </div>\`;
-    });
-    
-    html += '</div>';
-    
-    // Race session - full width, more prominent
-    if (raceSession) {
-        html += \`
-            <div class="mt-3 flex flex-col px-4 py-3 bg-gradient-to-br from-ferrari/20 to-red-900/30 rounded-xl border-2 border-ferrari/40 text-center">
-                <span class="text-xs font-bold uppercase tracking-widest text-ferrari">🏁 Race</span>
-                <span class="text-lg font-bold mt-1">\${formatDateTime(raceSession.date)}</span>
-                <span class="text-xs text-gray-400 mt-0.5">\${formatUTC(raceSession.date)}</span>
-            </div>\`;
-    }
-    
     document.getElementById('session-times').innerHTML = html;
 }
 
@@ -307,27 +281,27 @@ function renderLatestResults(data) {
     }
     
     const cacheBadge = data.cached ? '<span class="ml-2 px-2 py-0.5 text-[10px] bg-gray-700 rounded font-medium">💾 Cached</span>' : '';
-    header.innerHTML = \`<span class="font-semibold text-white">\${data.sessionName}</span> - \${data.raceName}\${cacheBadge}\`;
+    header.innerHTML = `<span class="font-semibold text-white">${data.sessionName}</span> - ${data.raceName}${cacheBadge}`;
     
     if (data.fastestLap) {
-        header.innerHTML += \` <span class="ml-2 text-purple-400 text-xs"><span class="px-1.5 py-0.5 bg-purple-500 rounded text-white font-bold">FL</span> \${data.fastestLap.driver}</span>\`;
+        header.innerHTML += ` <span class="ml-2 text-purple-400 text-xs"><span class="px-1.5 py-0.5 bg-purple-500 rounded text-white font-bold">FL</span> ${data.fastestLap.driver}</span>`;
     }
     
-    tbody.innerHTML = data.results.map(r => \`
+    tbody.innerHTML = data.results.map(r => `
         <tr class="border-b border-gray-800/50 last:border-0 hover:bg-gray-800/30 transition-colors">
-            <td class="py-2.5"><div class="w-7 h-7 rounded-md \${getPositionClass(r.position)} flex items-center justify-center font-bold text-xs">\${r.position}</div></td>
+            <td class="py-2.5"><div class="w-7 h-7 rounded-md ${getPositionClass(r.position)} flex items-center justify-center font-bold text-xs">${r.position}</div></td>
             <td class="py-2.5">
-                <span class="font-medium">\${r.driver}</span>
-                \${r.fastestLap ? '<span class="ml-1 px-1.5 py-0.5 bg-purple-500 rounded text-[10px] font-bold">FL</span>' : ''}
-                <span class="ml-2 px-1.5 py-0.5 text-[10px] font-bold uppercase rounded \${getTeamBadgeClass(r.team)} text-white">\${r.team.substring(0, 3).toUpperCase()}</span>
+                <span class="font-medium">${r.driver}</span>
+                ${r.fastestLap ? '<span class="ml-1 px-1.5 py-0.5 bg-purple-500 rounded text-[10px] font-bold">FL</span>' : ''}
+                <span class="ml-2 px-1.5 py-0.5 text-[10px] font-bold uppercase rounded ${getTeamBadgeClass(r.team)} text-white">${r.team.substring(0, 3).toUpperCase()}</span>
             </td>
-            <td class="py-2.5 text-right text-gray-400 font-mono text-sm">\${r.time || '-'}</td>
+            <td class="py-2.5 text-right text-gray-400 font-mono text-sm">${r.time || '-'}</td>
         </tr>
-    \`).join('');
+    `).join('');
 }
 
 function showError(container, message) {
-    container.innerHTML = \`<div class="text-center text-red-400 py-8">\${message}</div>\`;
+    container.innerHTML = `<div class="text-center text-red-400 py-8">${message}</div>`;
 }
 
 async function loadAll() {
@@ -377,7 +351,7 @@ function updateCountdown(race) {
 }
 
 document.addEventListener('DOMContentLoaded', loadAll);
-document.getElementById('season-year').textContent = \`\${new Date().getFullYear()} Season\`;
+document.getElementById('season-year').textContent = `${new Date().getFullYear()} Season`;
 
 // Pull to Refresh
 (function() {
@@ -406,7 +380,7 @@ document.getElementById('season-year').textContent = \`\${new Date().getFullYear
         const diff = Math.max(0, currentY - startY);
         
         if (diff > 0 && isAtTop()) {
-            indicator.style.transform = \`translateY(\${Math.min(diff, threshold + 20)}px)\`;
+            indicator.style.transform = `translateY(${Math.min(diff, threshold + 20)}px)`;
             indicator.style.opacity = Math.min(diff / threshold, 1);
             indicator.classList.toggle('rotate', diff >= threshold);
         }
