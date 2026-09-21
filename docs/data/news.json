@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-09-20T10:45:42.672Z",
+  "lastUpdated": "2026-09-21T12:09:47.304Z",
   "total": 5,
   "articles": [
+    {
+      "title": "How to follow Azerbaijan Grand Prix on the BBC",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cdx0elx8pz8o?at_medium=RSS",
+      "description": "All the key BBC coverage details for the Spanish Grand Prix, which takes place from 24-26 September.",
+      "pubDate": "Mon, 21 Sep 2026 09:37:26 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Andrew Benson Q&A: Send us your questions",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/ckg3y15zje8o?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/ckeq8vj28149o?at_medium=RSS",
       "description": "Former Mercedes F1 design boss Mike Elliott joins Alpine as chief technical officer.",
       "pubDate": "Thu, 17 Sep 2026 10:52:29 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Verstappen passes 100 amateur karters in 14 laps in exhibition race",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c50m3k7jk82jo?at_medium=RSS",
-      "description": "Four-time F1 world champion Max Verstappen passes 100 amateur drivers in just 14 laps in an exhibition go-kart race at Silverstone.",
-      "pubDate": "Thu, 17 Sep 2026 06:12:30 GMT",
       "source": "BBC Sport F1"
     }
   ]
