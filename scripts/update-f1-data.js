@@ -82,7 +82,7 @@ async function updateSchedule() {
 async function updateResults(round) {
   if (round < 1) return;
   
-  const data = await fetchWithRetry(`${ERGAST_BASE}/f1/${YEAR}/${round}/results.json`);
+  const data = await fetchWithRetry(`${ERGAST_BASE}/f1/${YEAR}/${round}/results.json?limit=100`);
   const race = data?.MRData?.RaceTable?.Races?.[0];
   
   if (race) {
