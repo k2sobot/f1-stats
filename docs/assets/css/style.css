@@ -433,6 +433,16 @@ html:not(.dark) .dnf-row {
 .site-footer a { color: var(--accent); text-decoration: none; }
 .site-footer a:hover { text-decoration: underline; }
 
+.site-footer-note {
+    margin: 0.7rem auto 0;
+    max-width: 28rem;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 0.72rem;
+    opacity: 0.8;
+    line-height: 1.4;
+}
+
 .pull-indicator { transition: transform 0.2s ease, opacity 0.2s ease; }
 
 html.dark .theme-sun { display: block; }
