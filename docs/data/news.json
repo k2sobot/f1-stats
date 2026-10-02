@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-10-01T12:34:00.953Z",
+  "lastUpdated": "2026-10-02T11:59:06.190Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Russell says Red Bull strongest after Bahrain practice",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/ckm2q2346zz9o?at_medium=RSS",
+      "description": "Red Bull are tipped by George Russell and Charles Leclerc as the team to beat after the first day at the Bahrain Grand Prix in Malaysia.",
+      "pubDate": "Fri, 02 Oct 2026 11:15:54 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Russell says his 'confidence is back and growing'",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cv1j4jn5nxxlo?at_medium=RSS",
@@ -24,17 +31,10 @@
       "source": "BBC Sport F1"
     },
     {
-      "title": "Bahrain GP in Malaysia becomes third heat-hazard race of year",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cwg7klkxzzylo?at_medium=RSS",
-      "description": "This weekend's Bahrain Grand Prix in Malaysia is declared a heat-hazard race, the third time the designation has been used this year.",
-      "pubDate": "Wed, 30 Sep 2026 12:46:42 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Ocon to leave Haas putting F1 future in doubt",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c9e8e5k21ge5o?at_medium=RSS",
-      "description": "Esteban Ocon is fighting to save his Formula 1 career after the Haas team announcement that they are splitting with the Frenchman at the end of the year.",
-      "pubDate": "Wed, 30 Sep 2026 10:24:02 GMT",
+      "title": "F1: Chequered Flag",
+      "link": "https://www.bbc.co.uk/sounds/play/p0pd8sqc?at_medium=RSS",
+      "description": "Can Antonelli bounce back from his Baku blip or is Russell still in the title fight?",
+      "pubDate": "Wed, 30 Sep 2026 19:13:00 GMT",
       "source": "BBC Sport F1"
     }
   ]
