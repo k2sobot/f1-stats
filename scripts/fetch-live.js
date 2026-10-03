@@ -21,15 +21,27 @@ const SESSION_PRIORITY = {
 };
 
 async function fetchWithTimeout(url, timeout = API_TIMEOUT) {
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
-    try {
-        const resp = await fetch(url, { signal: controller.signal });
-        clearTimeout(id);
-        return resp.ok ? resp.json() : null;
-    } catch {
-        return null;
+    for (let attempt = 0; attempt < 5; attempt++) {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeout);
+        try {
+            const resp = await fetch(url, { signal: controller.signal });
+            clearTimeout(id);
+            if ((resp.status === 429 || resp.status >= 500) && attempt < 4) {
+                await new Promise(r => setTimeout(r, 1200 * (attempt + 1)));
+                continue;
+            }
+            return resp.ok ? resp.json() : null;
+        } catch {
+            clearTimeout(id);
+            if (attempt < 4) {
+                await new Promise(r => setTimeout(r, 1200 * (attempt + 1)));
+                continue;
+            }
+            return null;
+        }
     }
+    return null;
 }
 
 async function fetchCurrentMeeting() {
