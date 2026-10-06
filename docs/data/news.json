@@ -1,19 +1,26 @@
 {
-  "lastUpdated": "2026-10-05T13:47:32.548Z",
+  "lastUpdated": "2026-10-06T12:52:24.873Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Wet races and why future of F1 engines appears to be V8 turbos - Q&A",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cr15j3z2npz9o?at_medium=RSS",
+      "description": "BBC Sport F1 correspondent Andrew Benson answers your latest questions after the Bahrain Grand Prix in Malaysia.",
+      "pubDate": "Tue, 06 Oct 2026 06:47:43 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Bottas cycling from Malaysia to Singapore Grand Prix",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cv2d6p9en7wdo?at_medium=RSS",
+      "description": "Cadillac driver Valtteri Bottas switches four wheels for two and opts to travel to the Singapore Grand Prix by bike.",
+      "pubDate": "Mon, 05 Oct 2026 19:00:23 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "F1 needs to have hard look at itself - Sainz",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cr62y51n1841o?at_medium=RSS",
       "description": "F1 \"needs to have a hard look at\" itself in the wake of unprecedented software glitches that affected the Bahrain Grand Prix in Malaysia, Carlos Sainz says.",
       "pubDate": "Mon, 05 Oct 2026 11:52:01 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Damilola Taylor's shocking murder revisited 26 years on",
-      "link": "https://www.bbc.co.uk/iplayer/episode/m0032lg7?at_mid=RknUGKJ6x5",
-      "description": "A look at the killing of Damilola Taylor, shedding fresh light with new testimony.",
-      "pubDate": "Mon, 05 Oct 2026 05:00:00 GMT",
       "source": "BBC Sport F1"
     },
     {
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cwg7x820k9xjo?at_medium=RSS",
       "description": "Max Verstappen and Lewis Hamilton liken the effects of a software bug that affected multiple cars before the Bahrain Grand Prix in Malaysia to a \"Lego race\".",
       "pubDate": "Sun, 04 Oct 2026 16:58:56 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "How to follow the Singapore Grand Prix on the BBC",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cm2d6p4e3y93o?at_medium=RSS",
-      "description": "All the key BBC coverage details for the Singapore Grand Prix, the sixth and final sprint event of the season, which takes place from 9-11 October.",
-      "pubDate": "Sun, 04 Oct 2026 14:44:28 GMT",
       "source": "BBC Sport F1"
     }
   ]
