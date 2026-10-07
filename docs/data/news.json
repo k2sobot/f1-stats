@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-10-06T12:52:24.873Z",
+  "lastUpdated": "2026-10-07T12:46:20.284Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Russell to start from back of Singapore grid after penalty",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cm0qkdk37gy0o?at_medium=RSS",
+      "description": "Britain's George Russell will start from the back of the grid in Sunday's Singapore Grand Prix because of a power-unit penalty from last weekend's race.",
+      "pubDate": "Wed, 07 Oct 2026 10:01:59 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Wet races and why future of F1 engines appears to be V8 turbos - Q&A",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cr15j3z2npz9o?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/videos/cq3djv4rjvmdo?at_medium=RSS",
       "description": "The Chequered Flag Podcast's Sam Bird and Andrew Benson discuss Max Verstappen's impressive Bahrain Grand Prix victory, which secured his first win of the season.",
       "pubDate": "Sun, 04 Oct 2026 17:41:20 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Hamilton & Verstappen bemused after glitch turns F1 into 'Lego race'",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cwg7x820k9xjo?at_medium=RSS",
-      "description": "Max Verstappen and Lewis Hamilton liken the effects of a software bug that affected multiple cars before the Bahrain Grand Prix in Malaysia to a \"Lego race\".",
-      "pubDate": "Sun, 04 Oct 2026 16:58:56 GMT",
       "source": "BBC Sport F1"
     }
   ]
