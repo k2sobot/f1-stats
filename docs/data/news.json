@@ -1,40 +1,40 @@
 {
-  "lastUpdated": "2026-10-09T12:41:13.160Z",
+  "lastUpdated": "2026-10-10T12:00:11.699Z",
   "total": 5,
   "articles": [
+    {
+      "title": "How to follow Singapore Grand Prix on the BBC",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cm2d6p4e3y93o?at_medium=RSS",
+      "description": "All the key BBC coverage details for the Singapore Grand Prix, the sixth and final sprint event of the season, which takes place from 9-11 October.",
+      "pubDate": "Sat, 10 Oct 2026 11:14:21 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Verstappen wins sprint after Russell crashes out",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cwn73gmz78reo?at_medium=RSS",
+      "description": "Red Bull's Max Verstappen wins an incident-packed sprint race at the Singapore Grand Prix after George Russell crashes out of the lead.",
+      "pubDate": "Sat, 10 Oct 2026 10:53:03 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Verstappen on sprint pole after another settings issue",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/ck62y7jz1qqro?at_medium=RSS",
+      "description": "Red Bull's Max Verstappen beats Mercedes driver George Russell to sprint pole at the Singapore Grand Prix.",
+      "pubDate": "Fri, 09 Oct 2026 15:48:28 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Mercedes critics think I'm Satan - Wolff",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cmje5x0enkxqo?at_medium=RSS",
+      "description": "Mercedes Formula 1 boss Toto Wolff rejects accusations of team of bias against George Russell, calling critics \"brainless\".",
+      "pubDate": "Fri, 09 Oct 2026 13:24:12 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Russell fastest from Leclerc in Singapore practice",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cm0e0w5ele7wo?at_medium=RSS",
       "description": "Mercedes driver George Russell leads Ferrari's Charles Leclerc in practice at the Singapore Grand Prix.",
       "pubDate": "Fri, 09 Oct 2026 09:45:25 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "5 Live Sport: All About...",
-      "link": "https://www.bbc.co.uk/sounds/play/p0pfsdld?at_medium=RSS",
-      "description": "Katie Smith is joined by Wake Up to Money’s Sean Farrington",
-      "pubDate": "Thu, 08 Oct 2026 20:31:00 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Ticket rises and more TV packages - why is price of sport increasing?",
-      "link": "https://www.bbc.co.uk/sport/articles/cx7vpe1p070mo?at_medium=RSS",
-      "description": "The price of sports tickets and TV subscriptions are on the rise - so what is behind the increases and how are they justified?",
-      "pubDate": "Thu, 08 Oct 2026 18:57:13 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "F1: Chequered Flag",
-      "link": "https://www.bbc.co.uk/sounds/play/p0pfrs29?at_medium=RSS",
-      "description": "Software bugs, Russell’s penalty & a sprint weekend dominate the build-up in Singapore.",
-      "pubDate": "Thu, 08 Oct 2026 17:50:00 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Russell to take further grid penalty this season",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c6y8lyj1pemko?at_medium=RSS",
-      "description": "George Russell says he will be taking a further grid penalty this season in addition to the one he has been hit with for the Singapore Grand Prix.",
-      "pubDate": "Thu, 08 Oct 2026 13:48:17 GMT",
       "source": "BBC Sport F1"
     }
   ]
