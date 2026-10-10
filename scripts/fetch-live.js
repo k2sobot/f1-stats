@@ -9,17 +9,6 @@ const path = require('path');
 const DATA_DIR = path.join(__dirname, '../docs/data/live');
 const API_TIMEOUT = 10000;
 
-// Session priority (higher = more important for "latest")
-const SESSION_PRIORITY = {
-    'Race': 10,
-    'Sprint': 9,
-    'Qualifying': 8,
-    'Sprint Qualifying': 7,
-    'Practice 3': 6,
-    'Practice 2': 5,
-    'Practice 1': 4
-};
-
 async function fetchWithTimeout(url, timeout = API_TIMEOUT) {
     for (let attempt = 0; attempt < 5; attempt++) {
         const controller = new AbortController();
@@ -91,13 +80,9 @@ async function fetchSessionResults(meeting) {
         }
     }
 
-    // Sort by priority (highest first), then by date (most recent first)
-    results.sort((a, b) => {
-        const priA = SESSION_PRIORITY[a.session_type] || 0;
-        const priB = SESSION_PRIORITY[b.session_type] || 0;
-        if (priA !== priB) return priB - priA;
-        return new Date(b.date_end) - new Date(a.date_end);
-    });
+    // Latest card should be the most recently completed session.
+    // Priority would hide Saturday qualifying behind the earlier sprint.
+    results.sort((a, b) => new Date(b.date_end) - new Date(a.date_end));
 
     return results.length ? results : null;
 }
