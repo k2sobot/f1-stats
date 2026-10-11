@@ -8,11 +8,11 @@
     "total": "11",
     "StandingsTable": {
       "season": "2026",
-      "round": "16",
+      "round": "17",
       "StandingsLists": [
         {
           "season": "2026",
-          "round": "16",
+          "round": "17",
           "ConstructorStandings": [
             {
               "position": "1",
@@ -150,6 +150,5 @@
         }
       ]
     }
-  },
-  "lastUpdated": "2026-10-10T16:26:24.656Z"
+  }
 }
