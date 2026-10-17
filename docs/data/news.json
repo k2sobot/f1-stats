@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-16T10:50:11.992Z",
+  "lastUpdated": "2026-10-17T10:14:46.615Z",
   "total": 5,
   "articles": [
     {
@@ -7,6 +7,13 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/ckg3y15zje8o?at_medium=RSS",
       "description": "Our F1 correspondent Andrew Benson is doing a weekly Q&A this season, so get your questions in now.",
       "pubDate": "Fri, 16 Oct 2026 10:46:21 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "The Chequered Flag Podcast",
+      "link": "https://www.bbc.co.uk/iplayer/episode/m0032vkn?at_medium=RSS",
+      "description": "Harry Benjamin speaks to F1 Academy championship leader Alisha Palmowski about her season.",
+      "pubDate": "Thu, 15 Oct 2026 16:00:00 GMT",
       "source": "BBC Sport F1"
     },
     {
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/c84g1rxr0dpno?at_medium=RSS",
       "description": "Red Bull team principal Laurent Mekies, who replaced Christian Horner at the F1 team, has his contract extended until the end of 2031.",
       "pubDate": "Wed, 14 Oct 2026 17:02:47 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "A 'landmark' moment - why has Rwanda been chosen to host F1?",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cw62yglre6y5o?at_medium=RSS",
-      "description": "How Rwanda has succeeded where Morocco and South Africa, among others, have failed by agreeing a deal to stage the African Grand Prix.",
-      "pubDate": "Tue, 13 Oct 2026 15:01:17 GMT",
       "source": "BBC Sport F1"
     }
   ]
