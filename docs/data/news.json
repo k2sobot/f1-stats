@@ -1,7 +1,21 @@
 {
-  "lastUpdated": "2026-10-18T10:30:06.733Z",
+  "lastUpdated": "2026-10-19T12:19:42.076Z",
   "total": 5,
   "articles": [
+    {
+      "title": "How to follow US Grand Prix on the BBC",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cm0qk189q5dgo?at_medium=RSS",
+      "description": "All the key BBC coverage details for the United States Grand Prix, which takes place from 23-25 October.",
+      "pubDate": "Mon, 19 Oct 2026 06:42:58 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Best images of F1 in the US through the years",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cqm24nezmy23o?at_medium=RSS",
+      "description": "A selection of images from F1 races in the US, from Indianapolis, Watkins Glen and Long Beach to the streets of Dallas and the Caesars Palace car park.",
+      "pubDate": "Mon, 19 Oct 2026 06:17:28 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Andrew Benson Q&A: Send us your questions",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/ckg3y15zje8o?at_medium=RSS",
@@ -21,20 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cr15jn74l0pdo?at_medium=RSS",
       "description": "Brazilian Rafael Camara will join the US-based Haas team for his debut Formula 1 season in 2027.",
       "pubDate": "Thu, 15 Oct 2026 15:41:27 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "The F1 pit stop that helped save lives",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c6ly0q00gj5do?at_medium=RSS",
-      "description": "How an F1 pit stop inspired changes to hospital care that have helped save lives ever since.",
-      "pubDate": "Thu, 15 Oct 2026 05:56:53 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Red Bull F1 boss Mekies gets new deal to 2031",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c84g1rxr0dpno?at_medium=RSS",
-      "description": "Red Bull team principal Laurent Mekies, who replaced Christian Horner at the F1 team, has his contract extended until the end of 2031.",
-      "pubDate": "Wed, 14 Oct 2026 17:02:47 GMT",
       "source": "BBC Sport F1"
     }
   ]
