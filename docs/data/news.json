@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-20T11:00:11.032Z",
+  "lastUpdated": "2026-10-21T11:16:59.854Z",
   "total": 5,
   "articles": [
     {
@@ -24,17 +24,17 @@
       "source": "BBC Sport F1"
     },
     {
-      "title": "The Chequered Flag Podcast",
-      "link": "https://www.bbc.co.uk/iplayer/episode/m0032vkn?at_medium=RSS",
-      "description": "Harry Benjamin speaks to F1 Academy championship leader Alisha Palmowski about her season.",
-      "pubDate": "Thu, 15 Oct 2026 16:00:00 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
       "title": "Brazilian Camara to join Haas for F1 debut in 2027",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cr15jn74l0pdo?at_medium=RSS",
       "description": "Brazilian Rafael Camara will join the US-based Haas team for his debut Formula 1 season in 2027.",
       "pubDate": "Thu, 15 Oct 2026 15:41:27 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "The F1 pit stop that helped save lives",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/c6ly0q00gj5do?at_medium=RSS",
+      "description": "How an F1 pit stop inspired changes to hospital care that have helped save lives ever since.",
+      "pubDate": "Thu, 15 Oct 2026 05:56:53 GMT",
       "source": "BBC Sport F1"
     }
   ]
