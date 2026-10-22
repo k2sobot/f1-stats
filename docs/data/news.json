@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-10-21T11:16:59.854Z",
+  "lastUpdated": "2026-10-22T11:15:59.504Z",
   "total": 5,
   "articles": [
+    {
+      "title": "F1 races to return to standard distance in 2028",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/c69wzvr14xlxo?at_medium=RSS",
+      "description": "Formula 1 grands prix will return to their standard distance in 2028 after the maximum length was shortened for next season.",
+      "pubDate": "Wed, 21 Oct 2026 11:41:56 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Will Lindblad and Lawson be retained by Racing Bulls? F1 Q&A",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cx30ez4ge3z7o?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cr15jn74l0pdo?at_medium=RSS",
       "description": "Brazilian Rafael Camara will join the US-based Haas team for his debut Formula 1 season in 2027.",
       "pubDate": "Thu, 15 Oct 2026 15:41:27 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "The F1 pit stop that helped save lives",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c6ly0q00gj5do?at_medium=RSS",
-      "description": "How an F1 pit stop inspired changes to hospital care that have helped save lives ever since.",
-      "pubDate": "Thu, 15 Oct 2026 05:56:53 GMT",
       "source": "BBC Sport F1"
     }
   ]
