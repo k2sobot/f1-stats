@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-10-28T12:14:23.689Z",
+  "lastUpdated": "2026-10-29T12:23:42.395Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Perez signs multi-year extension with Cadillac",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cqde852ww04ko?at_medium=RSS",
+      "description": "Sergio Perez will remain with Cadillac until 2029 after signing a multi-year contract extension.",
+      "pubDate": "Wed, 28 Oct 2026 16:10:07 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Simpler, cheaper hybrid V8s proposed for next F1 rules",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cw4g186011rdo?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/iplayer/episode/m0032vks?at_medium=RSS",
       "description": "Teenager Kimi Antonelli dominated in Austin but must wait to clinch the world championship",
       "pubDate": "Mon, 26 Oct 2026 06:00:00 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "F1: Chequered Flag",
-      "link": "https://www.bbc.co.uk/sounds/play/p0pjls50?at_medium=RSS",
-      "description": "Guenther Steiner and Damon Hill join Rosanna to look back at the race in Austin",
-      "pubDate": "Mon, 26 Oct 2026 03:26:00 GMT",
       "source": "BBC Sport F1"
     }
   ]
