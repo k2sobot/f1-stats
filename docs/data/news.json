@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-10-30T12:14:48.894Z",
+  "lastUpdated": "2026-10-31T11:46:42.369Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Verstappen and Lawson given grid penalties for Mexico practice collision",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cqde8p6j9ye7o?at_medium=RSS",
+      "description": "Max Verstappen accuses Liam Lawson of \"not very smart behaviour\" after the two collided in Friday practice at the Mexico City Grand Prix.",
+      "pubDate": "Sat, 31 Oct 2026 03:18:06 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "F1 has never had anyone like me - Hamilton",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cmvg9z1v33keo?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cqde852ww04ko?at_medium=RSS",
       "description": "Sergio Perez will remain with Cadillac until 2029 after signing a multi-year contract extension.",
       "pubDate": "Wed, 28 Oct 2026 16:10:07 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Simpler, cheaper hybrid V8s proposed for next F1 rules",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cw4g186011rdo?at_medium=RSS",
-      "description": "Formula 1's next engine regulations are set to introduce V8 turbo hybrid engines that are simplified and less expensive compared to the existing rules.",
-      "pubDate": "Tue, 27 Oct 2026 15:17:53 GMT",
       "source": "BBC Sport F1"
     }
   ]
