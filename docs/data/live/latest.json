@@ -81,16 +81,6 @@
     },
     {
       "position": 8,
-      "driver_number": 30,
-      "driver_code": "LAW",
-      "driver_name": "Liam Lawson",
-      "team": "Racing Bulls",
-      "best_lap": 77.029,
-      "best_lap_time": "1:17.029",
-      "gap_to_fastest": 0.515
-    },
-    {
-      "position": 9,
       "driver_number": 41,
       "driver_code": "LIN",
       "driver_name": "Arvid Lindblad",
@@ -100,7 +90,7 @@
       "gap_to_fastest": 0.603
     },
     {
-      "position": 10,
+      "position": 9,
       "driver_number": 10,
       "driver_code": "GAS",
       "driver_name": "Pierre Gasly",
@@ -110,7 +100,7 @@
       "gap_to_fastest": 0.639
     },
     {
-      "position": 11,
+      "position": 10,
       "driver_number": 27,
       "driver_code": "HUL",
       "driver_name": "Nico Hulkenberg",
@@ -120,7 +110,7 @@
       "gap_to_fastest": 0.578
     },
     {
-      "position": 12,
+      "position": 11,
       "driver_number": 43,
       "driver_code": "COL",
       "driver_name": "Franco Colapinto",
@@ -130,7 +120,7 @@
       "gap_to_fastest": 0.912
     },
     {
-      "position": 13,
+      "position": 12,
       "driver_number": 81,
       "driver_code": "PIA",
       "driver_name": "Oscar Piastri",
@@ -140,7 +130,7 @@
       "gap_to_fastest": 0.918
     },
     {
-      "position": 14,
+      "position": 13,
       "driver_number": 5,
       "driver_code": "BOR",
       "driver_name": "Gabriel Bortoleto",
@@ -150,7 +140,7 @@
       "gap_to_fastest": 0.952
     },
     {
-      "position": 15,
+      "position": 14,
       "driver_number": 87,
       "driver_code": "BEA",
       "driver_name": "Oliver Bearman",
@@ -160,7 +150,7 @@
       "gap_to_fastest": 1.355
     },
     {
-      "position": 16,
+      "position": 15,
       "driver_number": 55,
       "driver_code": "SAI",
       "driver_name": "Carlos Sainz",
@@ -170,7 +160,7 @@
       "gap_to_fastest": 2.157
     },
     {
-      "position": 17,
+      "position": 16,
       "driver_number": 23,
       "driver_code": "ALB",
       "driver_name": "Alexander Albon",
@@ -180,7 +170,7 @@
       "gap_to_fastest": 1.289
     },
     {
-      "position": 18,
+      "position": 17,
       "driver_number": 14,
       "driver_code": "ALO",
       "driver_name": "Fernando Alonso",
@@ -190,7 +180,7 @@
       "gap_to_fastest": 1.567
     },
     {
-      "position": 19,
+      "position": 18,
       "driver_number": 50,
       "driver_code": "HIR",
       "driver_name": "Ryo Hirakawa",
@@ -200,7 +190,7 @@
       "gap_to_fastest": 1.617
     },
     {
-      "position": 20,
+      "position": 19,
       "driver_number": 18,
       "driver_code": "STR",
       "driver_name": "Lance Stroll",
@@ -210,7 +200,7 @@
       "gap_to_fastest": 1.731
     },
     {
-      "position": 21,
+      "position": 20,
       "driver_number": 11,
       "driver_code": "PER",
       "driver_name": "Sergio Perez",
@@ -220,7 +210,7 @@
       "gap_to_fastest": 1.764
     },
     {
-      "position": 22,
+      "position": 21,
       "driver_number": 77,
       "driver_code": "BOT",
       "driver_name": "Valtteri Bottas",
@@ -228,6 +218,16 @@
       "best_lap": 79.852,
       "best_lap_time": "1:19.852",
       "gap_to_fastest": 2.511
+    },
+    {
+      "position": 22,
+      "driver_number": 30,
+      "driver_code": "LAW",
+      "driver_name": "Liam Lawson",
+      "team": "Racing Bulls",
+      "best_lap": 77.029,
+      "best_lap_time": "1:17.029",
+      "gap_to_fastest": 0.515
     }
   ]
 }
