@@ -230,6 +230,7 @@ function renderDriverStandings(data) {
                 <div class="flex items-center gap-2">
                     <span class="font-semibold truncate">${s.driver}</span>
                     <span class="team-chip ${getTeamBadgeClass(s.team)}">${s.team.substring(0, 3).toUpperCase()}</span>
+                    ${s.driver === 'ANT' && s.position === 1 ? '<span class="wdc-chip">WDC</span>' : ''}
                 </div>
             </div>
             <div class="pts">${s.points}<span>pts</span></div>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'f1-stats-v8';
+const CACHE_NAME = 'f1-stats-v9';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
