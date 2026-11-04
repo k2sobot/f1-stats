@@ -1,7 +1,28 @@
 {
-  "lastUpdated": "2026-11-03T13:43:26.987Z",
+  "lastUpdated": "2026-11-04T13:52:31.668Z",
   "total": 5,
   "articles": [
+    {
+      "title": "More than the Score",
+      "link": "https://www.bbc.co.uk/sounds/play/w3ct9tp9?at_medium=RSS",
+      "description": "The 20-year-old Italian is the youngest F1 world champion ever",
+      "pubDate": "Wed, 04 Nov 2026 06:01:00 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Ocon dropped by Haas for rest of season after row",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/ck054q3g5jnpo?at_medium=RSS",
+      "description": "F1 team Haas says Estaban Ocon will \"no longer compete on its behalf in the 2026 world championship\" after he was dropped for the Mexico Grand Prix.",
+      "pubDate": "Tue, 03 Nov 2026 21:15:53 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "How sporting events are being affected by Middle East conflict",
+      "link": "https://www.bbc.co.uk/sport/articles/ck0j0l65nzlvo?at_medium=RSS",
+      "description": "BBC Sport takes a look at how the ongoing conflict in the Middle East has affected sporting events in Saudi Arabia, Qatar, Bahrain and the wider area.",
+      "pubDate": "Tue, 03 Nov 2026 16:01:24 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Do Ferrari need rules of engagement? F1 Q&A",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/c862y1en5vrzo?at_medium=RSS",
@@ -14,27 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cmq8n95ppwd4o?at_medium=RSS",
       "description": "George Russell says the way his season \"unravelled\" while Mercedes team-mate Kimi Antonelli marched to the title have been \"tough to deal with\".",
       "pubDate": "Mon, 02 Nov 2026 21:16:11 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "How to follow Sao Paulo Grand Prix on the BBC",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cw0k0ylj6lj3o?at_medium=RSS",
-      "description": "All the key BBC coverage details for the Sao Paulo Grand Prix, which takes place from 6-8 November.",
-      "pubDate": "Mon, 02 Nov 2026 13:24:32 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "The boy from Bologna who became world champion",
-      "link": "https://www.bbc.co.uk/sport/formula1/videos/cm17k1gxlze2o?at_medium=RSS",
-      "description": "A world champion and history maker. This is the story of Kimi Antonelli told by the people of his hometown Bologna.",
-      "pubDate": "Mon, 02 Nov 2026 11:20:40 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "A world champion but 'one of us' - a city's pride in Antonelli",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cj3vq29y10qyo?at_medium=RSS",
-      "description": "As Kimi Antonelli becomes F1 world champion, the people of Bologna hail their hometown hero.",
-      "pubDate": "Mon, 02 Nov 2026 11:16:47 GMT",
       "source": "BBC Sport F1"
     }
   ]
