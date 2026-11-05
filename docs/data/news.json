@@ -1,7 +1,21 @@
 {
-  "lastUpdated": "2026-11-04T13:52:31.668Z",
+  "lastUpdated": "2026-11-05T14:06:09.435Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Former F1 champion Jones dies aged 80",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cmd9345vdy8do?at_medium=RSS",
+      "description": "Alan Jones, the last Australian and first Williams driver to win the Formula 1 world title, dies at the age of 80.",
+      "pubDate": "Thu, 05 Nov 2026 09:46:51 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Ocon dropped - is it the end of his F1 career?",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/c59vz9gdllxlo?at_medium=RSS",
+      "description": "Esteban Ocon's career as a Formula 1 race driver is over - at least for the foreseeable future - after falling out with Haas. Andrew Benson looks at what the future holds for the Frenchman.",
+      "pubDate": "Wed, 04 Nov 2026 15:00:26 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "More than the Score",
       "link": "https://www.bbc.co.uk/sounds/play/w3ct9tp9?at_medium=RSS",
@@ -21,20 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/articles/ck0j0l65nzlvo?at_medium=RSS",
       "description": "BBC Sport takes a look at how the ongoing conflict in the Middle East has affected sporting events in Saudi Arabia, Qatar, Bahrain and the wider area.",
       "pubDate": "Tue, 03 Nov 2026 16:01:24 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Do Ferrari need rules of engagement? F1 Q&A",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c862y1en5vrzo?at_medium=RSS",
-      "description": "BBC F1 correspondent Andrew Benson answers your latest questions after the Mexico City Grand Prix.",
-      "pubDate": "Tue, 03 Nov 2026 07:53:14 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Russell says F1 title loss 'tough to deal with'",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cmq8n95ppwd4o?at_medium=RSS",
-      "description": "George Russell says the way his season \"unravelled\" while Mercedes team-mate Kimi Antonelli marched to the title have been \"tough to deal with\".",
-      "pubDate": "Mon, 02 Nov 2026 21:16:11 GMT",
       "source": "BBC Sport F1"
     }
   ]
