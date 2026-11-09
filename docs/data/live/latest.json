@@ -55,9 +55,9 @@
       "driver_code": "ANT",
       "driver_name": "Kimi Antonelli",
       "team": "Mercedes",
-      "best_lap": 5759.521,
-      "best_lap_time": "+36.017",
-      "gap_to_fastest": 36.017
+      "best_lap": 5764.521,
+      "best_lap_time": "+41.017",
+      "gap_to_fastest": 41.017
     },
     {
       "position": 6,
@@ -71,16 +71,6 @@
     },
     {
       "position": 7,
-      "driver_number": 16,
-      "driver_code": "LEC",
-      "driver_name": "Charles Leclerc",
-      "team": "Ferrari",
-      "best_lap": 5797.09,
-      "best_lap_time": "+73.586",
-      "gap_to_fastest": 73.586
-    },
-    {
-      "position": 8,
       "driver_number": 30,
       "driver_code": "LAW",
       "driver_name": "Liam Lawson",
@@ -88,6 +78,16 @@
       "best_lap": 5798.906,
       "best_lap_time": "+75.402",
       "gap_to_fastest": 75.402
+    },
+    {
+      "position": 8,
+      "driver_number": 16,
+      "driver_code": "LEC",
+      "driver_name": "Charles Leclerc",
+      "team": "Ferrari",
+      "best_lap": 5802.09,
+      "best_lap_time": "+78.586",
+      "gap_to_fastest": 78.586
     },
     {
       "position": 9,
