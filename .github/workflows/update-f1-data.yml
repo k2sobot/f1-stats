@@ -1,11 +1,12 @@
 name: Update F1 Data
 
 on:
-  # Midnight SAST (22:00 UTC) at the end of Friday, Saturday, and Sunday.
-  # Friday catches practice, Saturday qualifying/sprint, Sunday the race.
+  # Friday and Saturday: midnight SAST (22:00 UTC), after practice and qualifying.
+  # Monday: 01:00 SAST (23:00 UTC Sunday). That is the weekly cache clear.
   schedule:
-    - cron: '0 22 * * FRI,SAT,SUN'
-    # Monday catch-up for late Sunday races (Americas)
+    - cron: '0 22 * * FRI,SAT'
+    - cron: '0 23 * * SUN'
+    # Later Monday catch-up for Americas races that finish after 01:00 SAST.
     - cron: '0 5 * * MON'
 
   workflow_dispatch:
