@@ -1,4 +1,4 @@
-const CACHE_NAME = 'f1-stats-v9';
+const CACHE_NAME = 'f1-stats-v10';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -42,6 +42,11 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+function isDataRequest(request) {
+  const url = new URL(request.url);
+  return url.pathname.startsWith('/data/');
+}
+
 function isAnalyticsRequest(request) {
   const url = new URL(request.url);
   return url.hostname === 'gc.zgo.at' || url.hostname.endsWith('goatcounter.com');
@@ -62,6 +67,21 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch(() => caches.match(event.request).then((cached) => cached || caches.match('/')))
+    );
+    return;
+  }
+
+  if (isDataRequest(event.request)) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const copy = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request))
     );
     return;
   }
