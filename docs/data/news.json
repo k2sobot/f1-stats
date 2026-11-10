@@ -1,12 +1,26 @@
 {
-  "lastUpdated": "2026-11-09T15:23:22.641Z",
+  "lastUpdated": "2026-11-10T14:26:33.691Z",
   "total": 5,
   "articles": [
+    {
+      "title": "How good is Hamilton and how long can he stay in F1? - Q&A",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cmp3g005zyxko?at_medium=RSS",
+      "description": "BBC F1 correspondent Andrew Benson answers your latest questions after the Sao Paulo Grand Prix.",
+      "pubDate": "Tue, 10 Nov 2026 08:00:49 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "FIA boss planning to end age limits for office holders",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cr9dz7w1xgxvo?at_medium=RSS",
       "description": "FIA president Mohammed Ben Sulayem is planning to end age limits for office holders in motorsport's governing body.",
       "pubDate": "Mon, 09 Nov 2026 15:20:35 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Two mums take on a drugs company to fight for their children",
+      "link": "https://www.bbc.co.uk/iplayer/episode/m00344mn?at_mid=GsR2NlMHqC",
+      "description": "Two mums tell their story of a scandal that led to 20,000 babies being born disabled.",
+      "pubDate": "Mon, 09 Nov 2026 06:00:00 GMT",
       "source": "BBC Sport F1"
     },
     {
@@ -21,20 +35,6 @@
       "link": "https://www.bbc.co.uk/sounds/play/p0plz2wv?at_medium=RSS",
       "description": "The team react to an absorbing race in São Paulo.",
       "pubDate": "Sun, 08 Nov 2026 22:55:00 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "'He was in a league of his own' - Benson on Norris' Brazil GP win",
-      "link": "https://www.bbc.co.uk/sport/formula1/videos/cr5yn1n99lqno?at_medium=RSS",
-      "description": "On The Chequered Flag Podcast, BBC F1 correspondent Andrew Benson reflects on Lando Norris's impressive victory for McLaren at the Sao Paulo Grand Prix.",
-      "pubDate": "Sun, 08 Nov 2026 22:46:44 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Norris wins gripping race after Antonelli and Russell errors",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c35yn19r7zkvo?at_medium=RSS",
-      "description": "McLaren's Lando Norris wins a gripping Sao Paulo Grand Prix in difficult conditions, as Mercedes secure the 2026 constructors' championship.",
-      "pubDate": "Sun, 08 Nov 2026 22:11:31 GMT",
       "source": "BBC Sport F1"
     }
   ]
