@@ -1,7 +1,21 @@
 {
-  "lastUpdated": "2026-11-17T15:35:18.928Z",
+  "lastUpdated": "2026-11-18T15:12:11.599Z",
   "total": 5,
   "articles": [
+    {
+      "title": "How to follow Las Vegas Grand Prix on the BBC",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cx4gnlr603mqo?at_medium=RSS",
+      "description": "All the key BBC coverage details for the Las Vegas Grand Prix, which takes place from 20-22 November.",
+      "pubDate": "Wed, 18 Nov 2026 11:35:12 GMT",
+      "source": "BBC Sport F1"
+    },
+    {
+      "title": "Cowboy boots, cocktails and casinos - how do three US grands prix compare?",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/c6d91xl13pggo?at_medium=RSS",
+      "description": "F1 struggled to establish itself in the United States, but now hosts three grands prix. We compare the merits of Austin, Miami and Las Vegas.",
+      "pubDate": "Wed, 18 Nov 2026 07:50:26 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Alonso to drive in Dakar Rally for Aston Martin",
       "link": "https://www.bbc.co.uk/sport/motorsport/articles/crp3e1783xq3o?at_medium=RSS",
@@ -21,20 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/c804w7nxr61zo?at_medium=RSS",
       "description": "Rafael Camara will again race for Haas in the Las Vegas Grand Prix following the sacking of Esteban Ocon.",
       "pubDate": "Mon, 16 Nov 2026 08:35:56 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "How to follow Las Vegas Grand Prix on the BBC",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cx4gnlr603mqo?at_medium=RSS",
-      "description": "All the key BBC coverage details for the Las Vegas Grand Prix, which takes place from 20-22 November.",
-      "pubDate": "Mon, 16 Nov 2026 08:07:20 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Formula 1's one-race wonders",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/cqp9dr4kedd3o?at_medium=RSS",
-      "description": "Making it to Formula 1 is the undoubted pinnacle of any racing driver’s career – but what became of some of those who only had one shot?",
-      "pubDate": "Mon, 16 Nov 2026 06:53:18 GMT",
       "source": "BBC Sport F1"
     }
   ]
