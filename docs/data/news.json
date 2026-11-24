@@ -1,7 +1,14 @@
 {
-  "lastUpdated": "2026-11-23T17:31:14.199Z",
+  "lastUpdated": "2026-11-24T17:03:02.720Z",
   "total": 5,
   "articles": [
+    {
+      "title": "Is Hamilton and Leclerc's Ferrari partnership sustainable? F1 Q&A",
+      "link": "https://www.bbc.co.uk/sport/formula1/articles/cw30gq2633ljo?at_medium=RSS",
+      "description": "BBC F1 correspondent Andrew Benson answers your latest questions after the Las Vegas Grand Prix.",
+      "pubDate": "Tue, 24 Nov 2026 08:10:15 GMT",
+      "source": "BBC Sport F1"
+    },
     {
       "title": "Camara to continue with Haas for final two races",
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cwe9k29y7z44o?at_medium=RSS",
@@ -28,13 +35,6 @@
       "link": "https://www.bbc.co.uk/sport/formula1/articles/cjzx912pyekdo?at_medium=RSS",
       "description": "All the key BBC coverage details for the Qatar Grand Prix, which takes place from 27 to 29 November.",
       "pubDate": "Sun, 22 Nov 2026 11:57:12 GMT",
-      "source": "BBC Sport F1"
-    },
-    {
-      "title": "Verstappen a constant amid chaos as he says Russell is 'so far below my level'",
-      "link": "https://www.bbc.co.uk/sport/formula1/articles/c3n0l5p5x5x5o?at_medium=RSS",
-      "description": "Max Verstappen was the star figure in a Las Vegas Grand Prix that was unlike any F1 race anyone younger than about 70 had ever seen.",
-      "pubDate": "Sun, 22 Nov 2026 11:07:32 GMT",
       "source": "BBC Sport F1"
     }
   ]
